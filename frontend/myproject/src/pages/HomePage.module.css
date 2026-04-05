@@ -75,102 +75,78 @@
 }
 
 
-/* --- TỔNG THỂ BANNER QUẢNG CÁO --- */
+/* Banner quảng cáo: thấp, rộng theo khung .wrap (vừa màn hình thiết bị) */
 
 .promoBanner {
     display: grid;
-    width: 95%;
-    /* Để một chút khoảng cách với lề màn hình */
-    /* 1. KHÔNG CHẾ ĐỘ RỘNG: Thu bé khung lại để không bị quá dài */
-    max-width: 850px;
-    /* 2. TỈ LỆ KHUNG HÌNH: Giúp banner luôn là hình chữ nhật nằm ngang đẹp */
-    aspect-ratio: 3 / 1;
-    margin: 2rem auto;
-    /* Căn giữa banner */
+    width: 100%;
+    max-width: 100%;
     overflow: hidden;
-    border-radius: 1rem;
-    /* Bo góc tròn hơn cho hiện đại */
-    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
-    /* Chia 2 cột bằng nhau */
-    grid-template-columns: 1fr 1fr;
-    /* Màu nền kem/be đồng bộ hoàn toàn với ảnh Sơn Tùng */
-    background-color: #F7F3E9;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 14px -2px rgb(0 0 0 / 0.1);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
 }
 
-
-/* --- CỘT CHỨA CHỮ (BÊN TRÁI) --- */
+@media (min-width: 640px) {
+    .promoBanner {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto;
+        min-height: 220px;
+    }
+}
 
 .promoTextCol {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
-    /* Căn trái chữ cho chuyên nghiệp */
-    padding: 2.5rem;
+    order: 1;
+    /* 1. THAY ĐỔI MÀU NỀN SANG MÀU KEM (Tiệp với nền ảnh) */
     background-color: #F7F3E9;
-    /* Đồng màu với cột ảnh */
+    /* Đây là màu kem sáng, rất khớp với nền ảnh gốc */
+    padding: 0.75rem 1rem;
+    text-align: center;
 }
 
-
-/* --- TIÊU ĐỀ QUẢNG CÁO --- */
+@media (min-width: 640px) {
+    .promoTextCol {
+        order: 0;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem 0 0 0.75rem;
+    }
+}
 
 .promoHeadline {
     margin: 0;
+    max-width: 100%;
     font-family: var(--font-headline);
-    /* 3. CHỮ TO VÀ ĐẬM: Làm nổi bật thông điệp */
-    font-size: clamp(1.1rem, 3vw, 1.6rem);
-    font-weight: 900;
+    font-size: clamp(0.7rem, 2.8vw, 0.95rem);
+    font-weight: 800;
     line-height: 1.3;
-    /* Màu xanh đậm đặc trưng của NEU để nổi bật trên nền kem */
+    letter-spacing: 0.04em;
+    /* 2. THAY ĐỔI MÀU CHỮ SANG XANH ĐẬM (Dễ đọc trên nền kem) */
     color: #003F87;
-    text-transform: uppercase;
-    /* Viết hoa toàn bộ */
+    /* Mã màu xanh đậm thương hiệu của NEU */
 }
-
-
-/* --- CỘT CHỨA ẢNH (BÊN PHẢI) --- */
 
 .promoImageCol {
     display: flex;
-    height: 100%;
-    overflow: hidden;
-    background-color: #F7F3E9;
+    order: 2;
+    min-height: 0;
+    background-color: #0a4d7a;
 }
 
-
-/* --- HÌNH ẢNH SƠN TÙNG --- */
+@media (min-width: 640px) {
+    .promoImageCol {
+        order: 0;
+        border-radius: 0 0.75rem 0.75rem 0;
+    }
+}
 
 .promoImage {
     display: block;
     width: 100%;
     height: 100%;
-    /* 4. HIỂN THỊ ẢNH: Lấp đầy khung mà không làm biến dạng */
     object-fit: cover;
-    /* Ưu tiên giữ phần đầu và thân trên của Sơn Tùng */
-    object-position: top center;
-}
-
-
-/* --- ĐIỀU CHỈNH CHO THIẾT BỊ DI ĐỘNG --- */
-
-@media (max-width: 640px) {
-    .promoBanner {
-        grid-template-columns: 1fr;
-        /* Chuyển thành 1 cột trên điện thoại */
-        aspect-ratio: auto;
-        /* Bỏ cố định tỉ lệ để không bị quá bé */
-        max-height: none;
-    }
-    .promoImageCol {
-        height: 250px;
-        /* Giới hạn chiều cao ảnh trên mobile */
-        order: -1;
-        /* Đưa ảnh lên trên chữ trên mobile */
-    }
-    .promoTextCol {
-        padding: 1.5rem;
-        align-items: center;
-        /* Căn giữa chữ trên mobile */
-        text-align: center;
-    }
+    object-position: center;
 }
