@@ -75,100 +75,102 @@
 }
 
 
-/* Tổng thể Banner quảng cáo */
+/* --- TỔNG THỂ BANNER QUẢNG CÁO --- */
 
 .promoBanner {
     display: grid;
-    width: 100%;
-    max-width: 1200px;
-    /* Giới hạn độ rộng tối đa để không bị quá dãn trên màn hình lớn */
-    max-height: 400px;
-    /* Khống chế chiều cao tổng thể */
-    margin: 1.5rem auto;
-    /* Căn giữa và tạo khoảng cách với các phần khác */
+    width: 95%;
+    /* Để một chút khoảng cách với lề màn hình */
+    /* 1. KHÔNG CHẾ ĐỘ RỘNG: Thu bé khung lại để không bị quá dài */
+    max-width: 850px;
+    /* 2. TỈ LỆ KHUNG HÌNH: Giúp banner luôn là hình chữ nhật nằm ngang đẹp */
+    aspect-ratio: 3 / 1;
+    margin: 2rem auto;
+    /* Căn giữa banner */
     overflow: hidden;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 14px -2px rgb(0 0 0 / 0.1);
-    grid-template-columns: 1fr;
+    border-radius: 1rem;
+    /* Bo góc tròn hơn cho hiện đại */
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
+    /* Chia 2 cột bằng nhau */
+    grid-template-columns: 1fr 1fr;
+    /* Màu nền kem/be đồng bộ hoàn toàn với ảnh Sơn Tùng */
+    background-color: #F7F3E9;
 }
 
 
-/* Cột chứa chữ */
+/* --- CỘT CHỨA CHỮ (BÊN TRÁI) --- */
 
 .promoTextCol {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    order: 1;
-    /* Màu beige/kem nhạt để tiệp với màu nền của ảnh Sơn Tùng */
+    align-items: flex-start;
+    /* Căn trái chữ cho chuyên nghiệp */
+    padding: 2.5rem;
     background-color: #F7F3E9;
-    padding: 1.5rem;
-    text-align: center;
+    /* Đồng màu với cột ảnh */
 }
 
 
-/* Cột chứa ảnh */
+/* --- TIÊU ĐỀ QUẢNG CÁO --- */
 
 .promoHeadline {
     margin: 0;
-    max-width: 100%;
     font-family: var(--font-headline);
-    /* Tăng kích thước chữ */
-    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
-    /* Bôi đậm tối đa */
+    /* 3. CHỮ TO VÀ ĐẬM: Làm nổi bật thông điệp */
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
     font-weight: 900;
-    line-height: 1.2;
-    text-transform: uppercase;
-    /* Viết hoa toàn bộ cho chuyên nghiệp */
-    /* Nếu nền màu sáng (#F7F3E9), bạn nên dùng chữ màu xanh đậm của NEU để nổi bật */
+    line-height: 1.3;
+    /* Màu xanh đậm đặc trưng của NEU để nổi bật trên nền kem */
     color: #003F87;
-    /* Nếu bạn vẫn muốn chữ màu trắng, hãy đổi background-color ở trên thành màu xanh đậm */
+    text-transform: uppercase;
+    /* Viết hoa toàn bộ */
 }
 
 
-/* Cập nhật lại cột ảnh để không bị lệch màu */
+/* --- CỘT CHỨA ẢNH (BÊN PHẢI) --- */
 
 .promoImageCol {
     display: flex;
-    order: 2;
-    background-color: #F7F3E9;
-    /* Đồng bộ màu nền với cột chữ */
+    height: 100%;
     overflow: hidden;
+    background-color: #F7F3E9;
 }
 
 
-/* Hình ảnh bên trong */
+/* --- HÌNH ẢNH SƠN TÙNG --- */
 
 .promoImage {
     display: block;
     width: 100%;
     height: 100%;
-    /* THAY ĐỔI TỪ cover SANG contain ĐỂ HIỆN THỊ TRỌN VẸN ẢNH */
-    object-fit: contain;
-    object-position: center;
+    /* 4. HIỂN THỊ ẢNH: Lấp đầy khung mà không làm biến dạng */
+    object-fit: cover;
+    /* Ưu tiên giữ phần đầu và thân trên của Sơn Tùng */
+    object-position: top center;
 }
 
 
-/* Điều chỉnh khi màn hình rộng hơn (Tablet/Laptop) */
+/* --- ĐIỀU CHỈNH CHO THIẾT BỊ DI ĐỘNG --- */
 
-@media (min-width: 640px) {
+@media (max-width: 640px) {
     .promoBanner {
-        grid-template-columns: 1fr 1fr;
-        /* Chia đôi: một bên chữ, một bên ảnh */
-        min-height: 220px;
-    }
-    .promoTextCol {
-        order: 0;
-        padding: 1.5rem;
-        border-radius: 0.75rem 0 0 0.75rem;
+        grid-template-columns: 1fr;
+        /* Chuyển thành 1 cột trên điện thoại */
+        aspect-ratio: auto;
+        /* Bỏ cố định tỉ lệ để không bị quá bé */
+        max-height: none;
     }
     .promoImageCol {
-        order: 0;
-        height: auto;
-        /* Trên máy tính để chiều cao tự động theo nội dung */
-        border-radius: 0 0.75rem 0.75rem 0;
+        height: 250px;
+        /* Giới hạn chiều cao ảnh trên mobile */
+        order: -1;
+        /* Đưa ảnh lên trên chữ trên mobile */
     }
-    .promoHeadline {
-        font-size: clamp(1rem, 2.5vw, 1.25rem);
+    .promoTextCol {
+        padding: 1.5rem;
+        align-items: center;
+        /* Căn giữa chữ trên mobile */
+        text-align: center;
     }
 }
