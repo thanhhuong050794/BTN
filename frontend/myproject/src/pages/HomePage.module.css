@@ -100,20 +100,39 @@
     align-items: center;
     justify-content: center;
     order: 1;
-    background-color: #0066b3;
-    padding: 1rem;
+    /* Màu beige/kem nhạt để tiệp với màu nền của ảnh Sơn Tùng */
+    background-color: #F7F3E9;
+    padding: 1.5rem;
     text-align: center;
 }
 
 
 /* Cột chứa ảnh */
 
+.promoHeadline {
+    margin: 0;
+    max-width: 100%;
+    font-family: var(--font-headline);
+    /* Tăng kích thước chữ */
+    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    /* Bôi đậm tối đa */
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+    /* Viết hoa toàn bộ cho chuyên nghiệp */
+    /* Nếu nền màu sáng (#F7F3E9), bạn nên dùng chữ màu xanh đậm của NEU để nổi bật */
+    color: #003F87;
+    /* Nếu bạn vẫn muốn chữ màu trắng, hãy đổi background-color ở trên thành màu xanh đậm */
+}
+
+
+/* Cập nhật lại cột ảnh để không bị lệch màu */
+
 .promoImageCol {
     display: flex;
     order: 2;
-    height: 180px;
-    /* Giới hạn chiều cao ảnh trên mobile để vừa tầm mắt */
-    background-color: #0a4d7a;
+    background-color: #F7F3E9;
+    /* Đồng bộ màu nền với cột chữ */
     overflow: hidden;
 }
 
@@ -124,11 +143,9 @@
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    /* Giúp ảnh không bị méo, tự động cắt trung tâm */
+    /* THAY ĐỔI TỪ cover SANG contain ĐỂ HIỆN THỊ TRỌN VẸN ẢNH */
+    object-fit: contain;
     object-position: center;
-    aspect-ratio: 16 / 9;
-    /* Tỉ lệ vàng cho banner quảng cáo */
 }
 
 
