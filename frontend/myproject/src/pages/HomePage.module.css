@@ -1,7 +1,7 @@
 .pageHome {
     background-color: var(--color-page);
     padding-bottom: 6rem;
-    padding-top: 9rem;
+    padding-top: 10rem;
 }
 
 @media (min-width: 768px) {
@@ -21,8 +21,8 @@
 
 .hero {
     position: relative;
-    height: clamp(200px, 28vh, 300px);
-    max-height: 320px;
+    height: clamp(260px, 34vh, 380px);
+    max-height: 380px;
     overflow: hidden;
     border-radius: 1.25rem;
 }
