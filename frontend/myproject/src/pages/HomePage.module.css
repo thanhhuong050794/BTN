@@ -1,0 +1,155 @@
+.pageHome {
+  background-color: var(--color-page);
+  padding-bottom: 6rem;
+  padding-top: 5rem;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 768px) {
+  .pageHome {
+    padding-bottom: 3rem;
+  }
+}
+
+.pageHome::selection {
+  background-color: var(--color-brand-2);
+  color: var(--color-brand-soft);
+}
+
+.sectionMb12 {
+  margin-bottom: 3rem;
+}
+
+.hero {
+  position: relative;
+  height: clamp(200px, 28vh, 300px);
+  max-height: 320px;
+  overflow: hidden;
+  border-radius: 1.25rem;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.7s ease;
+}
+
+.hero:hover .heroBg {
+  transform: scale(1.05);
+}
+
+.heroBox {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(to right, rgb(0 63 135 / 0.8), rgb(0 63 135 / 0.4), transparent);
+  padding-left: clamp(1rem, 4vw, 2.5rem);
+  padding-right: clamp(1rem, 4vw, 2.5rem);
+}
+
+.heroTitle {
+  margin-bottom: 0.75rem;
+  max-width: 32rem;
+  font-family: var(--font-headline);
+  font-size: clamp(1.5rem, 4.5vw, 2.25rem);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--color-on-brand);
+}
+
+.heroLead {
+  margin-bottom: 1rem;
+  max-width: 28rem;
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  line-height: 1.5;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.9);
+}
+
+/* Banner quảng cáo: thấp, rộng theo khung .wrap (vừa màn hình thiết bị) */
+.promoBanner {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px -2px rgb(0 0 0 / 0.1);
+  grid-template-columns: 1fr;
+  grid-template-rows: auto minmax(72px, 14vh);
+}
+
+@media (min-width: 640px) {
+  .promoBanner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(88px, 12vh);
+    max-height: 140px;
+  }
+}
+
+.promoTextCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  order: 1;
+  background-color: #0066b3;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .promoTextCol {
+    order: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem 0 0 0.75rem;
+  }
+}
+
+.promoHeadline {
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-headline);
+  font-size: clamp(0.7rem, 2.8vw, 0.95rem);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.promoImageCol {
+  display: flex;
+  order: 2;
+  min-height: 0;
+  background-color: #0a4d7a;
+}
+
+@media (min-width: 640px) {
+  .promoImageCol {
+    order: 0;
+    border-radius: 0 0.75rem 0.75rem 0;
+  }
+}
+
+.promoImage {
+  display: block;
+  height: 100%;
+  width: 100%;
+  max-height: 14vh;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 640px) {
+  .promoImage {
+    max-height: none;
+    min-height: 0;
+  }
+}
