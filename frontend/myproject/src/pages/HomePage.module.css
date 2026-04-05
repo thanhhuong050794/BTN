@@ -1,7 +1,7 @@
 .pageHome {
     background-color: var(--color-page);
     padding-bottom: 6rem;
-    padding-top: 10rem;
+    padding-top: 8rem;
 }
 
 @media (min-width: 768px) {
@@ -21,8 +21,8 @@
 
 .hero {
     position: relative;
-    height: clamp(260px, 34vh, 380px);
-    max-height: 380px;
+    height: clamp(360px, 80vh, 360px);
+    max-height: 550px;
     overflow: hidden;
     border-radius: 1.25rem;
 }
@@ -35,10 +35,6 @@
     object-fit: cover;
     object-position: center;
     transition: transform 0.7s ease;
-}
-
-.hero:hover .heroBg {
-    transform: scale(1.05);
 }
 
 .heroBox {
@@ -63,6 +59,10 @@
     color: var(--color-on-brand);
 }
 
+.heroButton {
+    margin-top: 1.5rem;
+}
+
 .heroLead {
     margin-bottom: 1rem;
     max-width: 28rem;
@@ -70,6 +70,8 @@
     line-height: 1.5;
     font-weight: 500;
     color: rgb(255 255 255 / 0.9);
+    white-space: nowrap;
+    overflow: visible;
 }
 
 

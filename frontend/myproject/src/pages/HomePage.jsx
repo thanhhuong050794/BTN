@@ -19,8 +19,10 @@ export default function HomePage() {
             />
             <div className={styles.heroBox}>
               <h1 className={styles.heroTitle}>Đặt đồ ăn giao tại phòng học</h1>
-              <p className={styles.heroLead}>Cung cấp năng lượng tức thì cho những giờ học căng thẳng.</p>
-              <Link className="btn-brand" to="/menu">
+              <p className={styles.heroLead}>
+                Cùng cấp năng lượng tức thì cho những giờ học căng thẳng.
+              </p>
+              <Link className={`btn-brand ${styles.heroButton}`} to="/menu">
                 Đặt ngay
               </Link>
             </div>
