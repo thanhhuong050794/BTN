@@ -1,7 +1,7 @@
 .pageHome {
     background-color: var(--color-page);
     padding-bottom: 6rem;
-  padding-top: 9rem;
+    padding-top: 9rem;
 }
 
 @media (min-width: 768px) {
