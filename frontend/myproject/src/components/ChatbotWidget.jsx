@@ -62,7 +62,7 @@ export default function ChatbotWidget() {
           role: 'bot',
           text:
             e.message ||
-            'Không gửi được tin. Chạy backend (npm start) và kiểm tra file .env có GEMINI_API_KEY.',
+            'Không gửi được tin.',
         },
       ])
     } finally {
