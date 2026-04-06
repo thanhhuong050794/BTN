@@ -41,7 +41,7 @@ function saveChat() {
 }
 
 // check API KEY
-const apiKey = process.env.GEMINI_API_KEY ? .trim();
+const apiKey = process.env.GEMINI_API_KEY?.trim();
 
 if (!apiKey) {
     console.warn("CHƯA CÓ GEMINI_API_KEY");
@@ -59,7 +59,7 @@ app.post('/api/reset', (req, res) => {
 // chat API
 app.post('/api/chat', async(req, res) => {
     try {
-        const userMessage = String(req.body ? .message ? ? '').trim();
+        const userMessage = String(req.body?.message?? '').trim();
 
         if (!userMessage) {
             return res.status(400).json({ error: 'Thiếu nội dung' });
@@ -94,7 +94,7 @@ app.post('/api/chat', async(req, res) => {
         const data = await response.json();
 
         let reply =
-            data ? .candidates ? .[0] ? .content ? .parts ? .[0] ? .text ||
+            data ?.candidates?.[0]?.content?.parts?.[0]?.text ||
             "Không có phản hồi";
 
         chatHistory.push({
