@@ -32,7 +32,7 @@ export default function HomePage() {
         <section className={`wrap ${styles.sectionMb12}`}>
           <div className={styles.promoBanner}>
             <div className={styles.promoTextCol}>
-              <p className={styles.promoHeadline}>SƠN TÙNG ĐÃ THỬ, CÒN BẠN THÌ SAO?</p>
+              <p className={styles.promoHeadline}>SƠN TÙNG ĐÃ ĐẶT, CÒN BẠN THÌ SAO?</p>
             </div>
             <div className={styles.promoImageCol}>
               <img
