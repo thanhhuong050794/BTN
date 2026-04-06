@@ -4,6 +4,12 @@ import styles from './ChatbotWidget.module.css'
 
 const API_BASE = import.meta.env.VITE_CHAT_API_URL ?? ''
 
+const QUICK_PROMPTS = [
+  'Gợi ý món cho bữa trưa',
+  'Cách đặt hàng trên web?',
+  'Mất bao lâu để giao?',
+]
+
 export default function ChatbotWidget() {
   const { pathname } = useLocation()
   const hasBottomDock = ['/', '/menu', '/gio-hang'].includes(pathname)
@@ -12,11 +18,18 @@ export default function ChatbotWidget() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const listRef = useRef(null)
+  const inputRef = useRef(null)
 
   useEffect(() => {
     if (!open || !listRef.current) return
     listRef.current.scrollTop = listRef.current.scrollHeight
   }, [messages, open])
+
+  useEffect(() => {
+    if (open) {
+      inputRef.current?.focus()
+    }
+  }, [open])
 
   const postJson = useCallback(async (path, body) => {
     const url = `${API_BASE}${path}`
@@ -32,8 +45,8 @@ export default function ChatbotWidget() {
     return data
   }, [])
 
-  const sendMessage = useCallback(async () => {
-    const text = input.trim()
+  const sendMessage = useCallback(async (overrideText) => {
+    const text = (overrideText != null ? String(overrideText) : input).trim()
     if (!text || loading) return
     setInput('')
     setMessages((prev) => [...prev, { role: 'user', text }])
@@ -47,7 +60,9 @@ export default function ChatbotWidget() {
         ...prev,
         {
           role: 'bot',
-          text: e.message || 'Không gửi được tin. Chạy backend và cấu hình GEMINI_API_KEY.',
+          text:
+            e.message ||
+            'Không gửi được tin. Chạy backend (npm start) và kiểm tra file .env có GEMINI_API_KEY.',
         },
       ])
     } finally {
@@ -70,6 +85,11 @@ export default function ChatbotWidget() {
       e.preventDefault()
       sendMessage()
     }
+  }
+
+  const onQuick = (q) => {
+    setInput(q)
+    sendMessage(q)
   }
 
   return (
@@ -117,9 +137,25 @@ export default function ChatbotWidget() {
 
           <div className={styles.messages} ref={listRef}>
             {messages.length === 0 && !loading && (
-              <p className={styles.hint}>
-                Chào bạn! Hỏi gợi ý món, giờ giao, hoặc cách đặt hàng nhé.
-              </p>
+              <>
+                <p className={styles.hint}>
+                  Chào bạn! Mình là trợ lý NEUFood — hỏi về menu, đặt món hoặc giao hàng
+                  trong campus nhé.
+                </p>
+                <div className={styles.quickRow} role="group" aria-label="Gợi ý nhanh">
+                  {QUICK_PROMPTS.map((q) => (
+                    <button
+                      key={q}
+                      type="button"
+                      className={styles.quickBtn}
+                      onClick={() => onQuick(q)}
+                      disabled={loading}
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
             {messages.map((m, i) => (
               <div
@@ -129,20 +165,23 @@ export default function ChatbotWidget() {
                 }
               >
                 <span className={styles.bubbleLabel}>
-                  {m.role === 'user' ? 'Bạn' : 'Bot'}
+                  {m.role === 'user' ? 'Bạn' : 'Trợ lý'}
                 </span>
                 <p className={styles.bubbleText}>{m.text}</p>
               </div>
             ))}
             {loading && (
-              <p className={styles.thinking} aria-live="polite">
-                Đang trả lời…
-              </p>
+              <div className={styles.typing} aria-live="polite" aria-busy="true">
+                <span className={styles.typingDot} />
+                <span className={styles.typingDot} />
+                <span className={styles.typingDot} />
+              </div>
             )}
           </div>
 
           <div className={styles.compose}>
             <input
+              ref={inputRef}
               className={styles.input}
               type="text"
               placeholder="Nhập câu hỏi…"
@@ -151,6 +190,7 @@ export default function ChatbotWidget() {
               onKeyDown={onKeyDown}
               disabled={loading}
               aria-label="Nội dung tin nhắn"
+              autoComplete="off"
             />
             <button
               type="button"
