@@ -4,6 +4,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 const FILE_PATH = path.join(__dirname, 'chat.json');
@@ -42,6 +43,7 @@ function saveChat() {
 
 // check API KEY
 const apiKey = process.env.GEMINI_API_KEY?.trim();
+const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 if (!apiKey) {
     console.warn("CHƯA CÓ GEMINI_API_KEY");
@@ -71,31 +73,37 @@ app.post('/api/chat', async(req, res) => {
             });
         }
 
+        const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+        const timeoutMs = parseNum(process.env.GEMINI_TIMEOUT_MS, 20000);
+
+        if (!genAI) {
+            return res.status(500).json({ reply: "Chưa khởi tạo được Gemini client" });
+        }
+
+        const geminiModel = genAI.getGenerativeModel({
+            model,
+            systemInstruction: {
+                parts: [{ text: getSystemPrompt() }]
+            }
+        });
+
+        const chat = geminiModel.startChat({
+            history: chatHistory.slice(-10)
+        });
+
+        const result = await Promise.race([
+            chat.sendMessage(userMessage),
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error(`Gemini timeout after ${timeoutMs}ms`)), timeoutMs)
+            )
+        ]);
+
+        const reply = (result?.response?.text?.() || "").trim() || "Không có phản hồi";
+
         chatHistory.push({
             role: 'user',
             parts: [{ text: userMessage }]
         });
-
-        const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
-
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    systemInstruction: {
-                        parts: [{ text: getSystemPrompt() }]
-                    },
-                    contents: chatHistory.slice(-10)
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        let reply =
-            data ?.candidates?.[0]?.content?.parts?.[0]?.text ||
-            "Không có phản hồi";
 
         chatHistory.push({
             role: 'model',
@@ -107,8 +115,39 @@ app.post('/api/chat', async(req, res) => {
         res.json({ reply });
 
     } catch (err) {
+        const status = err?.status || err?.response?.status;
+        const message = typeof err?.message === 'string' ? err.message : String(err);
         console.error("ERROR:", err);
-        res.status(500).json({ reply: "Lỗi server" });
+
+        // Trả lỗi gọn và thân thiện hơn cho frontend
+        if (status === 429) {
+            const retrySeconds =
+                message.match(/retry in ([0-9.]+)s/i)?.[1] ||
+                message.match(/"retryDelay":"(\d+)s"/i)?.[1] ||
+                null;
+
+            return res.status(429).json({
+                reply: retrySeconds
+                    ? `AI đang quá tải hoặc đã chạm giới hạn quota. Vui lòng thử lại sau khoảng ${Math.ceil(Number(retrySeconds))} giây.`
+                    : "AI đang quá tải hoặc đã chạm giới hạn quota. Vui lòng thử lại sau."
+            });
+        }
+
+        if (status === 403) {
+            return res.status(403).json({
+                reply: "API key Gemini không hợp lệ hoặc đã bị chặn. Vui lòng kiểm tra lại cấu hình."
+            });
+        }
+
+        if (status === 404) {
+            return res.status(404).json({
+                reply: "Model Gemini không tồn tại hoặc chưa hỗ trợ. Vui lòng kiểm tra GEMINI_MODEL."
+            });
+        }
+
+        res.status(502).json({
+            reply: `Gemini lỗi${status ? ` (${status})` : ""}: ${message}`
+        });
     }
 });
 

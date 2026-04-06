@@ -17,6 +17,7 @@ export default function ChatbotWidget() {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
+  const [cooldownSec, setCooldownSec] = useState(0)
   const listRef = useRef(null)
   const inputRef = useRef(null)
 
@@ -31,6 +32,14 @@ export default function ChatbotWidget() {
     }
   }, [open])
 
+  useEffect(() => {
+    if (cooldownSec <= 0) return
+    const timer = setInterval(() => {
+      setCooldownSec((prev) => Math.max(prev - 1, 0))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [cooldownSec])
+
   const postJson = useCallback(async (path, body) => {
     const url = `${API_BASE}${path}`
     const res = await fetch(url, {
@@ -40,14 +49,16 @@ export default function ChatbotWidget() {
     })
     const data = await res.json().catch(() => ({}))
     if (!res.ok) {
-      throw new Error(data.error || data.reply || `Lỗi ${res.status}`)
+      const error = new Error(data.error || data.reply || `Lỗi ${res.status}`)
+      error.status = res.status
+      throw error
     }
     return data
   }, [])
 
   const sendMessage = useCallback(async (overrideText) => {
     const text = (overrideText != null ? String(overrideText) : input).trim()
-    if (!text || loading) return
+    if (!text || loading || cooldownSec > 0) return
     setInput('')
     setMessages((prev) => [...prev, { role: 'user', text }])
     setLoading(true)
@@ -56,6 +67,13 @@ export default function ChatbotWidget() {
       const reply = data.reply ?? 'Không có phản hồi'
       setMessages((prev) => [...prev, { role: 'bot', text: reply }])
     } catch (e) {
+      if (e?.status === 429) {
+        const waitSeconds =
+          Number(e?.message?.match(/sau khoảng (\d+) giây/i)?.[1]) ||
+          Number(e?.message?.match(/retry in ([0-9.]+)s/i)?.[1]) ||
+          10
+        setCooldownSec(Math.max(Math.ceil(waitSeconds), 5))
+      }
       setMessages((prev) => [
         ...prev,
         {
@@ -68,7 +86,7 @@ export default function ChatbotWidget() {
     } finally {
       setLoading(false)
     }
-  }, [input, loading, postJson])
+  }, [input, loading, postJson, cooldownSec])
 
   const resetChat = useCallback(async () => {
     if (!window.confirm('Bạn có chắc muốn xóa toàn bộ đoạn chat?')) return
@@ -188,7 +206,7 @@ export default function ChatbotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              disabled={loading}
+              disabled={loading || cooldownSec > 0}
               aria-label="Nội dung tin nhắn"
               autoComplete="off"
             />
@@ -196,12 +214,17 @@ export default function ChatbotWidget() {
               type="button"
               className={styles.sendBtn}
               onClick={sendMessage}
-              disabled={loading || !input.trim()}
+              disabled={loading || cooldownSec > 0 || !input.trim()}
               aria-label="Gửi"
             >
               <span className="material-symbols-outlined">send</span>
             </button>
           </div>
+          {cooldownSec > 0 ? (
+            <p className={styles.hint} aria-live="polite">
+              Hệ thống đang quá tải, bạn có thể gửi lại sau khoảng {cooldownSec} giây.
+            </p>
+          ) : null}
         </div>
       ) : null}
 
