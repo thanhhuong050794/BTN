@@ -1,0 +1,31 @@
+<div id="chatbox"></div>
+<input id="input" placeholder="Nhập câu hỏi..." />
+<button onclick="sendMessage()">Gửi</button>
+<button onclick="resetChat()">Reset</button> 
+<script>
+    async function resetChat() {
+      if (!confirm("Bạn có chắc muốn xóa toàn bộ chat không?")) return;
+    
+      await fetch("http://localhost:3000/api/reset", {
+        method: "POST"
+      });
+      document.getElementById("chatbox").innerHTML = "";
+    }
+    </script>
+<script>
+async function sendMessage() {
+  const input = document.getElementById("input").value;
+
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: input })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("chatbox").innerHTML += 
+    "<p><b>Bạn:</b> " + input + "</p>" +
+    "<p><b>Bot:</b> " + data.reply + "</p>";
+}
+</script>
