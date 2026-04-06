@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom'
+import ChatbotWidget from './ChatbotWidget'
 import Navbar from './Navbar'
 import BottomNav from './BottomNav'
 
@@ -13,6 +14,7 @@ export default function Layout() {
       <Navbar />
       <Outlet />
       {showBottomNav ? <BottomNav /> : null}
+      <ChatbotWidget />
     </>
   )
 }
