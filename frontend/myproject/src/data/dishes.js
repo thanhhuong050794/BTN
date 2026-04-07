@@ -1,6 +1,17 @@
+export const MENU_CATEGORIES = [
+  { id: 'all', label: 'Tất cả' },
+  { id: 'mon-chinh', label: 'Món chính' },
+  { id: 'do-uong', label: 'Đồ uống' },
+  { id: 'an-vat', label: 'Ăn vặt' },
+  { id: 'healthy', label: 'Healthy' },
+  { id: 'soup', label: 'Súp & cháo' },
+]
+
 export const dishes = [
   {
     id: 'com-ga-xoi-mo',
+    categoryId: 'mon-chinh',
+    badges: ['bestSeller', 'hot'],
     name: 'Cơm Gà Xối Mỡ NEU',
     shortDescription: 'Gà giòn tan, cơm thơm dẻo, kèm dưa góp đặc biệt.',
     description:
@@ -23,6 +34,8 @@ export const dishes = [
   },
   {
     id: 'tra-sua-tran-chau',
+    categoryId: 'do-uong',
+    badges: ['bestSeller'],
     name: 'Trà Sữa Trân Châu Đường Đen',
     shortDescription: 'Vị sữa béo ngậy kết hợp trân châu dai giòn.',
     description: 'Vị sữa béo ngậy kết hợp trân châu dai giòn.',
@@ -34,6 +47,8 @@ export const dishes = [
   },
   {
     id: 'combo-an-vat',
+    categoryId: 'an-vat',
+    badges: [],
     name: 'Combo Ăn Vặt Tổng Hợp',
     shortDescription: 'Nem chua rán, phô mai que, khoai tây chiên.',
     description: 'Nem chua rán, phô mai que, khoai tây chiên.',
@@ -45,6 +60,8 @@ export const dishes = [
   },
   {
     id: 'salad-uc-ga',
+    categoryId: 'healthy',
+    badges: ['new'],
     name: 'Salad Ức Gà',
     shortDescription: 'Salad tươi, ức gà áp chảo.',
     description: 'Salad tươi, ức gà áp chảo, sốt nhẹ.',
@@ -56,6 +73,8 @@ export const dishes = [
   },
   {
     id: 'sup-bap-cua',
+    categoryId: 'soup',
+    badges: [],
     name: 'Súp Bắp Cua',
     shortDescription: 'Súp bắp cua thơm, ấm.',
     description: 'Súp bắp cua thơm, ấm.',
@@ -67,6 +86,8 @@ export const dishes = [
   },
   {
     id: 'pho-bo-tai-lan',
+    categoryId: 'mon-chinh',
+    badges: ['hot'],
     name: 'Phở Bò Tái Lăn',
     shortDescription: 'Nước dùng thanh ngọt, thịt bò mềm tươi mỗi ngày.',
     description: 'Nước dùng thanh ngọt, thịt bò mềm tươi mỗi ngày.',
