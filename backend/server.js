@@ -65,8 +65,7 @@ app.post('/api/reset', (req, res) => {
 // chat API
 app.post('/api/chat', async(req, res) => {
             try {
-                const userMessage = String(req.body?.message?.trim());
-
+                const userMessage = String(req.body?.message ?? '').trim();
                 if (!userMessage) {
                     return res.status(400).json({ error: 'Thiếu nội dung' });
                 }
@@ -75,7 +74,7 @@ app.post('/api/chat', async(req, res) => {
                     return res.json({ reply: "Chưa cấu hình API KEY" });
                 }
 
-                const model = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
+                const model = process.env.OPENROUTER_MODEL || 'nvidia/nemotron-3-super-120b-a12b:free';
                 const temperature = parseNum(process.env.OPENROUTER_TEMPERATURE, 0.65);
                 const max_tokens = parseNum(process.env.OPENROUTER_MAX_OUTPUT_TOKENS, 1024);
                 const timeoutMs = parseNum(process.env.OPENROUTER_TIMEOUT_MS, 30000);

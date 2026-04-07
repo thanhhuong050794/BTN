@@ -3,7 +3,7 @@
     "role": "user",
     "parts": [
       {
-        "text": "Gợi ý món cho bữa trưa"
+        "text": "Mất bao lâu để giao?"
       }
     ]
   },
@@ -11,7 +11,7 @@
     "role": "model",
     "parts": [
       {
-        "text": "Chào bạn! Dưới đây là một vài gợi ý món ăn phù hợp cho bữa trưa tại NEUFood, bạn có thể tham khảo và sau đó vào Menu trên website/app để xem chi tiết giá cả và thành phần:\n\n**1. Cơm & 밥 bowl**  \n- Cơm gà nướng sốtMe (hoặc sốt cà chua, sốt tiêu)  \n- Cơm ribeye bò xào hành  \n- Cơm cá hồi teriyaki + rau luộc  \n- Cơm chay đậu hũ sốt nấm  \n\n**2. Mì & Phở**  \n- Phở bò tai nạm (hoặc phở gà)  \n- Bún bò Huế  \n- Mì xào hải sản hoặc xào bò  \n- Hủ tiếu nam vang  \n\n**3. Salad & Bowl nhẹ**  \n- Salad gà nướng + rau củ + sốt mù tạt  \n- Bowl quinoa + salmon + авокадо  \n- Gỏi cuốn tôm thịt + nước sốt peanut  \n\n**4. Bánh mì & Đồ ăn nhẹ**  \n- Bánh mì thịt nướng, pate, trứng  \n- Bánh mì chay (đậu hũ, rau củ)  \n- Bánh bao hấp (thịt, chay)  \n\n**5. Món ăn nhanh / combo**  \n- Combo cơm + súp + nước uống  \n- Set bún + rouleau primavera + trà đá  \n\n**Cách đặt đơn:**  \n1. Mở app/website NEUFood → chọn “Menu”.  \n2. Tìm món bạn thích → nhấn “Thêm vào giỏ hàng”.  \n3. Kiểm tra giỏ hàng, nếu muốn thay đổi số lượng hoặc thêm món khác thì chỉnh sửa ngay.  \n4. Chọn phương thức thanh toán (thẻ, ví điện tử, hoặc thanh toán khi nhận hàng).  \n5. Xác nhận đơn → bạn sẽ nhận được thông báo thời gian dự kiến giao và mã đơn hàng để theo dõi.\n\n**Lưu ý:**  \n- Giá và khuyến mãi có thể thay đổi; vui lòng xem chi tiết trên trang món để biết chính xác.  \n- Nếu bạn có dị ứng hoặc yêu cầu đặc biệt về thành phần, hãy ghi chú trong phần “Ghi chú khi đặt” hoặc gọi trực tiếp tới quán để được hỗ trợ tốt nhất.  \n\nNếu bạn có sở thích cụ Thích (ví dụ: chỉ ăn chay, muốn món ít calo, hoặc thích cay) hãy cho mình biết nhé – mình sẽ gợi ý thêm cho phù hợp! Selamat ăn!"
+        "text": "Thời gian giao hàng tại NEUFood thường dao động từ **20‑45 phút**, tùy thuộc vào:\n\n- Khoảng cách từ quán ăn đến điểm bạn đang ở (trong khuôn viên hoặc các khu vực gần kampus).  \n- Lượng đơn hàng đang được xử lý lúc bạn đặt (giờ cao điểm như trưa hoặc tối thường sẽ mất thời gian lâu hơn).  \n\nKhi bạn thực hiện đơn hàng trên web hoặc app, hệ thống sẽ hiển thị **estimated delivery time** (thời gian dự kiến giao) ngay trước khi bạn xác nhận thanh toán. Bạn cũng có thể theo dõi tiến độ đơn hàng qua tính năng “Theo dõi đơn” để biết chính xác khi món ăn đang trên đường đến.\n\nNếu có nhu cầu giao hàng nhanh hơn, bạn có thể:\n\n- Đặt mua trước (scheduled order) để hệ thống ưu tiên xử lý.  \n- Chọn các món ăn có thời gian chuẩn bị ngắn (ví dụ: sandwich, salad, bánh mì) khi bạn cần gấp.  \n\nNếu còn bất kỳ thắc mắc nào khác về quy trình đặt món, thanh toán hoặc lịch sử đơn, cứ thoải mái hỏi nhé! 😊"
       }
     ]
   },
@@ -19,7 +19,7 @@
     "role": "user",
     "parts": [
       {
-        "text": "[object Object]"
+        "text": "phở có nhiều calo không"
       }
     ]
   },
@@ -27,7 +27,7 @@
     "role": "model",
     "parts": [
       {
-        "text": "Chào bạn! Tin nhắn vừa gửi có vẻ bị hỏng hoặc là một đối tượng trống ([object Object]). Bạn có thể gửi lại câu hỏi hoặc mô tả nhu cầu của mình một cách cụ thể hơn không ạ? Ví dụ: muốn gợi ý món ăn cho bữa trưa, hỏi về cách đặt đơn, hoặc bất kỳ gì khác liên quan đến NEUFood. Mình sẵn sàng giúp đỡ! 😊"
+        "text": "Phở là món ăn khá linh hoạt, vì vậy lượng calo sẽ thay đổi tùy thuộc vào thành phần và khẩu phần bạn chọn:\n\n- **Bún phở**: là nguồn carbohydrate chính; nếu bạn ăn nhiều bún, calo sẽ tăng. Bạn có thể giảm lượng bún hoặc thay bằng bún lọc, bún đậu để giảm calo.\n- **Thịt**: thịt bò nạc (thăn, gân) có ít chất béo hơn thịt bò đỏ hoặc bò viên. Thức ăn từ gà hoặc hải sản thường có calo thấp hơn thịt bò.\n- **Nước dùng**: nước dùng phở thường được ninh từ xương và gia vị, có thể chứa lượng muối piuttosto cao nhưng không quá nhiều chất béo nếu không thêm mucho dầu hoặc mỡ. Bạn có thể yêu cầu nước dùng ít muối hoặc không thêm bột ngọt.\n- **Trái cây và rau**: giá đỗ, húng quế, rau ngọt, lá húng, mù tạt… đều rất ít calo và cung cấp chất xơ, vitamin.\n- **Thêm toppings**: trứng, bột báng, bột chiên, hoặc sốt đậu hũ, sốt Sriracha… có thể tăng calo nếu dùng nhiều.\n\n**Mẹo giảm calo khi ăn phở**:\n1. Chọn phần bún vừa phải (hoặc hỏi “ít bún” nếu có).\n2. Ưu tiên thịt nạc hoặc gà, hạn chế bò viên và các loại thịt chế biến có nhiều chất béo.\n3. Yêu cầu nước dùng ít muối hoặc không thêm bột ngọt.\n4. Thêm nhiều rau sống và giá đỗ.\n5. Giữ lượng sốt và toppings (trứng, bột chiên…) ở mức vừa phải.\n\nNếu bạn đang theo dõi dinh dưỡng cụ thể (ví dụ: để giảm cân, quản lý đường huyết, hoặc có hạn chế về muối/chất béo), tốt nhất là tham khảo thông tin chi tiết trên menu của từng quán hoặc hỏi trực tiếp nhân viên về cách chế biến. Và khi có bất kỳ vấn đề y tế hoặc dị ứng nào, hãy tham khảo ý kiến bác sĩ hoặc chuyên gia dinh dưỡng để được tư vấn phù hợp. \n\nChúc bạn thưởng thức món phở ngon mà vẫn phù hợp với mục tiêu dinh dưỡng của mình! 😊"
       }
     ]
   }
