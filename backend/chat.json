@@ -1,1 +1,34 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "Gợi ý món cho bữa trưa"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "Chào bạn! Dưới đây là một vài gợi ý món ăn phù hợp cho bữa trưa tại NEUFood, bạn có thể tham khảo và sau đó vào Menu trên website/app để xem chi tiết giá cả và thành phần:\n\n**1. Cơm & 밥 bowl**  \n- Cơm gà nướng sốtMe (hoặc sốt cà chua, sốt tiêu)  \n- Cơm ribeye bò xào hành  \n- Cơm cá hồi teriyaki + rau luộc  \n- Cơm chay đậu hũ sốt nấm  \n\n**2. Mì & Phở**  \n- Phở bò tai nạm (hoặc phở gà)  \n- Bún bò Huế  \n- Mì xào hải sản hoặc xào bò  \n- Hủ tiếu nam vang  \n\n**3. Salad & Bowl nhẹ**  \n- Salad gà nướng + rau củ + sốt mù tạt  \n- Bowl quinoa + salmon + авокадо  \n- Gỏi cuốn tôm thịt + nước sốt peanut  \n\n**4. Bánh mì & Đồ ăn nhẹ**  \n- Bánh mì thịt nướng, pate, trứng  \n- Bánh mì chay (đậu hũ, rau củ)  \n- Bánh bao hấp (thịt, chay)  \n\n**5. Món ăn nhanh / combo**  \n- Combo cơm + súp + nước uống  \n- Set bún + rouleau primavera + trà đá  \n\n**Cách đặt đơn:**  \n1. Mở app/website NEUFood → chọn “Menu”.  \n2. Tìm món bạn thích → nhấn “Thêm vào giỏ hàng”.  \n3. Kiểm tra giỏ hàng, nếu muốn thay đổi số lượng hoặc thêm món khác thì chỉnh sửa ngay.  \n4. Chọn phương thức thanh toán (thẻ, ví điện tử, hoặc thanh toán khi nhận hàng).  \n5. Xác nhận đơn → bạn sẽ nhận được thông báo thời gian dự kiến giao và mã đơn hàng để theo dõi.\n\n**Lưu ý:**  \n- Giá và khuyến mãi có thể thay đổi; vui lòng xem chi tiết trên trang món để biết chính xác.  \n- Nếu bạn có dị ứng hoặc yêu cầu đặc biệt về thành phần, hãy ghi chú trong phần “Ghi chú khi đặt” hoặc gọi trực tiếp tới quán để được hỗ trợ tốt nhất.  \n\nNếu bạn có sở thích cụ Thích (ví dụ: chỉ ăn chay, muốn món ít calo, hoặc thích cay) hãy cho mình biết nhé – mình sẽ gợi ý thêm cho phù hợp! Selamat ăn!"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "[object Object]"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "Chào bạn! Tin nhắn vừa gửi có vẻ bị hỏng hoặc là một đối tượng trống ([object Object]). Bạn có thể gửi lại câu hỏi hoặc mô tả nhu cầu của mình một cách cụ thể hơn không ạ? Ví dụ: muốn gợi ý món ăn cho bữa trưa, hỏi về cách đặt đơn, hoặc bất kỳ gì khác liên quan đến NEUFood. Mình sẵn sàng giúp đỡ! 😊"
+      }
+    ]
+  }
+]
