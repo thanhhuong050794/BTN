@@ -13,13 +13,14 @@
 
   min-height: 100vh;
   background-color: var(--menu-page-bg);
-  padding-top: 4.5rem;
+  /* Navbar is fixed and taller because of logo; keep heading fully visible */
+  padding-top: 7rem;
   padding-bottom: 6rem;
 }
 
 @media (min-width: 768px) {
   .menu {
-    padding-top: 5.5rem;
+    padding-top: 7.5rem;
     padding-bottom: 3rem;
   }
 }
@@ -61,7 +62,7 @@
 /* Thanh cố định: tìm kiếm, lọc, danh mục */
 .stickyDock {
   position: sticky;
-  top: 4.75rem;
+  top: 7rem;
   z-index: 30;
   margin: 0;
   padding: 0.45rem 0 0.65rem;
@@ -72,7 +73,7 @@
 
 @media (min-width: 768px) {
   .stickyDock {
-    top: 5.25rem;
+    top: 7.5rem;
   }
 }
 
