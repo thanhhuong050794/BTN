@@ -140,19 +140,24 @@ function DishCard({ dish }) {
 
 export default function MenuPage() {
   const { add, lines, totalCount } = useCart()
+  const PAGE_SIZE = 9
 
-  const [categoryId, setCategoryId] = useState('all')
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([])
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState('popular')
   const [priceFilter, setPriceFilter] = useState('all')
   const [ratingFilter, setRatingFilter] = useState('all')
   const [showFilters, setShowFilters] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const filtered = useMemo(() => {
     let list = [...dishes]
 
-    if (categoryId !== 'all') {
-      list = list.filter((d) => d.categoryId === categoryId)
+    if (selectedCategoryIds.length > 0) {
+      list = list.filter((d) => {
+        const dishCategoryIds = d.categoryIds ?? (d.categoryId ? [d.categoryId] : [])
+        return dishCategoryIds.some((id) => selectedCategoryIds.includes(id))
+      })
     }
 
     const q = search.trim().toLowerCase()
@@ -175,7 +180,30 @@ export default function MenuPage() {
     }
 
     return list
-  }, [categoryId, search, sort, priceFilter, ratingFilter])
+  }, [selectedCategoryIds, search, sort, priceFilter, ratingFilter])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedCategoryIds, search, sort, priceFilter, ratingFilter])
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const pageStart = (currentPage - 1) * PAGE_SIZE
+  const pagedDishes = filtered.slice(pageStart, pageStart + PAGE_SIZE)
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+
+  const selectedCategoryLabels = selectedCategoryIds
+    .map((id) => MENU_CATEGORIES.find((c) => c.id === id)?.label)
+    .filter(Boolean)
+
+  function toggleCategory(id) {
+    if (id === 'all') {
+      setSelectedCategoryIds([])
+      return
+    }
+    setSelectedCategoryIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    )
+  }
 
   return (
     <main className={styles.menu}>
@@ -262,8 +290,16 @@ export default function MenuPage() {
                 <button
                   key={c.id}
                   type="button"
-                  className={c.id === categoryId ? styles.catChipOn : styles.catChip}
-                  onClick={() => setCategoryId(c.id)}
+                  className={
+                    c.id === 'all'
+                      ? selectedCategoryIds.length === 0
+                        ? styles.catChipOn
+                        : styles.catChip
+                      : selectedCategoryIds.includes(c.id)
+                        ? styles.catChipOn
+                        : styles.catChip
+                  }
+                  onClick={() => toggleCategory(c.id)}
                 >
                   {c.label}
                 </button>
@@ -277,19 +313,48 @@ export default function MenuPage() {
             <section className={styles.main} aria-label="Danh sách món">
               <p className={styles.resultCount}>
                 {filtered.length} món
-                {categoryId !== 'all'
-                  ? ` · ${MENU_CATEGORIES.find((c) => c.id === categoryId)?.label ?? ''}`
-                  : ''}
+                {selectedCategoryLabels.length > 0 ? ` · ${selectedCategoryLabels.join(', ')}` : ''}
               </p>
 
               <div className={styles.grid}>
-                {filtered.map((dish) => (
+                {pagedDishes.map((dish) => (
                   <DishCard key={dish.id} dish={dish} />
                 ))}
               </div>
 
               {filtered.length === 0 ? (
                 <p className={styles.empty}>Không có món phù hợp. Thử đổi bộ lọc hoặc từ khóa.</p>
+              ) : null}
+
+              {filtered.length > 0 ? (
+                <div className={styles.pagination} aria-label="Chuyển trang món ăn">
+                  <button
+                    type="button"
+                    className={styles.pageBtn}
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  >
+                    {'‹'}
+                  </button>
+                  {pageNumbers.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      className={p === currentPage ? styles.pageBtnOn : styles.pageBtn}
+                      onClick={() => setCurrentPage(p)}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    className={styles.pageBtn}
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  >
+                    {'›'}
+                  </button>
+                </div>
               ) : null}
             </section>
 
