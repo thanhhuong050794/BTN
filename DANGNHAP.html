@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#427bcc",
+                        "surface-dim": "#c8dbff",
+                        "inverse-surface": "#000e25",
+                        "on-primary": "#f8f7ff",
+                        "on-secondary": "#faf8fc",
+                        "inverse-on-surface": "#8d9dbd",
+                        "on-background": "#003266",
+                        "secondary-container": "#e4e2e6",
+                        "on-secondary-fixed": "#3f3f43",
+                        "surface-tint": "#0c56d0",
+                        "error-container": "#fe8983",
+                        "on-primary-fixed": "#003993",
+                        "on-tertiary-container": "#524c68",
+                        "secondary-fixed": "#e4e2e6",
+                        "primary-fixed-dim": "#c6d3ff",
+                        "inverse-primary": "#5c8bff",
+                        "on-tertiary": "#fcf7ff",
+                        "primary-fixed": "#dae2ff",
+                        "primary-container": "#dae2ff",
+                        "secondary-dim": "#535356",
+                        "surface-container-high": "#dfe8ff",
+                        "background": "#f9f9ff",
+                        "on-primary-container": "#004ab9",
+                        "on-error": "#fff7f6",
+                        "outline-variant": "#85b3ff",
+                        "on-tertiary-fixed-variant": "#5c5672",
+                        "surface-bright": "#f9f9ff",
+                        "surface-container": "#e7eeff",
+                        "primary": "#0c56d0",
+                        "on-surface": "#003266",
+                        "secondary": "#5f5f62",
+                        "on-primary-fixed-variant": "#0253cd",
+                        "tertiary-container": "#e3dbfd",
+                        "on-tertiary-fixed": "#3f3a54",
+                        "primary-dim": "#004aba",
+                        "on-secondary-fixed-variant": "#5b5b5f",
+                        "secondary-fixed-dim": "#d5d4d8",
+                        "tertiary-fixed-dim": "#d5cdee",
+                        "on-error-container": "#752121",
+                        "surface-container-highest": "#d6e3ff",
+                        "error-dim": "#4e0309",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#1d5fae",
+                        "tertiary-fixed": "#e3dbfd",
+                        "surface-variant": "#d6e3ff",
+                        "on-secondary-container": "#515155",
+                        "error": "#9f403d",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#615b77",
+                        "tertiary-dim": "#554f6b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-button {
+            background: linear-gradient(135deg, #0c56d0 0%, #1d5fae 100%);
+        }
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+        }
+        .hero-pattern {
+            background-image: radial-gradient(#0c56d0 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Decorative background elements -->
+<div class="fixed inset-0 hero-pattern pointer-events-none"></div>
+<div class="fixed -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-tertiary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<nav class="w-full px-8 md:px-12 py-6 flex justify-between items-center fixed top-0 z-50 bg-surface/80 backdrop-blur-md">
+<div class="text-3xl font-extrabold tracking-tighter text-[#003266] dark:text-blue-400">NEU Food</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-[#003266]/70 dark:text-slate-400 font-semibold hover:text-[#0c56d0] transition-colors duration-300" href="#">Đăng nhập</a>
+<a class="text-[#003266]/70 dark:text-slate-400 font-semibold hover:text-[#0c56d0] transition-colors duration-300" href="#">Đăng ký</a>
+<a class="text-[#003266]/70 dark:text-slate-400 font-semibold hover:text-[#0c56d0] transition-colors duration-300" href="#">Hỗ trợ</a>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center pt-24 pb-12 px-6 md:px-12 relative z-10">
+<div class="w-full max-w-[1800px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+<!-- Left Section: Reordered Logo and Text -->
+<section class="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left py-8">
+<div class="relative w-full max-w-lg aspect-square flex items-center justify-center mb-8 lg:-ml-12">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
+<div class="relative w-full h-full flex flex-col items-center justify-center">
+<img alt="Official NEU Food Logo" class="w-[95%] h-[95%] object-contain drop-shadow-[0_20px_50px_rgba(12,86,208,0.2)]" src="https://lh3.googleusercontent.com/aida/ADBb0uhC0h69BjyYJ9uRNoXb9QxBTGAPBbLZP4rgBVcjvv5NReYyefvsc2AeaeodaFueTECRg69BDCtbXMcclKHgl3dKpHtukMk8oJgquMIDjEXNb77tvTwPMj4AnX4_ggZRSuJ8Fwo0zsiO4YDO_3Lplo1rlHA_SfNx4tSLPwq7olQBcYAoqnHFadQgeGXVyo3Or6lLmXLw40cOT58ZTKtANGXoHV2BwJ6VN1xZYIoD3ohk6TkujJqIKp1psZoWjaqWtJS7n0CfJI1P"/>
+</div>
+</div>
+<div class="space-y-6">
+<h1 class="font-headline text-on-surface text-5xl md:text-6xl lg:text-8xl font-extrabold tracking-tight leading-[1.1]">
+                        Giao hàng tận<br/><span class="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-outline-variant">phòng học tại NEU.</span>
+</h1>
+<p class="text-on-surface-variant text-xl md:text-2xl max-w-2xl lg:max-w-3xl leading-relaxed opacity-90">
+                        Thưởng thức bữa trưa nóng hổi mà không cần rời khỏi lớp. Giải pháp đặt đồ ăn tối ưu giúp bạn tiết kiệm thời gian và nạp năng lượng nhanh chóng cho giờ học tiếp theo.
+                    </p>
+</div>
+</section>
+<!-- Right Section: Login Form -->
+<section class="lg:col-span-5 w-full flex justify-center py-8">
+<div class="bg-surface-container-low/50 p-2 rounded-[2.5rem] w-full max-w-xl">
+<div class="glass-panel p-8 md:p-14 rounded-[2rem] shadow-[0_32px_64px_-12px_rgba(0,50,102,0.15)] border border-white/40">
+<header class="mb-10 text-center">
+<h2 class="font-headline text-on-surface text-4xl font-bold tracking-tight mb-4">Chào mừng trở lại</h2>
+<p class="text-on-surface-variant text-lg">Vui lòng nhập thông tin để tiếp tục.</p>
+</header>
+<form class="space-y-8">
+<div class="space-y-3">
+<label class="font-label text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant/80 ml-1">ĐỊA CHỈ EMAIL</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-2 border-transparent rounded-2xl px-6 py-5 text-on-surface text-lg placeholder:text-on-surface-variant/30 focus:ring-4 focus:ring-primary/10 focus:bg-white focus:border-primary transition-all" placeholder="tên@côngty.com" type="email"/>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center px-1">
+<label class="font-label text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant/80">MẬT KHẨU</label>
+<a class="text-sm font-bold text-primary hover:text-primary-dim transition-all" href="#">Quên mật khẩu?</a>
+</div>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-2 border-transparent rounded-2xl px-6 py-5 text-on-surface text-lg placeholder:text-on-surface-variant/30 focus:ring-4 focus:ring-primary/10 focus:bg-white focus:border-primary transition-all" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="flex items-center gap-4 px-1">
+<input class="w-6 h-6 rounded-lg border-outline-variant bg-surface-container-low text-primary focus:ring-offset-0 focus:ring-0 cursor-pointer" id="remember" type="checkbox"/>
+<label class="text-lg font-medium text-on-surface-variant cursor-pointer select-none" for="remember">Ghi nhớ tôi</label>
+</div>
+<button class="signature-button w-full py-6 rounded-full text-on-primary text-xl font-bold tracking-tight hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_20px_40px_-10px_rgba(12,86,208,0.4)]" type="submit">
+                                Đăng nhập ngay
+                            </button>
+</form>
+<div class="relative my-10 flex items-center justify-center">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<span class="relative bg-white px-6 text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/50">HOẶC TIẾP TỤC VỚI</span>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<button class="flex items-center justify-center gap-4 py-5 px-4 md:px-8 rounded-2xl bg-white hover:bg-surface-container-low border border-outline-variant/20 transition-all active:scale-[0.98] shadow-sm">
+<img alt="Google" class="w-6 h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0XnffqaXdqzl6ifmyy6MvB8r0cjlEmwsBJ1hDO3TvTLbc32OW9Hs-W7t7DSjL2shZc00KAYtyPvfj5b-KjNXeFt8rhs5kCXeqHnctnKgnD6yu9voJYUWj6MvK3o0Xk8GRwlRHG83jOdCN-XZgsph90RDc68jPn6hhx4i0YRTChoJ0RUYEtkax0MUdYM7u83mDKFGrbCEYU9iJgr8WPkJHbK6OrakvqVzT7d5XugM8wtfWQSJhlJqfHml1v1hhSrGPiOveTKhldPI"/>
+<span class="text-base font-bold text-on-surface">Google</span>
+</button>
+<button class="flex items-center justify-center gap-4 py-5 px-4 md:px-8 rounded-2xl bg-white hover:bg-surface-container-low border border-outline-variant/20 transition-all active:scale-[0.98] shadow-sm">
+<svg class="w-7 h-7 text-[#1877F2]" fill="currentColor" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+<span class="text-base font-bold text-on-surface">Facebook</span>
+</button>
+</div>
+<footer class="mt-10 text-center">
+<p class="text-lg text-on-surface-variant">
+                                Bạn chưa có tài khoản? 
+                                <a class="font-bold text-primary hover:underline underline-offset-4 decoration-2 transition-all" href="#">Đăng ký ngay</a>
+</p>
+</footer>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="w-full px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1800px] mx-auto border-t border-outline-variant/20 bg-surface/50 backdrop-blur-sm">
+<p class="font-['Inter'] text-sm font-medium tracking-normal text-on-surface-variant/70">© 2024 NEU Food. Hệ thống cung cấp suất ăn thông minh tại cơ sở.</p>
+<div class="flex gap-10">
+<a class="font-['Inter'] text-sm font-medium text-on-surface-variant/70 hover:text-primary transition-colors" href="#">Chính sách bảo mật</a>
+<a class="font-['Inter'] text-sm font-medium text-on-surface-variant/70 hover:text-primary transition-colors" href="#">Điều khoản dịch vụ</a>
+<a class="font-['Inter'] text-sm font-medium text-on-surface-variant/70 hover:text-primary transition-colors" href="#">Bảo mật</a>
+</div>
+</footer>
+</body></html>
