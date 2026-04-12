@@ -1,13 +1,16 @@
 import { Link, NavLink } from 'react-router-dom'
 import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield } from 'lucide-react'
 import { useAdminAuth } from '../context/AdminAuthContext'
+import { useCart } from '../context/CartContext'
 import styles from './Navbar.module.css'
 
 const linkClass = ({ isActive }) =>
   isActive ? `${styles.topnavLink} ${styles.topnavLinkOn}` : styles.topnavLink
 
-export default function Navbar({ cartCount = 2 }) {
+export default function Navbar() {
   const { isAdmin } = useAdminAuth()
+  const { totalCount } = useCart()
+  const cartCount = totalCount
 
   return (
     <header class={styles.topnav}>

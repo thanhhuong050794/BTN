@@ -4,6 +4,7 @@ import RequireAdmin from './components/admin/RequireAdmin'
 import Layout from './components/Layout'
 import { AdminAuthProvider } from './context/AdminAuthContext'
 import { AdminDishesProvider } from './context/AdminDishesContext'
+import { CartProvider } from './context/CartContext'
 import AdminBaoCaoPage from './pages/admin/AdminBaoCaoPage'
 import AdminDonPage from './pages/admin/AdminDonPage'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
@@ -14,6 +15,7 @@ import ChiTietMonPage from './pages/ChiTietMonPage'
 import DonHangPage from './pages/DonHangPage'
 import GioHangPage from './pages/GioHangPage'
 import HomePage from './pages/HomePage'
+import MenuPage from './pages/MenuPage'
 import LichSuDonHangPage from './pages/LichSuDonHangPage'
 import TaiKhoanPage from './pages/TaiKhoanPage'
 import ThanhToanPage from './pages/ThanhToanPage'
@@ -31,6 +33,7 @@ function AdminSuite() {
 export default function App() {
   return (
     <AdminAuthProvider>
+      <CartProvider>
       <BrowserRouter>
         <Routes>
           <Route path="quan-ly/dang-nhap" element={<AdminLoginPage />} />
@@ -43,7 +46,7 @@ export default function App() {
           </Route>
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path="menu" element={<HomePage />} />
+            <Route path="menu" element={<MenuPage />} />
             <Route path="mon/:id" element={<ChiTietMonPage />} />
             <Route path="gio-hang" element={<GioHangPage />} />
             <Route path="thanh-toan" element={<ThanhToanPage />} />
@@ -54,6 +57,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </CartProvider>
     </AdminAuthProvider>
   )
 }

@@ -4,6 +4,48 @@ import styles from './ChatbotWidget.module.css'
 
 const API_BASE = import.meta.env.VITE_CHAT_API_URL ?? ''
 
+// Parse markdown text to JSX
+function parseMarkdown(text) {
+  if (!text) return null
+  
+  // Split by lines first to handle line breaks
+  const lines = text.split('\n')
+  
+  return lines.map((line, lineIdx) => {
+    if (!line.trim()) {
+      return <br key={`br-${lineIdx}`} />
+    }
+    
+    // Parse bold text (**text**)
+    const parts = []
+    let lastIndex = 0
+    const boldRegex = /\*\*(.+?)\*\*/g
+    let match
+    
+    while ((match = boldRegex.exec(line)) !== null) {
+      // Add text before the match
+      if (match.index > lastIndex) {
+        parts.push(line.substring(lastIndex, match.index))
+      }
+      // Add bold text
+      parts.push(<strong key={`bold-${match.index}`}>{match[1]}</strong>)
+      lastIndex = boldRegex.lastIndex
+    }
+    
+    // Add remaining text
+    if (lastIndex < line.length) {
+      parts.push(line.substring(lastIndex))
+    }
+    
+    // If no parts, just return the line
+    if (parts.length === 0) {
+      return <div key={`line-${lineIdx}`}>{line}</div>
+    }
+    
+    return <div key={`line-${lineIdx}`}>{parts}</div>
+  })
+}
+
 const QUICK_PROMPTS = [
   'Gợi ý món cho bữa trưa',
   'Cách đặt hàng trên web?',
@@ -185,7 +227,7 @@ export default function ChatbotWidget() {
                 <span className={styles.bubbleLabel}>
                   {m.role === 'user' ? 'Bạn' : 'Trợ lý'}
                 </span>
-                <p className={styles.bubbleText}>{m.text}</p>
+                <p className={styles.bubbleText}>{parseMarkdown(m.text)}</p>
               </div>
             ))}
             {loading && (
