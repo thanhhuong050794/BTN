@@ -25,7 +25,7 @@ export const dishes = [
     price: 50000,
     rating: 4.8,
     reviewCount: 312,
-    image: 'https://www.pinterest.com/pin/32651166044327569/',
+    image: 'https://live2makan.com/wp-content/uploads/2022/08/l2m-vn-2207-pho10-05.jpg',
   },
   {
     id: 'pho-tron',
@@ -37,7 +37,7 @@ export const dishes = [
     price: 45000,
     rating: 4.6,
     reviewCount: 154,
-    image: 'https://www.pinterest.com/pin/359232507796297908/',
+    image: 'https://cdn.tgdd.vn/2021/08/CookRecipe/Avatar/pho-ga-tron-sa-te-thumbnail.jpg',
   },
   {
     id: 'bun-bo-hue',
@@ -49,7 +49,7 @@ export const dishes = [
     price: 55000,
     rating: 4.9,
     reviewCount: 420,
-    image: 'https://www.pinterest.com/pin/3237030977116163/',
+    image: 'https://cdn.tgdd.vn/Files/2017/03/24/964495/cach-nau-bun-bo-hue-gio-heo-ngon-cong-thuc-chuan-vi-202208251617593627.jpg',
   },
   {
     id: 'bun-rieu',
@@ -61,7 +61,7 @@ export const dishes = [
     price: 40000,
     rating: 4.5,
     reviewCount: 180,
-    image: 'https://www.pinterest.com/pin/985231160975233/',
+    image: 'https://i.ytimg.com/vi/C1P1Cw9J1-I/maxresdefault.jpg',
   },
   {
     id: 'hu-tieu',
@@ -73,7 +73,7 @@ export const dishes = [
     price: 45000,
     rating: 4.7,
     reviewCount: 210,
-    image: 'https://www.pinterest.com/pin/4503668368051411/',
+    image: 'https://media.cooky.vn/recipe/g3/22522/s800x500/recipe22522-636439367069081450.jpg',
   },
   {
     id: 'mien-ga',
@@ -85,7 +85,7 @@ export const dishes = [
     price: 40000,
     rating: 4.4,
     reviewCount: 120,
-    image: 'https://www.pinterest.com/pin/293789575709820765/',
+    image: 'https://cdn.tgdd.vn/Files/2017/03/22/963778/bi-quyet-nau-mien-ga-thom-ngon-da-ga-vang-gion-202208261323269332.jpg',
   },
   {
     id: 'chao-suon',
@@ -97,7 +97,7 @@ export const dishes = [
     price: 25000,
     rating: 4.8,
     reviewCount: 305,
-    image: 'https://www.pinterest.com/pin/129900770500404825/',
+    image: 'https://cdn.tgdd.vn/2021/05/CookProduct/axresdefault(1)-1200x676.jpg',
   },
   {
     id: 'banh-canh',
@@ -109,7 +109,7 @@ export const dishes = [
     price: 40000,
     rating: 4.5,
     reviewCount: 140,
-    image: 'https://www.pinterest.com/pin/6544361949721767/',
+    image: 'https://i.ytimg.com/vi/ZjAxz95VJKQ/maxresdefault.jpg',
   },
   {
     id: 'bun-moc',
@@ -121,7 +121,7 @@ export const dishes = [
     price: 40000,
     rating: 4.6,
     reviewCount: 160,
-    image: 'https://www.pinterest.com/pin/123919427245210410/',
+    image: 'https://i.ytimg.com/vi/AwppaRlywik/maxresdefault.jpg',
   },
   {
     id: 'bun-thang',
@@ -133,7 +133,7 @@ export const dishes = [
     price: 50000,
     rating: 4.7,
     reviewCount: 195,
-    image: 'https://www.pinterest.com/pin/170714642118415833/',
+    image: 'https://noiphodien123.vn/wp-content/uploads/2022/02/bun-thang-ngon.jpg',
   },
   {
     id: 'bun-ca',
@@ -145,7 +145,7 @@ export const dishes = [
     price: 40000,
     rating: 4.5,
     reviewCount: 130,
-    image: 'https://www.pinterest.com/pin/84864774221742210/',
+    image: 'https://cdn.tgdd.vn/Files/2020/04/03/1246339/cach-nau-bun-ca-ha-noi-thom-ngon-chuan-vi-khong-ta-13.jpg',
   },
   {
     id: 'bun-cha',
@@ -157,7 +157,7 @@ export const dishes = [
     price: 45000,
     rating: 4.9,
     reviewCount: 520,
-    image: 'https://www.pinterest.com/pin/836191855856511310/',
+    image: 'https://www.seriouseats.com/thmb/J0g7JWjk9r6CHESo1CIrD1BfGd0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20231204-SEA-VyTran-BunChaHanoi-19-f623913c6ef34a9185bcd6e5680c545f.jpg',
   },
   {
     id: 'bun-mam',
@@ -169,7 +169,7 @@ export const dishes = [
     price: 55000,
     rating: 4.6,
     reviewCount: 110,
-    image: 'https://www.pinterest.com/pin/78109374782057413/',
+    image: 'https://cdn.tgdd.vn/Files/2019/03/12/1154316/cach-nau-bun-mam-mien-tay-chuan-thom-ngon-don-gian-tai-nha-202112211640380018.jpg',
   },
   {
     id: 'bun-dau-mam-tom',
@@ -181,7 +181,7 @@ export const dishes = [
     price: 50000,
     rating: 4.8,
     reviewCount: 415,
-    image: 'https://www.pinterest.com/pin/307441112080944826/',
+    image: 'https://static.vinwonders.com/2023/01/bun-dau-mam-tom-thumb.jpg',
   },
   {
     id: 'nem-nuong-nha-trang',
@@ -193,7 +193,7 @@ export const dishes = [
     price: 45000,
     rating: 4.7,
     reviewCount: 230,
-    image: 'https://www.pinterest.com/pin/273804852341550791/',
+    image: 'https://cdn.tgdd.vn/2021/09/CookDish/cach-lam-nem-nuong-nha-trang-bang-noi-chien-khong-dau-thom-avt-1200x676.jpg',
   },
   {
     id: 'goi-cuon',
@@ -205,7 +205,7 @@ export const dishes = [
     price: 30000,
     rating: 4.5,
     reviewCount: 155,
-    image: 'https://fptshop.com.vn/tin-tuc/dien-may/cach-lam-goi-cuon-164159',
+    image: 'https://images.squarespace-cdn.com/content/v1/52d3fafee4b03c7eaedee15f/30cf6af1-a5a1-456f-ba8e-3d09713608e3/thumbnail-9264.jpg',
   },
   {
     id: 'com-tam',
@@ -217,7 +217,7 @@ export const dishes = [
     price: 55000,
     rating: 4.8,
     reviewCount: 380,
-    image: 'https://www.pinterest.com/pin/386042999329251973/',
+    image: 'https://statics.vinwonders.com/com-tam-ngon-o-sai-gon-0_1630562640.jpg',
   },
   {
     id: 'com-ga',
@@ -229,7 +229,7 @@ export const dishes = [
     price: 45000,
     rating: 4.6,
     reviewCount: 210,
-    image: 'https://www.pinterest.com/pin/11399805458847561/',
+    image: 'https://static.vinwonders.com/2023/02/com-ga-da-nang-1.jpg',
   },
   {
     id: 'com-suon',
@@ -241,7 +241,7 @@ export const dishes = [
     price: 40000,
     rating: 4.5,
     reviewCount: 145,
-    image: 'https://www.pinterest.com/pin/318911217380216824/',
+    image: 'https://i.ytimg.com/vi/cJu6tFJe_Gc/maxresdefault.jpg',
   },
   {
     id: 'com-chien',
@@ -253,7 +253,7 @@ export const dishes = [
     price: 40000,
     rating: 4.4,
     reviewCount: 185,
-    image: 'https://www.pinterest.com/pin/47780446039804314/',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.nHkdDmDXSKC8cJ3PLVjgtQHaE6?pid=Api&P=0&h=180',
   },
   {
     id: 'com-bo-luc-lac',
@@ -265,7 +265,7 @@ export const dishes = [
     price: 65000,
     rating: 4.7,
     reviewCount: 220,
-    image: 'https://www.pinterest.com/pin/371758144255266428/',
+    image: 'https://i.ytimg.com/vi/RfGrzXPuKeM/maxresdefault.jpg',
   },
   {
     id: 'com-nieu',
@@ -277,7 +277,7 @@ export const dishes = [
     price: 50000,
     rating: 4.8,
     reviewCount: 160,
-    image: 'https://www.pinterest.com/pin/53972895530180910/',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.vdevG-D5cLXfSrBGkpqkHwHaEU?pid=Api&P=0&h=180',
   },
   {
     id: 'com-ca-kho',
@@ -289,7 +289,7 @@ export const dishes = [
     price: 45000,
     rating: 4.7,
     reviewCount: 140,
-    image: 'https://www.pinterest.com/pin/10344274144696004/',
+    image: 'https://img-global.cpcdn.com/recipes/8762fe6a5e6ac0b2/1200x630cq70/photo.jpg',
   },
   {
     id: 'com-ga-xoi-mo-2',
@@ -301,7 +301,7 @@ export const dishes = [
     price: 45000,
     rating: 4.7,
     reviewCount: 250,
-    image: 'https://www.pinterest.com/pin/359232507799228207/',
+    image: 'https://ticotravel.com.vn/wp-content/uploads/2022/06/Com-ga-xoi-mo-15.jpg',
   },
   {
     id: 'com-tron',
@@ -313,7 +313,7 @@ export const dishes = [
     price: 55000,
     rating: 4.6,
     reviewCount: 190,
-    image: 'https://www.pinterest.com/pin/529102656260727490/',
+    image: 'https://cdn.tgdd.vn/Files/2018/07/05/1099587/cach-lam-com-tron-han-quoc-bibimbap-ngon-nhu-nha-hang-202205241021184780.jpg',
   },
   {
     id: 'com-chay',
@@ -325,7 +325,7 @@ export const dishes = [
     price: 35000,
     rating: 4.8,
     reviewCount: 115,
-    image: 'https://www.pinterest.com/pin/200410252168381229/',
+    image: 'https://vnn-imgs-a1.vgcloud.vn/znews-photo.zadn.vn/w860/Uploaded/mrndcqjwq/2021_08_12/Mam_5.jpg',
   },
   {
     id: 'com-ca-ri',
@@ -337,7 +337,7 @@ export const dishes = [
     price: 45000,
     rating: 4.5,
     reviewCount: 130,
-    image: 'https://www.pinterest.com/pin/442126888441080494/',
+    image: 'https://www.huongnghiepaau.com/wp-content/uploads/2024/07/cach-nau-com-ca-ri-nhat.jpg',
   },
   {
     id: 'com-thit-kho',
@@ -349,7 +349,7 @@ export const dishes = [
     price: 40000,
     rating: 4.7,
     reviewCount: 175,
-    image: 'https://www.pinterest.com/pin/92042386129106163/',
+    image: 'https://tanmyholdings.com/wp-content/uploads/2024/10/Com-thit-kho-tieu1.png',
   },
   {
     id: 'banh-mi',
@@ -361,7 +361,7 @@ export const dishes = [
     price: 25000,
     rating: 4.9,
     reviewCount: 650,
-    image: 'https://www.pinterest.com/pin/16255248650885782/',
+    image: 'https://tse4.mm.bing.net/th/id/OIP.yxsHU68P6sAzYizPNk64IwHaEo?pid=Api&P=0&h=180',
   },
   {
     id: 'banh-xeo',
@@ -373,7 +373,7 @@ export const dishes = [
     price: 40000,
     rating: 4.7,
     reviewCount: 210,
-    image: 'https://www.pinterest.com/pin/143974519332193071/',
+    image: 'https://cdn.tgdd.vn/2020/12/CookProduct/11-1200x676.jpg',
   },
   {
     id: 'banh-cuon',
@@ -385,7 +385,7 @@ export const dishes = [
     price: 30000,
     rating: 4.6,
     reviewCount: 180,
-    image: 'https://www.pinterest.com/pin/230457705928815853/',
+    image: 'https://i.ytimg.com/vi/5CRLn1Bb1bg/maxresdefault.jpg',
   },
   {
     id: 'banh-khot',
@@ -397,7 +397,7 @@ export const dishes = [
     price: 40000,
     rating: 4.6,
     reviewCount: 150,
-    image: 'https://www.pinterest.com/pin/6333255721012161/',
+    image: 'http://foodisafourletterword.com/wp-content/uploads/2020/12/Vietnamese_Crispy_Savory_Shrimp_Pancakes_Recipe_Banh_Khot_top.jpg',
   },
   {
     id: 'banh-can',
@@ -409,7 +409,7 @@ export const dishes = [
     price: 35000,
     rating: 4.7,
     reviewCount: 135,
-    image: 'https://www.pinterest.com/pin/320740804715027290/',
+    image: 'https://static.vinwonders.com/production/banh-can-phan-thiet-01.jpeg',
   },
   {
     id: 'banh-uot',
@@ -421,7 +421,7 @@ export const dishes = [
     price: 35000,
     rating: 4.5,
     reviewCount: 120,
-    image: 'https://www.pinterest.com/pin/600949144071786066/',
+    image: 'https://img-global.cpcdn.com/recipes/922a89ff50818a94/1200x630cq70/photo.jpg',
   },
   {
     id: 'banh-duc',
@@ -433,7 +433,7 @@ export const dishes = [
     price: 20000,
     rating: 4.8,
     reviewCount: 205,
-    image: 'https://www.pinterest.com/pin/261982903317939446/',
+    image: 'https://cdn.tgdd.vn/2020/10/CookProduct/1260-1200x676-31.jpg',
   },
   {
     id: 'banh-hoi',
@@ -445,7 +445,7 @@ export const dishes = [
     price: 45000,
     rating: 4.6,
     reviewCount: 165,
-    image: 'https://www.pinterest.com/pin/70861394133527212/',
+    image: 'https://cdn.tgdd.vn/2021/05/content/hoi-3-800x450.jpg',
   },
   {
     id: 'banh-trang-nuong',
@@ -457,7 +457,7 @@ export const dishes = [
     price: 20000,
     rating: 4.8,
     reviewCount: 300,
-    image: 'https://www.pinterest.com/pin/6544361949721740/',
+    image: 'https://tse4.mm.bing.net/th/id/OIP.YM3x3rt1KAYSy542j8U6cAHaEK?pid=Api&P=0&h=180',
   },
   {
     id: 'banh-trang-tron',
@@ -469,7 +469,7 @@ export const dishes = [
     price: 20000,
     rating: 4.7,
     reviewCount: 450,
-    image: 'https://www.pinterest.com/pin/32088216098584124/',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.Hi2jizeoppiVBf0rUdSHuQHaEK?pid=Api&P=0&h=180',
   },
   {
     id: 'banh-bot-loc',
@@ -481,7 +481,7 @@ export const dishes = [
     price: 25000,
     rating: 4.6,
     reviewCount: 190,
-    image: 'https://www.pinterest.com/pin/121034308731638833/',
+    image: 'https://tse1.mm.bing.net/th/id/OIP.OnpBH_GEL59gT6nZGeCkLAHaGR?pid=Api&P=0&h=180',
   },
   {
     id: 'banh-bao',
@@ -493,7 +493,7 @@ export const dishes = [
     price: 15000,
     rating: 4.5,
     reviewCount: 220,
-    image: 'https://www.pinterest.com/pin/658158933088733993/',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.d0gK8bLS9Ix7SbiT_hhhJwHaE7?pid=Api&P=0&h=180',
   },
   {
     id: 'banh-trang-phoi-suong',
@@ -505,7 +505,7 @@ export const dishes = [
     price: 25000,
     rating: 4.6,
     reviewCount: 145,
-    image: 'https://www.pinterest.com/pin/624452304619585954/',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.VRXV5NTQLniOyMIYLeCcNgHaHa?pid=Api&P=0&h=180',
   },
   {
     id: 'chan-ga-sa-tac',
@@ -517,7 +517,7 @@ export const dishes = [
     price: 50000,
     rating: 4.8,
     reviewCount: 310,
-    image: 'https://www.pinterest.com/pin/28288303905354055/',
+    image: 'https://i.ytimg.com/vi/MVmtMJ3ILME/maxresdefault.jpg',
   },
   {
     id: 'xien-ban',
@@ -529,7 +529,7 @@ export const dishes = [
     price: 20000,
     rating: 4.5,
     reviewCount: 280,
-    image: 'https://www.pinterest.com/pin/48343395995698643/',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.vWFL1HTrGW3b8d6XNgsGcAHaEn?pid=Api&P=0&h=180',
   },
   {
     id: 'che-anh-dep-trai',
@@ -541,7 +541,7 @@ export const dishes = [
     price: 20000,
     rating: 4.4,
     reviewCount: 120,
-    image: 'https://www.foody.vn/ha-noi/che-anh-dep-trai/binh-luan-10607269',
+    image: 'https://mms.img.susercontent.com/vn-11134513-7r98o-lt4u34allm6x4a@resize_ss640x400!@crop_w640_h400_cT',
   },
   {
     id: 'khoai-tay-chien',
@@ -553,7 +553,7 @@ export const dishes = [
     price: 25000,
     rating: 4.6,
     reviewCount: 195,
-    image: 'https://www.pinterest.com/pin/7388786884933543/',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.Jto_K08lSADMshiKXHAMNwHaFj?pid=Api&P=0&h=180',
   },
   {
     id: 'tra-da',
@@ -565,7 +565,7 @@ export const dishes = [
     price: 5000,
     rating: 4.9,
     reviewCount: 850,
-    image: 'https://www.pinterest.com/pin/788130003586526521/',
+    image: 'https://migrationology.com/wp-content/uploads/2015/02/vietnamese_tra-da.jpg',
   },
   {
     id: 'sua-dau',
@@ -577,7 +577,7 @@ export const dishes = [
     price: 15000,
     rating: 4.7,
     reviewCount: 230,
-    image: 'https://www.pinterest.com/pin/359162139026576288/',
+    image: 'https://tse1.mm.bing.net/th/id/OIP.FprEjT4Qwbj3pGWwKeoDbwHaE7?pid=Api&P=0&h=180',
   },
   {
     id: 'nuoc-sam',
@@ -589,7 +589,7 @@ export const dishes = [
     price: 15000,
     rating: 4.8,
     reviewCount: 160,
-    image: 'https://www.pinterest.com/pin/281543723511185/',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.AnBR19fel8FWNKVzFKiiVgHaEK?pid=Api&P=0&h=180',
   },
   {
     id: 'coca-cola',
@@ -601,7 +601,7 @@ export const dishes = [
     price: 15000,
     rating: 4.8,
     reviewCount: 400,
-    image: 'https://www.pinterest.com/pin/17170042320685093/',
+    image: 'https://tse4.mm.bing.net/th/id/OIP.vTgKkSg-OfavsyV138XHzAHaDs?pid=Api&P=0&h=180',
   },
   {
     id: 'pepsi',
@@ -613,7 +613,7 @@ export const dishes = [
     price: 15000,
     rating: 4.8,
     reviewCount: 380,
-    image: 'https://www.pinterest.com/pin/56435801574668961/',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.c2zUCO9Uqt-2U04GZ8MZYQHaFb?pid=Api&P=0&h=180',
   },
   {
     id: 'tra-chanh',
@@ -625,7 +625,7 @@ export const dishes = [
     price: 15000,
     rating: 4.6,
     reviewCount: 210,
-    image: 'https://www.pinterest.com/pin/20477373300295608/',
+    image: 'https://photo2.tinhte.vn/data/attachment-files/2025/03/8661218_TRA_CHANH.jpg',
   },
   {
     id: 'tra-tac',
@@ -637,7 +637,7 @@ export const dishes = [
     price: 15000,
     rating: 4.7,
     reviewCount: 260,
-    image: 'https://www.pinterest.com/pin/232568768255749529/',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.g5WWRyhVoreZbTyolhFtdQHaEK?pid=Api&P=0&h=180',
   },
 ]
 
@@ -650,18 +650,18 @@ export const suggestedDishes = [
     id: 'pho',
     name: 'Phở',
     price: 50000,
-    image: 'https://www.pinterest.com/pin/32651166044327569/',
+    image: 'https://live2makan.com/wp-content/uploads/2022/08/l2m-vn-2207-pho10-05.jpg',
   },
   {
     id: 'bun-cha',
     name: 'Bún Chả',
     price: 45000,
-    image: 'https://www.pinterest.com/pin/836191855856511310/',
+    image: 'https://www.seriouseats.com/thmb/J0g7JWjk9r6CHESo1CIrD1BfGd0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20231204-SEA-VyTran-BunChaHanoi-19-f623913c6ef34a9185bcd6e5680c545f.jpg',
   },
   {
     id: 'com-tam',
     name: 'Cơm Tấm',
     price: 55000,
-    image: 'https://www.pinterest.com/pin/386042999329251973/',
+    image: 'https://statics.vinwonders.com/com-tam-ngon-o-sai-gon-0_1630562640.jpg',
   },
 ]
