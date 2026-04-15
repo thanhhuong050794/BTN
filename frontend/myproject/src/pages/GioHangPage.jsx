@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { formatVnd } from '../utils/money'
@@ -6,6 +6,8 @@ import styles from './GioHangPage.module.css'
 
 export default function GioHangPage() {
   const { lines, add, setQuantity, totalCount, subtotal } = useCart()
+  const [selectedBuilding, setSelectedBuilding] = useState('')
+  const [roomNumber, setRoomNumber] = useState('')
 
   const shipping = totalCount > 0 ? 10000 : 0
   const discount = totalCount > 0 ? 5000 : 0
@@ -63,17 +65,42 @@ export default function GioHangPage() {
                 <h3 className={styles.shipTitle}>Địa điểm giao hàng</h3>
               </div>
               <div className={styles.shipField}>
-                <select className={styles.shipSelect} defaultValue="" aria-label="Chọn phòng học">
-                  <option value="">Chọn phòng học/Giảng đường</option>
-                  <option value="A1.101">Giảng đường A1 - Phòng 101</option>
-                  <option value="B2.203">Giảng đường B2 - Phòng 203</option>
-                  <option value="C1.405">Giảng đường C1 - Phòng 405</option>
-                  <option value="D2.510">Giảng đường D2 - Phòng 510</option>
+                <select
+                  className={styles.shipSelect}
+                  value={selectedBuilding}
+                  onChange={(e) => {
+                    setSelectedBuilding(e.target.value)
+                    setRoomNumber('')
+                  }}
+                  aria-label="Chọn giảng đường"
+                >
+                  <option value="">Chọn giảng đường</option>
+                  <option value="A1">Giảng đường A1</option>
+                  <option value="A2">Giảng đường A2</option>
+                  <option value="B">Giảng đường B</option>
+                  <option value="C">Giảng đường C</option>
+                  <option value="D">Giảng đường D</option>
                 </select>
                 <div className={styles.shipChev}>
                   <span className="material-symbols-outlined">expand_more</span>
                 </div>
               </div>
+              {selectedBuilding ? (
+                <div className={styles.roomBox}>
+                  <label className={styles.roomLabel} htmlFor="room-number">
+                    Số phòng học
+                  </label>
+                  <input
+                    id="room-number"
+                    className={styles.roomInput}
+                    type="text"
+                    value={roomNumber}
+                    onChange={(e) => setRoomNumber(e.target.value)}
+                    placeholder={`Ví dụ: 404`}
+                    aria-label="Nhập số phòng cụ thể"
+                  />
+                </div>
+              ) : null}
               <p className={styles.shipHint}>
                 <span className={`material-symbols-outlined ${styles.shipHintIcon}`}>info</span>
                 Đơn hàng sẽ được giao tận cửa phòng học trong vòng 15-20 phút.
