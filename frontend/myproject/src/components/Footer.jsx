@@ -54,11 +54,22 @@ export default function Footer() {
               ask-cait@neu.edu.vn
             </a>
           </div>
-
         </div>
       </div>
-      <div className={styles.bottom}>
- Copyright © 2026 NEUFood
+  <div className={styles.bottom}>
+  <span className={styles.copy}>
+    © 2026 NEUFood
+  </span>
+
+  <div className={styles.footerLinks}>
+
+    <a href="/about" className={styles.footerLink}>
+      Câu chuyện của chúng tôi
+    </a>
+    <a href="/recruit" className={styles.footerLink}>
+      NEUFood đang tuyển nhân sự
+    </a>
+  </div>
 </div>
     </footer>
   )
