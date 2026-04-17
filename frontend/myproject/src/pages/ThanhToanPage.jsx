@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 import styles from './ThanhToanPage.module.css'
 
 function formatPrice(vnd) {
@@ -7,9 +8,14 @@ function formatPrice(vnd) {
 }
 
 export default function ThanhToanPage() {
+  const { lines, totalCount, subtotal } = useCart()
   const [payment, setPayment] = useState('transfer')
+  const [selectedBuilding, setSelectedBuilding] = useState('')
   const [room, setRoom] = useState('')
   const [note, setNote] = useState('')
+  const shipping = totalCount > 0 ? 10000 : 0
+  const discount = totalCount > 0 ? 5000 : 0
+  const total = Math.max(0, subtotal + shipping - discount)
 
   return (
     <>
@@ -48,6 +54,21 @@ export default function ThanhToanPage() {
                   <h2 class={styles.cardH}>Thông tin giao hàng</h2>
                 </div>
                 <div class={styles.cardBody}>
+                  <label class={styles.field}>
+                    <span class={styles.fieldLbl}> Địa điểm giao hàng</span>
+                    <select class={styles.fieldInput} value={selectedBuilding} onChange={(e) => setSelectedBuilding(e.target.value)}>
+                      <option value="">Chọn địa điểm giao hàng</option>
+                      <option value="A1">Giảng đường A1</option>
+                      <option value="A2">Giảng đường A2</option>
+                      <option value="B">Giảng đường B</option>
+                      <option value="C">Giảng đường C</option>
+                      <option value="D">Giảng đường D</option>
+                      <option value="E">Nhà văn hóa</option>
+                      <option value="F">Hội trường A2</option>
+                      <option value="G">Kí túc xá</option>
+                      <option value="H">Thư viện</option>
+                    </select>
+                  </label>
                   <label class={styles.field}>
                     <span class={styles.fieldLbl}>Phòng học / Vị trí cụ thể (Ví dụ: A101, B203)</span>
                     <input class={styles.fieldInput} id="room" type="text" value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Nhập số phòng học của bạn..." />
@@ -128,46 +149,36 @@ export default function ThanhToanPage() {
                 </div>
                 <div class={styles.billBody}>
                   <div class={styles.billLines}>
-                    <div class={styles.billLine}>
-                      <div class={styles.billThumb}>
-                        <img
-                          alt="Cơm Gà Xối Mỡ"
-                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuArlMMctdJZDssFMYe1amzzzrPKQyWn3zQXGiC8vIOz0jM2bbhGxWR1tQRw8Fvxd4L0_ATtCXAeG8gN-5HyUkMFA2HjPxhIQfCnvNB17xwwLzPa3_njP1vIp09_b1Ue8pnE1a_3nw5tgBTp4tnwrvpEatMXY3a772msn6yv6D-be44i5QEY__sbNf0k9j8cciMq1TpPshhcItLSDLYmMODCqV28lYSbl4wlsQOGWAjhxU7n0bmXeJDVulCQDWQb8Nz6DhnuXLh_9Ms"
-                        />
-                      </div>
-                      <div class={styles.billMid}>
-                        <h4 class={styles.billName}>Cơm Gà Xối Mỡ</h4>
-                        <p class={styles.billMeta}>x1 • Đùi gà lớn</p>
-                      </div>
-                      <p class={styles.billP}>{formatPrice(45000)}</p>
-                    </div>
-                    <div class={styles.billLine}>
-                      <div class={styles.billThumb}>
-                        <img
-                          alt="Trà Sữa"
-                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWLHO440gs0rEu__4BU42TM7ZdHK8KKHAyvVBwb53RMJ5hKB_Lr24ewxbpcRSLtcJI3th6I1-Wb3ASRQgzIcLL9wgEfzYDmRsW6xk1HWAvvz44WXK9rwp-LofYMJk1LU9R6-V954RbZZQxV4tdw8U3oJ-EMH29QNbXnr7JgsPblKEweUZ7afuARgIreHCbzxB56p-H0lNkVXBb6hQOZN3rUrgLnqaVps4yXlKJSb69vhL7VOhGFje5c7oSee2fG78D3VHKxSKJ7Dc"
-                        />
-                      </div>
-                      <div class={styles.billMid}>
-                        <h4 class={styles.billName}>Trà Sữa Trân Châu</h4>
-                        <p class={styles.billMeta}>x1 • Size M, 50% đường</p>
-                      </div>
-                      <p class={styles.billP}>{formatPrice(35000)}</p>
-                    </div>
+                    {lines.length > 0 ? (
+                      lines.map((line) => (
+                        <div class={styles.billLine} key={line.dish.id}>
+                          <div class={styles.billThumb}>
+                            <img alt={line.dish.name} src={line.dish.image} />
+                          </div>
+                          <div class={styles.billMid}>
+                            <h4 class={styles.billName}>{line.dish.name}</h4>
+                            <p class={styles.billMeta}>x{line.qty}</p>
+                          </div>
+                          <p class={styles.billP}>{formatPrice(line.dish.price * line.qty)}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p class={styles.billMeta}>Giỏ hàng đang trống.</p>
+                    )}
                   </div>
                   <div class={styles.billSep} />
                   <div class={styles.billRows}>
                     <div class={styles.billRow}>
-                      <span>Tạm tính</span>
-                      <span class={styles.billRowInk}>{formatPrice(80000)}</span>
+                      <span>Tạm tính ({totalCount} món)</span>
+                      <span class={styles.billRowInk}>{formatPrice(subtotal)}</span>
                     </div>
                     <div class={styles.billRow}>
                       <span>Phí giao hàng</span>
-                      <span class={styles.billRowInk}>{formatPrice(5000)}</span>
+                      <span class={styles.billRowInk}>{formatPrice(shipping)}</span>
                     </div>
                     <div class={styles.billRow}>
-                      <span>Giảm giá (Mã: NEUFREE)</span>
-                      <span class={styles.billRowDanger}>-{formatPrice(5000)}</span>
+                      <span>Giảm giá Campus</span>
+                      <span class={styles.billRowDanger}>-{formatPrice(discount)}</span>
                     </div>
                   </div>
                   <div class={styles.billSep} />
@@ -176,9 +187,9 @@ export default function ThanhToanPage() {
                       <span class={styles.billSumL}>Tổng cộng</span>
                       <p class={styles.billVat}>Bao gồm thuế VAT</p>
                     </div>
-                    <span class={styles.billSumN}>{formatPrice(80000)}</span>
+                    <span class={styles.billSumN}>{formatPrice(total)}</span>
                   </div>
-                  <button type="button" class={styles.billGo}>
+                  <button type="button" class={styles.billGo} disabled={totalCount === 0}>
                     <span class="material-symbols-outlined material-symbols-fill">shopping_bag</span>
                     Xác nhận đặt hàng
                   </button>

@@ -3,7 +3,7 @@
     padding-left: 1rem;
     padding-right: 1rem;
     padding-bottom: 4rem;
-    padding-top: 6rem;
+    padding-top: 8rem;
     font-family: var(--font-body);
     color: var(--color-ink);
 }
@@ -124,7 +124,7 @@
 
 .paySide {
     position: sticky;
-    top: 6rem;
+    top: 8rem;
 }
 
 @media (min-width: 1024px) {
