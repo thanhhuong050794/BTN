@@ -1,192 +1,113 @@
 .foot {
   width: 100%;
-  border-top: 1px solid #e2e8f0;
-  background-color: #f8fafc;
+  background: #4da6d9;
+  color: white;
+  padding: 30px 0; 
 }
 
-@media (prefers-color-scheme: dark) {
-  .foot {
-    border-color: #1e293b;
-    background-color: #020617;
-  }
-}
 
-.footMain {
+.container {
+  max-width: 1300px; 
+  margin: 0 auto;
+
   display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2.5rem;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
-@media (min-width: 768px) {
-  .footMain {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
-.footTitle {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-headline);
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-@media (prefers-color-scheme: dark) {
-  .footTitle {
-    color: #f1f5f9;
-  }
-}
-
-.footDesc {
-  margin-bottom: 1.5rem;
-  max-width: 20rem;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #64748b;
-}
-
-@media (prefers-color-scheme: dark) {
-  .footDesc {
-    color: #94a3b8;
-  }
-}
-
-.footSocial {
-  display: flex;
-  gap: 1rem;
-}
-
-.footSocBtn {
-  display: flex;
-  height: 2.5rem;
-  width: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  background-color: var(--color-well);
-  color: var(--color-brand);
-  text-decoration: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.footSocBtn:hover {
-  background-color: var(--color-brand);
-  color: var(--color-on-brand);
-}
-
-.footCols {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem 3rem;
-}
-
-.footCol {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.footLabel {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #0f172a;
-}
-
-@media (prefers-color-scheme: dark) {
-  .footLabel {
-    color: #fff;
-  }
-}
-
-.footLink {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #64748b;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.footLink:hover {
-  color: #2563eb;
-}
-
-.footBar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  border-top: 1px solid #f1f5f9;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  align-items: center;
+
+  gap: 100px; 
+  padding: 0 50px;
 }
 
-@media (min-width: 768px) {
-  .footBar {
-    flex-direction: row;
-  }
+
+.left {
+  flex: 1;
+  max-width: 45%;
 }
 
-@media (prefers-color-scheme: dark) {
-  .footBar {
-    border-color: #1e293b;
-  }
+.map {
+  width: 100%;
+  height: 220px; 
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.footCopy {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #64748b;
-  opacity: 0.8;
+
+.right {
+  flex: 1;
+  max-width: 36%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px; 
+
+  align-items: flex-start;
+
+  margin-left: auto;
+  padding-right: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .footCopy {
-    color: #94a3b8;
-  }
-}
 
-.footStatus {
+.item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
+  font-size: 15px; 
+  line-height: 1.5;
 }
 
-.footDot {
-  height: 0.5rem;
-  width: 0.5rem;
-  border-radius: 9999px;
-  background-color: #22c55e;
-  animation: pulse-opacity 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+.icon {
+  font-size: 16px;
 }
 
-@keyframes pulse-opacity {
-  50% {
-    opacity: 0.5;
+
+.label {
+  font-weight: 600;
+}
+
+
+.link {
+  color: white;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.link:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 20px;
+  }
+
+  .left,
+  .right {
+    max-width: 100%;
+  }
+
+  .right {
+    align-items: center;
+    margin-left: 0;
+    padding-right: 0;
+  }
+
+  .map {
+    height: 200px;
+  }
+
+  .item {
+    justify-content: center;
   }
 }
-
-.footStatusText {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 500;
-  color: #64748b;
-}
-
-.footIcon {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
+.bottom {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 20px;
 }

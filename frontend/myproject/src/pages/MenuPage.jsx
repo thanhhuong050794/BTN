@@ -65,20 +65,16 @@ function StarRow({ value }) {
 }
 
 function DishCard({ dish }) {
-  const { getQty, setQuantity } = useCart()
-  const cartQty = getQty(dish.id)
-  const [draft, setDraft] = useState(() => Math.max(1, cartQty))
-
-  useEffect(() => {
-    if (cartQty === 0) setDraft(1)
-  }, [cartQty])
+  const { add } = useCart()
+  const [draft, setDraft] = useState(1)
 
   function bump(delta) {
     setDraft((d) => Math.min(99, Math.max(1, d + delta)))
   }
 
   function addToCart() {
-    setQuantity(dish.id, draft)
+    add(dish.id, draft)
+    setDraft(1)
   }
 
   return (

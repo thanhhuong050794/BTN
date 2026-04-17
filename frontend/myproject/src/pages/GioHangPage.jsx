@@ -57,28 +57,6 @@ export default function GioHangPage() {
               </div>
             ))}
 
-            <div className={styles.ship}>
-              <div className={styles.shipHead}>
-                <span className={`material-symbols-outlined ${styles.shipIconBrand}`}>location_on</span>
-                <h3 className={styles.shipTitle}>Địa điểm giao hàng</h3>
-              </div>
-              <div className={styles.shipField}>
-                <select className={styles.shipSelect} defaultValue="" aria-label="Chọn phòng học">
-                  <option value="">Chọn phòng học/Giảng đường</option>
-                  <option value="A1.101">Giảng đường A1 - Phòng 101</option>
-                  <option value="B2.203">Giảng đường B2 - Phòng 203</option>
-                  <option value="C1.405">Giảng đường C1 - Phòng 405</option>
-                  <option value="D2.510">Giảng đường D2 - Phòng 510</option>
-                </select>
-                <div className={styles.shipChev}>
-                  <span className="material-symbols-outlined">expand_more</span>
-                </div>
-              </div>
-              <p className={styles.shipHint}>
-                <span className={`material-symbols-outlined ${styles.shipHintIcon}`}>info</span>
-                Đơn hàng sẽ được giao tận cửa phòng học trong vòng 15-20 phút.
-              </p>
-            </div>
           </div>
 
           <aside className={styles.sum}>
