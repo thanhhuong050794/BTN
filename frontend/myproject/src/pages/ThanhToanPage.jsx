@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import styles from './ThanhToanPage.module.css'
@@ -11,11 +11,37 @@ export default function ThanhToanPage() {
   const { lines, totalCount, subtotal } = useCart()
   const [payment, setPayment] = useState('transfer')
   const [selectedBuilding, setSelectedBuilding] = useState('')
+  const [isLocationOpen, setIsLocationOpen] = useState(false)
   const [room, setRoom] = useState('')
   const [note, setNote] = useState('')
+  const locationRef = useRef(null)
   const shipping = totalCount > 0 ? 10000 : 0
   const discount = totalCount > 0 ? 5000 : 0
   const total = Math.max(0, subtotal + shipping - discount)
+  const deliveryLocations = [
+    { value: 'A1', label: 'Giảng đường A1' },
+    { value: 'A2', label: 'Giảng đường A2' },
+    { value: 'B', label: 'Giảng đường B' },
+    { value: 'C', label: 'Giảng đường C' },
+    { value: 'D', label: 'Giảng đường D' },
+    { value: 'E', label: 'Nhà văn hóa' },
+    { value: 'F', label: 'Hội trường A2' },
+    { value: 'G', label: 'Kí túc xá' },
+    { value: 'H', label: 'Thư viện' },
+  ]
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setIsLocationOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   return (
     <>
@@ -54,21 +80,48 @@ export default function ThanhToanPage() {
                   <h2 class={styles.cardH}>Thông tin giao hàng</h2>
                 </div>
                 <div class={styles.cardBody}>
-                  <label class={styles.field}>
+                  <div class={styles.field}>
                     <span class={styles.fieldLbl}> Địa điểm giao hàng</span>
-                    <select class={styles.fieldInput} value={selectedBuilding} onChange={(e) => setSelectedBuilding(e.target.value)}>
-                      <option value="">Chọn địa điểm giao hàng</option>
-                      <option value="A1">Giảng đường A1</option>
-                      <option value="A2">Giảng đường A2</option>
-                      <option value="B">Giảng đường B</option>
-                      <option value="C">Giảng đường C</option>
-                      <option value="D">Giảng đường D</option>
-                      <option value="E">Nhà văn hóa</option>
-                      <option value="F">Hội trường A2</option>
-                      <option value="G">Kí túc xá</option>
-                      <option value="H">Thư viện</option>
-                    </select>
-                  </label>
+                    <div class={styles.locationSelect} ref={locationRef}>
+                      <button
+                        type="button"
+                        class={styles.locationToggle}
+                        onClick={() => setIsLocationOpen((prev) => !prev)}
+                        aria-expanded={isLocationOpen}
+                      >
+                        <span>{deliveryLocations.find((item) => item.value === selectedBuilding)?.label ?? 'Chọn địa điểm giao hàng'}</span>
+                        <span class={`material-symbols-outlined ${isLocationOpen ? styles.locationChevronOpen : ''}`}>expand_more</span>
+                      </button>
+
+                      {isLocationOpen ? (
+                        <div class={styles.locationMenu}>
+                          <button
+                            type="button"
+                            class={selectedBuilding === '' ? `${styles.locationItem} ${styles.locationItemActive}` : styles.locationItem}
+                            onClick={() => {
+                              setSelectedBuilding('')
+                              setIsLocationOpen(false)
+                            }}
+                          >
+                            Chọn địa điểm giao hàng
+                          </button>
+                          {deliveryLocations.map((location) => (
+                            <button
+                              key={location.value}
+                              type="button"
+                              class={selectedBuilding === location.value ? `${styles.locationItem} ${styles.locationItemActive}` : styles.locationItem}
+                              onClick={() => {
+                                setSelectedBuilding(location.value)
+                                setIsLocationOpen(false)
+                              }}
+                            >
+                              {location.label}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
                   <label class={styles.field}>
                     <span class={styles.fieldLbl}>Phòng học / Vị trí cụ thể (Ví dụ: A101, B203)</span>
                     <input class={styles.fieldInput} id="room" type="text" value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Nhập số phòng học của bạn..." />
