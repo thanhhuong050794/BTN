@@ -1,35 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { Chart, registerables } from 'chart.js'
+import { dishes } from '../../data/dishes.js'
 import styles from './AdminBaoCaoPage.module.css'
 
 Chart.register(...registerables)
 
-const topItems = [
-  {
-    name: 'Phở',
-    sold: 312,
-    pct: 85,
-    img: 'https://live2makan.com/wp-content/uploads/2022/08/l2m-vn-2207-pho10-05.jpg',
-  },
-  {
-    name: 'Phở trộn',
-    sold: 285,
-    pct: 78,
-    img: 'https://cdn.tgdd.vn/2021/08/CookRecipe/Avatar/pho-ga-tron-sa-te-thumbnail.jpg',
-  },
-  {
-    name: 'Bún bò Huế',
-    sold: 198,
-    pct: 54,
-    img: 'https://cdn.tgdd.vn/Files/2017/03/24/964495/cach-nau-bun-bo-hue-gio-heo-ngon-cong-thuc-chuan-vi-202208251617593627.jpg',
-  },
-  {
-    name: 'Bún riêu',
-    sold: 142,
-    pct: 40,
-    img: 'https://i.ytimg.com/vi/C1P1Cw9J1-I/maxresdefault.jpg',
-  },
-]
+// Tạo topItems từ dữ liệu dishes, sắp xếp theo reviewCount
+const totalReviews = dishes.reduce((sum, dish) => sum + dish.reviewCount, 0)
+const topItems = dishes
+  .sort((a, b) => b.reviewCount - a.reviewCount)
+  .slice(0, 4)
+  .map(dish => ({
+    name: dish.name,
+    sold: dish.reviewCount,
+    pct: Math.round((dish.reviewCount / totalReviews) * 100),
+    img: dish.image
+  }))
 
 export default function AdminBaoCaoPage() {
   const [range, setRange] = useState('30')

@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { dishes as seedDishes } from '../data/dishes'
 
-const STORAGE_KEY = 'neufood_admin_dishes_v1'
+const STORAGE_VERSION = 'v2'
+const STORAGE_KEY = `neufood_admin_dishes_${STORAGE_VERSION}`
 
 const AdminDishesContext = createContext(null)
 
