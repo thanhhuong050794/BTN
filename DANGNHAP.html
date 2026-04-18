@@ -11,10 +11,9 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
         function handleGoogleSignIn(response) {
-            // Handle the Google sign-in response
             console.log('Google Sign-In successful:', response);
-            // Here you would typically send the token to your backend
-            alert('Đăng nhập Google thành công! Token: ' + response.credential);
+            // Redirect to backend for authentication
+            window.location.href = '/auth/google/callback?credential=' + response.credential;
         }
 
         function initGoogleSignIn() {
@@ -31,12 +30,8 @@
         }
 
         function signInWithGitHub() {
-            // GitHub OAuth URL - replace with your actual client ID and redirect URI
-            const clientId = 'YOUR_GITHUB_CLIENT_ID'; // Replace with your actual client ID
-            const redirectUri = encodeURIComponent(window.location.origin + '/auth/github/callback');
-            const scope = 'user:email';
-            const githubOAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-            window.location.href = githubOAuthUrl;
+            // Redirect to backend GitHub auth
+            window.location.href = '/auth/github';
         }
 
         window.onload = function() {

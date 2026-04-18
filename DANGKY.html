@@ -12,7 +12,7 @@
     <script>
         function initGoogleSignIn() {
             google.accounts.id.initialize({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID',
+                client_id: '191657264286-hjuast9thqhhqot9g966541do0fq1c8n.apps.googleusercontent.com',
                 callback: handleGoogleSignIn
             });
             google.accounts.id.renderButton(
@@ -25,16 +25,13 @@
 
         function handleGoogleSignIn(response) {
             console.log('Google Sign-In successful:', response);
-            // Handle sign-in response here
-            // For now, just log to console
+            // Redirect to backend for authentication
+            window.location.href = '/auth/google/callback?credential=' + response.credential;
         }
 
         function signInWithGitHub() {
-            const clientId = 'YOUR_GITHUB_CLIENT_ID';
-            const redirectUri = encodeURIComponent(window.location.origin + '/auth/github/callback');
-            const scope = 'user:email';
-            const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-            window.location.href = githubAuthUrl;
+            // Redirect to backend GitHub auth
+            window.location.href = '/auth/github';
         }
 
         window.onload = function() {
