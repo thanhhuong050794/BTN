@@ -307,7 +307,31 @@
 
 .reviewsStars {
   display: flex;
-  color: var(--color-accent);
+  align-items: center;
+  gap: 0.1rem;
+  color: rgb(234 179 8);
+}
+
+.avgStarFill {
+  font-size: 1.25rem;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: rgb(234 179 8);
+}
+
+.avgStarEmpty {
+  font-size: 1.25rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: rgb(203 213 225);
+}
+
+.cardStarFill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: rgb(234 179 8);
+}
+
+.cardStarEmpty {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: rgb(203 213 225);
 }
 
 .metaBold {
@@ -331,6 +355,37 @@
   }
 }
 
+.reviewsMore {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.reviewsMoreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgb(226 232 240);
+  border-radius: 9999px;
+  background-color: var(--color-panel);
+  padding: 0.65rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-brand);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.reviewsMoreBtn:hover {
+  background-color: rgb(248 250 252);
+  border-color: var(--color-brand);
+}
+
+.reviewsMoreIco {
+  font-size: 1.25rem;
+}
+
 .review {
   border-radius: 0.75rem;
   border-left-width: 4px;
@@ -344,6 +399,24 @@
 
 .review:hover {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.reviewYours {
+  border-left-color: rgb(22 163 74);
+  background: linear-gradient(to right, rgb(240 253 244 / 0.85), var(--color-panel));
+}
+
+.reviewAvatarYou {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-brand), var(--color-brand-2, #2563eb));
+}
+
+.avatarLetter {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #fff;
 }
 
 .reviewTop {

@@ -56,6 +56,7 @@ function subtotalFromItems(items) {
 
 function normalizeStored(record) {
   const items = (record.items || []).map((i) => ({
+    dishId: i.dishId,
     name: i.name,
     price: i.price,
     qty: i.qty,
