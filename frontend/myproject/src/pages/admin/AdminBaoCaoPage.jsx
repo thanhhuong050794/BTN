@@ -6,28 +6,28 @@ Chart.register(...registerables)
 
 const topItems = [
   {
-    name: 'Cơm Gà Xối Mỡ',
+    name: 'Phở',
     sold: 312,
     pct: 85,
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD0wp0uGXYdYAcdagAkBxl4jLCcLI1cVUt2CQ9XCauM62Xs_i_oPEhtithsU3fE_BYQ9ysP2NIO5bSC8WPJaD4EQkFgxXjoT0aVbvE9bK3aLgIgwJAhT9mKXKGTXQFna85SkLgZwcxgc2mdicaG6Dqq0kn1SW2MvYrwBTgSwTiXK54w8zs5003l7Sa00mmO6glVk3tJIE5FbufpvCQ13Mt4VuQYdYe2q9Yp0BDYQf_yRjADLArxxw_DgXZdc5I-3dVJ4wKLSZlUuaQ',
+    img: 'https://live2makan.com/wp-content/uploads/2022/08/l2m-vn-2207-pho10-05.jpg',
   },
   {
-    name: 'Trà Sữa Trân Châu',
+    name: 'Phở trộn',
     sold: 285,
     pct: 78,
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDpDi0n4j2QrOn6pzsYV08pXs656ejh0ebzJKGGAXY1sfb_Zi5mNgcjYa9YAzbKKXG4lYrzwFT-WNg3b9XyqCpYkrMfwxoous5VWsm7Y2wlfzfLcei5H214eiXeHakiTwyUziIQzDN64ZouorYtWEqY-HMPJtVaQv7OrgzQZqfaxm_A1eH9F2AOD4jAAF16PXoC3Kp5dDia9TWT_wIcTrtbbtaw1p1M3e5APNmsi7cFS84DGcHgv1-7rNVQfs_Bwv5ztlx_WtEP-vE',
+    img: 'https://cdn.tgdd.vn/2021/08/CookRecipe/Avatar/pho-ga-tron-sa-te-thumbnail.jpg',
   },
   {
-    name: 'Salad Ức Gà',
+    name: 'Bún bò Huế',
     sold: 198,
     pct: 54,
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAVzqk8gTeoqrtFPPkgUTJu33j5gwpSf0luW6BxFSkvmT_teDARfr3_YZmctw0x9sNVYnKMShmg4Cb9Yuw5sNo24fVtvkwWsLHmuDnOtEIyUCUQfpq63rGgfri-4oc_D6D7K8TAfw1K7IPiFNmbPGKX5hSqRe1tXYdlNAQ9ZIB-p04XPbU146ttRNEM1n-UOP0m94iknmDVgcZAEKoFjCMTI6aYtfYXEZkgGbARKszeDypDHL3OKaJjhyhsXJQEjuWwwhIRsk4TaEo',
+    img: 'https://cdn.tgdd.vn/Files/2017/03/24/964495/cach-nau-bun-bo-hue-gio-heo-ngon-cong-thuc-chuan-vi-202208251617593627.jpg',
   },
   {
-    name: 'Donuts Mini',
+    name: 'Bún riêu',
     sold: 142,
     pct: 40,
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAj9LvBc7W-stmFcRnjFW2h8Fw_pfVtjWlEQ4rkzRk_oPaJs2u1SX6aTcl4XVchBddCkITJCFQAaKVJe_ufu4iMajM3nnHe7QyFxTtXX5JQfEVTEmVRhLMeZZdQX3PpcJZlQPzXJEc8PtqB3tJD1uXpqbQoOtP8RPidO9VNz6izS7DSpaASEP4QhJJ02m8nZSGRr3QQ9OEz_A0q-cV9dQ1aAOGeHMKn7_xC_CkXRJsA5JJxIVnBSgBmFHkAKt7TrKaFVwCmZ40FWJc',
+    img: 'https://i.ytimg.com/vi/C1P1Cw9J1-I/maxresdefault.jpg',
   },
 ]
 
@@ -87,7 +87,7 @@ export default function AdminBaoCaoPage() {
     pieChartRef.current = new Chart(pc, {
       type: 'doughnut',
       data: {
-        labels: ['Cơm', 'Đồ uống', 'Healthy', 'Ăn vặt'],
+        labels: ['Phở', 'Bún', 'Món trộn', 'Món khác'],
         datasets: [
           {
             data: [42, 28, 18, 12],
@@ -258,15 +258,15 @@ export default function AdminBaoCaoPage() {
           <div class={styles.insights}>
             <div class={styles.insItem}>
               <p class={styles.insLbl}>Dẫn đầu</p>
-              <p class={styles.insTxt}>Món cơm / cơm phần (42%)</p>
+              <p class={styles.insTxt}>Phở &amp; bún (42%)</p>
             </div>
             <div class={styles.insItem}>
               <p class={styles.insLbl}>Tăng nhanh</p>
-              <p class={styles.insTxt}>Đồ uống &amp; trà sữa (28%)</p>
+              <p class={styles.insTxt}>Món trộn &amp; đặc sản (28%)</p>
             </div>
             <div class={styles.insItem}>
-              <p class={styles.insLbl}>Healthy</p>
-              <p class={styles.insTxt}>Salad &amp; eat clean (18%)</p>
+              <p class={styles.insLbl}>Món khác</p>
+              <p class={styles.insTxt}>Ăn vặt &amp; đồ uống (18%)</p>
             </div>
           </div>
         </div>
