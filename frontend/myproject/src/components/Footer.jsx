@@ -1,5 +1,5 @@
 import styles from './Footer.module.css'
-
+import { Link } from "react-router-dom"
 export default function Footer() {
   return (
     <footer className={styles.foot}>
@@ -66,9 +66,9 @@ export default function Footer() {
     <a href="/about" className={styles.footerLink}>
       Câu chuyện của chúng tôi
     </a>
-    <a href="/recruit" className={styles.footerLink}>
-      NEUFood đang tuyển nhân sự
-    </a>
+    <Link to="/recruit" className={styles.footerLink}>
+  NEUFood đang tuyển nhân sự
+</Link>
   </div>
 </div>
     </footer>

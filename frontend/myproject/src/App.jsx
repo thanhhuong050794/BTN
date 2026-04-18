@@ -19,7 +19,7 @@ import MenuPage from './pages/MenuPage'
 import LichSuDonHangPage from './pages/LichSuDonHangPage'
 import TaiKhoanPage from './pages/TaiKhoanPage'
 import ThanhToanPage from './pages/ThanhToanPage'
-
+import Recruit from "./pages/Recruit"
 function AdminSuite() {
   return (
     <RequireAdmin>
@@ -36,6 +36,7 @@ export default function App() {
       <CartProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/recruit" element={<Recruit />} />
           <Route path="quan-ly/dang-nhap" element={<AdminLoginPage />} />
           <Route path="quan-ly" element={<AdminSuite />}>
             <Route index element={<AdminBaoCaoPage />} />
