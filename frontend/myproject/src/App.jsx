@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import { AdminAuthProvider } from './context/AdminAuthContext'
 import { AdminDishesProvider } from './context/AdminDishesContext'
 import { CartProvider } from './context/CartContext'
+import { OrderHistoryProvider } from './context/OrderHistoryContext'
 import { MenuSearchProvider } from './context/MenuSearchContext'
 import AdminBaoCaoPage from './pages/admin/AdminBaoCaoPage'
 import AdminDonPage from './pages/admin/AdminDonPage'
@@ -36,6 +37,7 @@ export default function App() {
   return (
     <AdminAuthProvider>
       <CartProvider>
+      <OrderHistoryProvider>
       <MenuSearchProvider>
       <BrowserRouter>
         <Routes>
@@ -56,13 +58,15 @@ export default function App() {
             <Route path="gio-hang" element={<GioHangPage />} />
             <Route path="thanh-toan" element={<ThanhToanPage />} />
             <Route path="lich-su-don" element={<LichSuDonHangPage />} />
-            <Route path="don-hang" element={<DonHangPage />} />
+            <Route path="don-hang/:orderId" element={<DonHangPage />} />
+            <Route path="don-hang" element={<Navigate to="/lich-su-don" replace />} />
             <Route path="tai-khoan" element={<TaiKhoanPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
       </BrowserRouter>
       </MenuSearchProvider>
+      </OrderHistoryProvider>
     </CartProvider>
     </AdminAuthProvider>
   )
