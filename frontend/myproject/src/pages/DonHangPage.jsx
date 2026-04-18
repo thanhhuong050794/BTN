@@ -5,6 +5,7 @@ import OrderReviewModal from '../components/OrderReviewModal'
 import { useOrderHistory } from '../context/OrderHistoryContext'
 import { NEU_CAMPUS_MAP_EMBED_URL } from '../data/campusMap'
 import { resolveTrackingOrder } from '../lib/resolveTrackingOrder'
+import { appendReviewsFromOrder } from '../lib/dishReviews'
 import { getReviewForOrder, saveReviewForOrder } from '../lib/orderReviews'
 import styles from './DonHangPage.module.css'
 
@@ -81,6 +82,7 @@ export default function DonHangPage() {
 
   function handleReviewSaved(data) {
     saveReviewForOrder(orderId, data)
+    appendReviewsFromOrder(orderId, view.items, data.starsByLine, data.comment)
     setReviewRecord(getReviewForOrder(orderId))
     setReviewOpen(false)
     setReviewToast(true)
