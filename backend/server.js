@@ -42,7 +42,7 @@ function saveChat() {
 }
 
 // khởi tạo OpenRouter client
-const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+const apiKey = process.env.OPENROUTER_API_KEY ?.trim();
 
 const client = apiKey ? new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
@@ -65,7 +65,7 @@ app.post('/api/reset', (req, res) => {
 // chat API
 app.post('/api/chat', async(req, res) => {
             try {
-                const userMessage = String(req.body?.message ?? '').trim();
+                const userMessage = String(req.body?.message??'').trim();
                 if (!userMessage) {
                     return res.status(400).json({ error: 'Thiếu nội dung' });
                 }
@@ -107,7 +107,7 @@ app.post('/api/chat', async(req, res) => {
 
             } catch (err) {
                 const status = err?.status || err?.response?.status;
-                const message = typeof err?.message === 'string' ? err.message : String(err);
+                const message = typeof err === 'string' ? err : String(err);
                 console.error("ERROR:", err);
 
                 if (status === 429) {
