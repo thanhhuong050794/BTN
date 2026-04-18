@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState, useEffect } 
 import { dishes } from '../data/dishes'
 
 const STORAGE_KEY = 'neufood-cart-v1'
+const PENDING_KEY = 'neufood-cart-pending-v1'
 
 const CartContext = createContext(null)
 
@@ -14,6 +15,31 @@ export function CartProvider({ children }) {
       if (raw) {
         const parsed = JSON.parse(raw)
         if (parsed && typeof parsed === 'object') setQuantities(parsed)
+      }
+    } catch {
+      /* ignore */
+    }
+
+    // Merge any pending additions coming from static pages (e.g. RANDOM.html)
+    try {
+      const pendingRaw = sessionStorage.getItem(PENDING_KEY)
+      if (pendingRaw) {
+        const pending = JSON.parse(pendingRaw)
+        if (pending && typeof pending === 'object') {
+          const adds = pending.adds
+          if (adds && typeof adds === 'object') {
+            setQuantities((prev) => {
+              const next = { ...(prev && typeof prev === 'object' ? prev : {}) }
+              for (const [id, qty] of Object.entries(adds)) {
+                const delta = Math.max(0, Math.floor(Number(qty)))
+                if (!delta) continue
+                next[id] = Math.max(0, (next[id] ?? 0) + delta)
+              }
+              return next
+            })
+          }
+        }
+        sessionStorage.removeItem(PENDING_KEY)
       }
     } catch {
       /* ignore */

@@ -305,6 +305,7 @@
     let lastWinningItem = null;
 
     const CART_KEY = 'neufood-cart-v1';
+    const PENDING_KEY = 'neufood-cart-pending-v1';
 
     function normalizeName(text) {
         return String(text || '')
@@ -377,7 +378,6 @@
         [normalizeName('Trà tắc')]: 'tra-tac',
     };
 
-    // Combo mapping -> add multiple items (also from `src/data/dishes.js`)
     const comboToItems = {
         [normalizeName('Combo 2 người')]: [
             { dishId: 'com-tam', quantity: 2 },
@@ -417,6 +417,18 @@
         } catch {
             return false;
         }
+    }
+
+    function addPending(dishId, qty) {
+        try {
+            const raw = sessionStorage.getItem(PENDING_KEY);
+            const parsed = raw ? JSON.parse(raw) : {};
+            const obj = (parsed && typeof parsed === 'object') ? parsed : {};
+            const adds = (obj.adds && typeof obj.adds === 'object') ? obj.adds : {};
+            const prev = Number(adds[dishId] ?? 0);
+            adds[dishId] = Math.max(0, Math.floor(prev + qty));
+            sessionStorage.setItem(PENDING_KEY, JSON.stringify({ adds }));
+        } catch {}
     }
 
     function findDishIdByName(itemName) {
@@ -530,7 +542,10 @@
         // If it's a combo, add all items in that combo
         const comboItems = comboToItems[normalized];
         if (Array.isArray(comboItems) && comboItems.length > 0) {
-            comboItems.forEach((ci) => addDishToCart(ci.dishId, ci.quantity));
+            comboItems.forEach((ci) => {
+                addDishToCart(ci.dishId, ci.quantity);
+                addPending(ci.dishId, ci.quantity);
+            });
         } else {
             const dishId = findDishIdByName(lastWinningItem.name);
             if (!dishId) {
@@ -538,6 +553,7 @@
                 return;
             }
             addDishToCart(dishId, 1);
+            addPending(dishId, 1);
         }
 
         // Go to React cart page
