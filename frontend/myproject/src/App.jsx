@@ -21,6 +21,7 @@ import LichSuDonHangPage from './pages/LichSuDonHangPage'
 import TaiKhoanPage from './pages/TaiKhoanPage'
 import ThanhToanPage from './pages/ThanhToanPage'
 import Recruit from "./pages/Recruit"
+import Story from "./pages/Story"
 function AdminSuite() {
   return (
     <RequireAdmin>
@@ -38,6 +39,7 @@ export default function App() {
       <MenuSearchProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/story" element={<Story />} />
           <Route path="/recruit" element={<Recruit />} />
           <Route path="quan-ly/dang-nhap" element={<AdminLoginPage />} />
           <Route path="quan-ly" element={<AdminSuite />}>
