@@ -61,7 +61,7 @@
                             <div class="inputGroup">
                                 <div class="passwordGroup">
                                     <label class="inputLabel">MẬT KHẨU</label>
-                                    <a class="forgotLink" href="#">Quên mật khẩu?</a>
+                                    <a class="forgotLink" id="forgot-password" href="#">Quên mật khẩu?</a>
                                 </div>
                                 <div class="inputWrapper">
                                     <input class="input" id="login-password" placeholder="••••••••" type="password" autocomplete="current-password" required />
@@ -96,6 +96,41 @@
             <a class="pageFooterLink" href="CaiDatCookie.html">Cài đặt Cookie</a>
         </div>
     </footer>
+    <!-- Reset password modal -->
+    <div class="modalOverlay" id="reset-overlay" style="display:none;">
+        <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="reset-title">
+            <div class="modalHead">
+                <h3 class="modalTitle" id="reset-title">Tạo mật khẩu mới</h3>
+                <button class="modalClose" id="reset-close" type="button" aria-label="Đóng">×</button>
+            </div>
+            <p class="modalDesc">Nhập email đã đăng ký và đặt mật khẩu mới.</p>
+            <form id="reset-form" class="modalForm">
+                <div class="inputGroup">
+                    <label class="inputLabel" for="reset-email">EMAIL</label>
+                    <div class="inputWrapper">
+                        <input class="input" id="reset-email" type="email" autocomplete="email" required placeholder="tên@côngty.com" />
+                    </div>
+                </div>
+                <div class="inputGroup">
+                    <label class="inputLabel" for="reset-password">MẬT KHẨU MỚI</label>
+                    <div class="inputWrapper">
+                        <input class="input" id="reset-password" type="password" autocomplete="new-password" minlength="6" required placeholder="••••••••" />
+                    </div>
+                </div>
+                <div class="inputGroup">
+                    <label class="inputLabel" for="reset-confirm">XÁC NHẬN</label>
+                    <div class="inputWrapper">
+                        <input class="input" id="reset-confirm" type="password" autocomplete="new-password" minlength="6" required placeholder="••••••••" />
+                    </div>
+                </div>
+                <p class="formDesc" id="reset-message" style="margin-top: 8px; display: none;"></p>
+                <div class="modalActions">
+                    <button class="submitButton" type="submit">Cập nhật mật khẩu</button>
+                    <button class="ghostButton" id="reset-cancel" type="button">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
         const USERS_KEY = 'neufood_users_v1';
         const SESSION_KEY = 'neufood_session_v1';
@@ -116,6 +151,14 @@
 
         function setMessage(text, type) {
             const el = document.getElementById('login-message');
+            if (!el) return;
+            el.style.display = 'block';
+            el.textContent = text;
+            el.style.color = type === 'success' ? '#0f766e' : '#b91c1c';
+        }
+
+        function setResetMessage(text, type) {
+            const el = document.getElementById('reset-message');
             if (!el) return;
             el.style.display = 'block';
             el.textContent = text;
@@ -159,6 +202,67 @@
 
             setMessage('Đăng nhập thành công! Đang chuyển về trang chủ...', 'success');
             setTimeout(() => window.location.href = '/', 400);
+        });
+
+        document.getElementById('forgot-password')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const overlay = document.getElementById('reset-overlay');
+            const emailInput = document.getElementById('reset-email');
+            const msg = document.getElementById('reset-message');
+            if (msg) msg.style.display = 'none';
+            if (emailInput) emailInput.value = document.getElementById('login-email')?.value || '';
+            if (overlay) overlay.style.display = 'flex';
+            setTimeout(() => emailInput?.focus(), 0);
+        });
+
+        function closeReset() {
+            const overlay = document.getElementById('reset-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        document.getElementById('reset-close')?.addEventListener('click', closeReset);
+        document.getElementById('reset-cancel')?.addEventListener('click', closeReset);
+        document.getElementById('reset-overlay')?.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'reset-overlay') closeReset();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeReset();
+        });
+
+        document.getElementById('reset-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = normalizeEmail(document.getElementById('reset-email')?.value);
+            const password = String(document.getElementById('reset-password')?.value || '');
+            const confirm = String(document.getElementById('reset-confirm')?.value || '');
+
+            if (!email) return setResetMessage('Vui lòng nhập email hợp lệ.', 'error');
+            if (password.length < 6) return setResetMessage('Mật khẩu phải có ít nhất 6 ký tự.', 'error');
+            if (password !== confirm) return setResetMessage('Mật khẩu xác nhận không khớp.', 'error');
+
+            let users = [];
+            try {
+                const raw = localStorage.getItem(USERS_KEY);
+                users = raw ? JSON.parse(raw) : [];
+                if (!Array.isArray(users)) users = [];
+            } catch {
+                users = [];
+            }
+
+            const idx = users.findIndex(u => normalizeEmail(u.email) === email);
+            if (idx === -1) return setResetMessage('Email này chưa được đăng ký. Vui lòng tạo tài khoản.', 'error');
+
+            users[idx] = { ...users[idx], password, updatedAt: new Date().toISOString() };
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            setResetMessage('Cập nhật mật khẩu thành công! Bạn có thể đăng nhập ngay.', 'success');
+            // Prefill login form
+            const loginEmail = document.getElementById('login-email');
+            if (loginEmail) loginEmail.value = email;
+            const loginPass = document.getElementById('login-password');
+            if (loginPass) loginPass.value = '';
+            setTimeout(() => {
+                closeReset();
+                document.getElementById('login-password')?.focus();
+            }, 600);
         });
     </script>
 </body>
