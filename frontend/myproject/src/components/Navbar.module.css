@@ -287,6 +287,58 @@
     }
 }
 
+.accountMenuItemButton {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: rgb(15 23 42);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.accountMenuItemButton:hover {
+    background-color: rgb(241 245 249);
+}
+
+@media (prefers-color-scheme: dark) {
+    .accountMenuItemButton {
+        color: rgb(226 232 240);
+    }
+    .accountMenuItemButton:hover {
+        background-color: rgb(30 41 59);
+    }
+}
+
+.accountTrigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.accountName {
+    display: none;
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-headline);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+@media (min-width: 1024px) {
+    .accountName {
+        display: inline;
+    }
+}
+
 .accountMenuIcon {
     height: 1.25rem;
     width: 1.25rem;

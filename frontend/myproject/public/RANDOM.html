@@ -158,6 +158,12 @@
 <header>
     <h1>Vòng Quay "Hôm Nay Ăn Gì?"</h1>
     <p>Dành riêng cho sinh viên NEU - Giao tận lớp học của bạn!</p>
+    <div id="auth-bar" style="margin-top: 10px; display: none;">
+        <span id="welcome" style="font-weight: 600;"></span>
+        <button id="logout-btn" style="margin-left: 10px; padding: 8px 14px; border: 0; border-radius: 999px; background: rgba(255,255,255,0.9); cursor: pointer; font-weight: 700;">
+            Đăng xuất
+        </button>
+    </div>
 </header>
 
 <nav id="category-nav">
@@ -176,11 +182,47 @@
         <h2>Chúc mừng! Bạn sẽ ăn:</h2>
         <h1 id="food-name" style="color: var(--primary-color);"></h1>
         <img id="food-img" src="" alt="food">
-        <button class="close-btn" onclick="closeResult()">Đặt món này ngay</button>
+        <button class="close-btn" onclick="orderNow()">Đặt món này ngay</button>
     </div>
 </div>
 
 <script>
+    const SESSION_KEY = 'neufood_session_v1';
+
+    function getSession() {
+        try {
+            const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch {
+            return null;
+        }
+    }
+
+    function clearSession() {
+        try {
+            localStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+        } catch {}
+    }
+
+    const session = getSession();
+    if (!session || !session.email) {
+        window.location.href = 'DANGNHAP.html';
+    } else {
+        const authBar = document.getElementById('auth-bar');
+        const welcome = document.getElementById('welcome');
+        const logoutBtn = document.getElementById('logout-btn');
+        if (authBar && welcome && logoutBtn) {
+            authBar.style.display = 'block';
+            const displayName = String(session.name || '').trim();
+            welcome.textContent = displayName ? `Xin chào, ${displayName}!` : `Xin chào! (${session.email})`;
+            logoutBtn.addEventListener('click', () => {
+                clearSession();
+                window.location.href = 'DANGNHAP.html';
+            });
+        }
+    }
+
     const menuData = {
         "Bún/Phở": [
             { name: "Phở", img: "https://live2makan.com/wp-content/uploads/2022/08/l2m-vn-2207-pho10-05.jpg" },
@@ -260,6 +302,133 @@
     let currentCategory = "Bún/Phở";
     let currentRotation = 0;
     let isSpinning = false;
+    let lastWinningItem = null;
+
+    const CART_KEY = 'neufood-cart-v1';
+
+    function normalizeName(text) {
+        return String(text || '')
+            .trim()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    // Map wheel item names -> dish ids used by React cart (`src/data/dishes.js`)
+    const nameToDishId = {
+        [normalizeName('Phở')]: 'pho',
+        [normalizeName('Phở trộn')]: 'pho-tron',
+        [normalizeName('Bún bò Huế')]: 'bun-bo-hue',
+        [normalizeName('Bún riêu')]: 'bun-rieu',
+        [normalizeName('Hủ tiếu')]: 'hu-tieu',
+        [normalizeName('Miến gà')]: 'mien-ga',
+        [normalizeName('Cháo sườn')]: 'chao-suon',
+        [normalizeName('Bánh canh')]: 'banh-canh',
+        [normalizeName('Bún mọc')]: 'bun-moc',
+        [normalizeName('Bún thang')]: 'bun-thang',
+        [normalizeName('Bún cá')]: 'bun-ca',
+        [normalizeName('Bún chả')]: 'bun-cha',
+        [normalizeName('Bún mắm')]: 'bun-mam',
+        [normalizeName('Bún đậu')]: 'bun-dau-mam-tom',
+        [normalizeName('Nem nướng')]: 'nem-nuong-nha-trang',
+        [normalizeName('Gỏi cuốn')]: 'goi-cuon',
+
+        [normalizeName('Cơm tấm')]: 'com-tam',
+        [normalizeName('Cơm gà')]: 'com-ga',
+        [normalizeName('Cơm sườn')]: 'com-suon',
+        [normalizeName('Cơm chiên')]: 'com-chien',
+        [normalizeName('Bò lúc lắc')]: 'com-bo-luc-lac',
+        [normalizeName('Cơm niêu')]: 'com-nieu',
+        [normalizeName('Cá kho')]: 'com-ca-kho',
+        [normalizeName('Gà xối mỡ')]: 'com-ga-xoi-mo-2',
+        [normalizeName('Cơm trộn')]: 'com-tron',
+        [normalizeName('Cơm chay')]: 'com-tron',
+        [normalizeName('Cơm cà ri')]: 'com-ca-ri',
+        [normalizeName('Thịt kho')]: 'com-thit-kho',
+
+        [normalizeName('Bánh mì')]: 'banh-mi',
+        [normalizeName('Bánh xèo')]: 'banh-xeo',
+        [normalizeName('Bánh cuốn')]: 'banh-cuon',
+        [normalizeName('Bánh khọt')]: 'banh-khot',
+        [normalizeName('Bánh căn')]: 'banh-can',
+        [normalizeName('Bánh ướt')]: 'banh-uot',
+        [normalizeName('Bánh đúc')]: 'banh-duc',
+        [normalizeName('Bánh hỏi')]: 'banh-hoi',
+        [normalizeName('Tráng nướng')]: 'banh-trang-nuong',
+        [normalizeName('Tráng trộn')]: 'banh-trang-tron',
+        [normalizeName('Bột lọc')]: 'banh-bot-loc',
+        [normalizeName('Bánh bao')]: 'banh-bao',
+
+        [normalizeName('Phơi sương')]: 'banh-trang-phoi-suong',
+        [normalizeName('Chân gà')]: 'chan-ga-sa-tac',
+        [normalizeName('Xiên bẩn')]: 'xien-ban',
+        [normalizeName('Chè anh đẹp trai')]: 'che-anh-dep-trai',
+        [normalizeName('Khoai tây chiên')]: 'khoai-tay-chien',
+
+        [normalizeName('Trà đá')]: 'tra-da',
+        [normalizeName('Sữa đậu')]: 'sua-dau',
+        [normalizeName('Nước sâm')]: 'nuoc-sam',
+        [normalizeName('Coca-Cola')]: 'coca-cola',
+        [normalizeName('Pepsi')]: 'pepsi',
+        [normalizeName('Trà chanh')]: 'tra-chanh',
+        [normalizeName('Trà tắc')]: 'tra-tac',
+    };
+
+    // Combo mapping -> add multiple items (also from `src/data/dishes.js`)
+    const comboToItems = {
+        [normalizeName('Combo 2 người')]: [
+            { dishId: 'com-tam', quantity: 2 },
+            { dishId: 'ca-vien-chien-mam', quantity: 1 },
+            { dishId: 'sua-dau', quantity: 2 },
+        ],
+        [normalizeName('Combo 3 người')]: [
+            { dishId: 'com-ga-xoi-mo-2', quantity: 3 },
+            { dishId: 'khoai-tay-chien', quantity: 1 },
+            { dishId: 'coca-cola', quantity: 3 },
+        ],
+        [normalizeName('Combo 4-5 người')]: [
+            { dishId: 'bun-dau-mam-tom', quantity: 2 },
+            { dishId: 'banh-mi', quantity: 2 },
+            { dishId: 'chan-ga-sa-tac', quantity: 1 },
+            { dishId: 'khoai-tay-chien', quantity: 1 },
+            { dishId: 'tra-chanh', quantity: 5 },
+        ],
+        [normalizeName('Combo tối nhẹ')]: [
+            { dishId: 'banh-bao', quantity: 5 },
+            { dishId: 'banh-mi', quantity: 5 },
+            { dishId: 'tra-da', quantity: 5 },
+            { dishId: 'banh-trang-phoi-suong', quantity: 2 },
+        ],
+    };
+
+    function addDishToCart(dishId, qty = 1) {
+        if (!dishId) return false;
+        try {
+            const raw = localStorage.getItem(CART_KEY);
+            const parsed = raw ? JSON.parse(raw) : {};
+            const cart = (parsed && typeof parsed === 'object') ? parsed : {};
+            const prevQty = Number(cart[dishId] ?? 0);
+            cart[dishId] = Math.max(0, Math.floor(prevQty + qty));
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    function findDishIdByName(itemName) {
+        const key = normalizeName(itemName);
+        if (!key) return null;
+        if (nameToDishId[key]) return nameToDishId[key];
+
+        // fuzzy match: allow wheel short names to match longer dish names
+        const entries = Object.entries(nameToDishId);
+        const found = entries.find(([k]) => k.includes(key) || key.includes(k));
+        return found ? found[1] : null;
+    }
 
     // Initialize Navigation
     Object.keys(menuData).forEach(cat => {
@@ -344,6 +513,7 @@
     };
 
     function showResult(item) {
+        lastWinningItem = item;
         document.getElementById('food-name').innerText = item.name;
         document.getElementById('food-img').src = item.img;
         document.getElementById('result-overlay').style.display = 'flex';
@@ -351,6 +521,27 @@
 
     function closeResult() {
         document.getElementById('result-overlay').style.display = 'none';
+    }
+
+    function orderNow() {
+        if (!lastWinningItem) return closeResult();
+        const normalized = normalizeName(lastWinningItem.name);
+
+        // If it's a combo, add all items in that combo
+        const comboItems = comboToItems[normalized];
+        if (Array.isArray(comboItems) && comboItems.length > 0) {
+            comboItems.forEach((ci) => addDishToCart(ci.dishId, ci.quantity));
+        } else {
+            const dishId = findDishIdByName(lastWinningItem.name);
+            if (!dishId) {
+                alert('Món này chưa có trong menu của hệ thống để thêm vào giỏ hàng. Vui lòng chọn món khác.');
+                return;
+            }
+            addDishToCart(dishId, 1);
+        }
+
+        // Go to React cart page
+        window.location.href = '/gio-hang';
     }
 
     drawWheel();

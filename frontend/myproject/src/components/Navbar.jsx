@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield, MapPin, LogIn, UserPlus, Gamepad2 } from 'lucide-react'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { useCart } from '../context/CartContext'
@@ -16,6 +16,26 @@ export default function Navbar() {
   const cartCount = totalCount
   const [showAccountMenu, setShowAccountMenu] = useState(false)
   const accountMenuRef = useRef(null)
+  const navigate = useNavigate()
+  const [userSession, setUserSession] = useState(null)
+
+  const SESSION_KEY = 'neufood_session_v1'
+
+  const readSession = () => {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY)
+      return raw ? JSON.parse(raw) : null
+    } catch {
+      return null
+    }
+  }
+
+  const clearSession = () => {
+    try {
+      localStorage.removeItem(SESSION_KEY)
+      sessionStorage.removeItem(SESSION_KEY)
+    } catch {}
+  }
 
   const toggleAccountMenu = () => {
     setShowAccountMenu(!showAccountMenu)
@@ -33,6 +53,25 @@ export default function Navbar() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  useEffect(() => {
+    setUserSession(readSession())
+    const onStorage = () => setUserSession(readSession())
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  const handleLogout = () => {
+    clearSession()
+    setUserSession(null)
+    setShowAccountMenu(false)
+    navigate('/')
+  }
+
+  const displayName =
+    (userSession && typeof userSession === 'object' && String(userSession.name || '').trim()) ||
+    (userSession && typeof userSession === 'object' && String(userSession.email || '').trim()) ||
+    ''
 
   return (
     <header class={styles.topnav}>
@@ -67,10 +106,6 @@ export default function Navbar() {
               <Package className={styles.topnavIcon} strokeWidth={2} aria-hidden />
               Đơn hàng
             </NavLink>
-            <NavLink className={linkClass} to="/tai-khoan">
-              <User className={styles.topnavIcon} strokeWidth={2} aria-hidden />
-              Tài khoản
-            </NavLink>
             {isAdmin ? (
               <NavLink className={linkClass} to="/quan-ly">
                 <Shield className={styles.topnavIcon} strokeWidth={2} aria-hidden />
@@ -98,38 +133,54 @@ export default function Navbar() {
             </Link>
             <div class={styles.accountMenu} ref={accountMenuRef}>
               <button 
-                class={styles.topnavRound} 
+                class={`${styles.topnavRound} ${styles.accountTrigger}`} 
                 onClick={toggleAccountMenu}
-                aria-label="Tài khoản"
+                aria-label={displayName ? `Tài khoản: ${displayName}` : 'Tài khoản'}
               >
                 <User strokeWidth={2} />
+                {displayName ? <span class={styles.accountName}>{displayName}</span> : null}
               </button>
               {showAccountMenu && (
                 <div class={styles.accountDropdown}>
-                  <Link 
-                    to="/tai-khoan" 
-                    class={styles.accountMenuItem}
-                    onClick={() => setShowAccountMenu(false)}
-                  >
-                    <User className={styles.accountMenuIcon} strokeWidth={2} />
-                    Tài khoản
-                  </Link>
-                  <Link 
-                    to="/dang-nhap" 
-                    class={styles.accountMenuItem}
-                    onClick={() => setShowAccountMenu(false)}
-                  >
-                    <LogIn className={styles.accountMenuIcon} strokeWidth={2} />
-                    Đăng nhập
-                  </Link>
-                  <Link 
-                    to="/dang-ky" 
-                    class={styles.accountMenuItem}
-                    onClick={() => setShowAccountMenu(false)}
-                  >
-                    <UserPlus className={styles.accountMenuIcon} strokeWidth={2} />
-                    Đăng ký
-                  </Link>
+                  {userSession ? (
+                    <>
+                      <Link
+                        to="/tai-khoan"
+                        class={styles.accountMenuItem}
+                        onClick={() => setShowAccountMenu(false)}
+                      >
+                        <User className={styles.accountMenuIcon} strokeWidth={2} />
+                        Tài khoản
+                      </Link>
+                      <button
+                        type="button"
+                        class={styles.accountMenuItemButton}
+                        onClick={handleLogout}
+                      >
+                        <LogIn className={styles.accountMenuIcon} strokeWidth={2} />
+                        Đăng xuất
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link 
+                        to="/dang-nhap" 
+                        class={styles.accountMenuItem}
+                        onClick={() => setShowAccountMenu(false)}
+                      >
+                        <LogIn className={styles.accountMenuIcon} strokeWidth={2} />
+                        Đăng nhập
+                      </Link>
+                      <Link 
+                        to="/dang-ky" 
+                        class={styles.accountMenuItem}
+                        onClick={() => setShowAccountMenu(false)}
+                      >
+                        <UserPlus className={styles.accountMenuIcon} strokeWidth={2} />
+                        Đăng ký
+                      </Link>
+                    </>
+                  )}
                   <a 
                     href="/RANDOM.html" 
                     class={styles.accountMenuItem}

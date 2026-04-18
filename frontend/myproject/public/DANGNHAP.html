@@ -60,11 +60,11 @@
                             <h2 class="formTitle">Chào mừng trở lại</h2>
                             <p class="formDesc">Vui lòng nhập thông tin để tiếp tục.</p>
                         </header>
-                        <form class="form">
+                        <form class="form" id="login-form">
                             <div class="inputGroup">
                                 <label class="inputLabel">ĐỊA CHỈ EMAIL</label>
                                 <div class="inputWrapper">
-                                    <input class="input" placeholder="tên@côngty.com" type="email" />
+                                    <input class="input" id="login-email" placeholder="tên@côngty.com" type="email" autocomplete="email" required />
                                 </div>
                             </div>
                             <div class="inputGroup">
@@ -73,13 +73,14 @@
                                     <a class="forgotLink" href="#">Quên mật khẩu?</a>
                                 </div>
                                 <div class="inputWrapper">
-                                    <input class="input" placeholder="••••••••" type="password" />
+                                    <input class="input" id="login-password" placeholder="••••••••" type="password" autocomplete="current-password" required />
                                 </div>
                             </div>
                             <div class="checkboxGroup">
                                 <input class="checkbox" id="remember" type="checkbox" />
                                 <label class="checkboxLabel" for="remember">Ghi nhớ tôi</label>
                             </div>
+                            <p class="formDesc" id="login-message" style="margin-top: 8px; display: none;"></p>
                             <button class="submitButton" type="submit">
                                 Đăng nhập ngay
                             </button>
@@ -117,6 +118,71 @@
             <a class="pageFooterLink" href="CaiDatCookie.html">Cài đặt Cookie</a>
         </div>
     </footer>
+    <script>
+        const USERS_KEY = 'neufood_users_v1';
+        const SESSION_KEY = 'neufood_session_v1';
+
+        function normalizeEmail(email) {
+            return String(email || '').trim().toLowerCase();
+        }
+
+        function loadUsers() {
+            try {
+                const raw = localStorage.getItem(USERS_KEY);
+                const users = raw ? JSON.parse(raw) : [];
+                return Array.isArray(users) ? users : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function setMessage(text, type) {
+            const el = document.getElementById('login-message');
+            if (!el) return;
+            el.style.display = 'block';
+            el.textContent = text;
+            el.style.color = type === 'success' ? '#0f766e' : '#b91c1c';
+        }
+
+        function getSessionStorage(remember) {
+            return remember ? localStorage : sessionStorage;
+        }
+
+        // If already logged in, go straight to Home
+        try {
+            const existing = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+            if (existing) window.location.href = '/';
+        } catch {}
+
+        document.getElementById('login-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = normalizeEmail(document.getElementById('login-email')?.value);
+            const password = String(document.getElementById('login-password')?.value || '');
+            const remember = Boolean(document.getElementById('remember')?.checked);
+
+            if (!email) return setMessage('Vui lòng nhập email hợp lệ.', 'error');
+            if (!password) return setMessage('Vui lòng nhập mật khẩu.', 'error');
+
+            const users = loadUsers();
+            const user = users.find(u => normalizeEmail(u.email) === email);
+            if (!user) return setMessage('Email chưa được đăng ký. Vui lòng tạo tài khoản.', 'error');
+            if (String(user.password || '') !== password) return setMessage('Mật khẩu không đúng.', 'error');
+
+            // Clear both to avoid stale session
+            localStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+
+            getSessionStorage(remember).setItem(SESSION_KEY, JSON.stringify({
+                email,
+                name: user.name || '',
+                loginAt: new Date().toISOString(),
+            }));
+
+            setMessage('Đăng nhập thành công! Đang chuyển về trang chủ...', 'success');
+            setTimeout(() => window.location.href = '/', 400);
+        });
+    </script>
 </body>
 
 </html>
