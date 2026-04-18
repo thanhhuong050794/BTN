@@ -812,6 +812,19 @@
   border-color: rgb(0 63 135 / 0.25);
 }
 
+.qtyBtnSmIcon {
+  display: block;
+  color: var(--menu-accent-dark);
+  stroke: currentColor;
+}
+
+.qtyBtnSmMs {
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--menu-accent-dark);
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+}
+
 .qtyValSm {
   font-size: 0.875rem;
   font-weight: 700;

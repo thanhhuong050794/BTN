@@ -217,6 +217,11 @@ export default function ChiTietMonPage() {
                       </div>
                       <CardStars value={entry.data.stars} />
                     </div>
+                    {entry.data.photo ? (
+                      <div class={styles.reviewPhotoBox}>
+                        <img class={styles.reviewPhoto} src={entry.data.photo} alt="Ảnh món ăn khách hàng chia sẻ" />
+                      </div>
+                    ) : null}
                     {entry.data.comment ? <p class={styles.reviewText}>{entry.data.comment}</p> : null}
                   </div>
                 ),
