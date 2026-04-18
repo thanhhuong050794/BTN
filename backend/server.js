@@ -387,6 +387,9 @@ app.post('/api/chat', async(req, res) => {
 
 // chạy server
 const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server đang chạy tại cổng: ${PORT}`);
+});
 
 app.get('/auth/google/callback',
     (req, res, next) => {
