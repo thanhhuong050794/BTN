@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useOrderHistory } from '../context/OrderHistoryContext'
 import { demoHistory } from '../data/orders'
 import styles from './LichSuDonHangPage.module.css'
 
@@ -8,18 +9,37 @@ function formatPrice(n) {
 }
 
 const statusUi = {
+  preparing: { label: 'Đang xử lý', cls: styles.badgeWait },
   delivered: { label: 'Đã giao', cls: styles.badgeOk },
   cancelled: { label: 'Đã huỷ', cls: styles.badgeBad },
 }
 
 export default function LichSuDonHangPage() {
+  const { orders } = useOrderHistory()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [q, setQ] = useState('')
+  const [orderFlash, setOrderFlash] = useState(false)
+
+  useEffect(() => {
+    if (!location.state?.orderPlaced) return
+    setOrderFlash(true)
+    navigate(location.pathname, { replace: true, state: {} })
+  }, [location.state, location.pathname, navigate])
+
+  useEffect(() => {
+    if (!orderFlash) return
+    const t = window.setTimeout(() => setOrderFlash(false), 6000)
+    return () => window.clearTimeout(t)
+  }, [orderFlash])
+
+  const merged = useMemo(() => [...orders, ...demoHistory], [orders])
 
   const rows = useMemo(() => {
     const s = q.trim().toLowerCase().replace(/^#/, '')
-    if (!s) return demoHistory
-    return demoHistory.filter((o) => o.id.toLowerCase().includes(s))
-  }, [q])
+    if (!s) return merged
+    return merged.filter((o) => o.id.toLowerCase().includes(s))
+  }, [q, merged])
 
   return (
     <main class={styles.page}>
@@ -28,6 +48,13 @@ export default function LichSuDonHangPage() {
           <h1 class={styles.title}>Lịch sử đơn hàng</h1>
           <p class={styles.lead}>Xem và quản lý các đơn đặt món tại campus.</p>
         </header>
+
+        {orderFlash ? (
+          <div class={styles.flash} role="status">
+            <span class={`material-symbols-outlined ${styles.flashIco}`}>check_circle</span>
+            <p class={styles.flashTxt}>Đặt hàng thành công. Đơn của bạn đã được lưu vào lịch sử.</p>
+          </div>
+        ) : null}
 
         <section class={styles.tools} aria-label="Lọc đơn hàng">
           <div class={styles.search}>
@@ -62,7 +89,7 @@ export default function LichSuDonHangPage() {
             <p class={styles.empty}>Không có đơn nào khớp “{q}”.</p>
           ) : (
             rows.map((o) => {
-              const st = statusUi[o.status]
+              const st = statusUi[o.status] ?? statusUi.preparing
               return (
                 <article key={o.id} class={styles.card}>
                   <div class={styles.top}>
@@ -89,7 +116,7 @@ export default function LichSuDonHangPage() {
                     </div>
                   </div>
                   <div class={styles.foot}>
-                    <Link class={`${styles.btn} ${styles.btnGhost}`} to="/don-hang">
+                    <Link class={`${styles.btn} ${styles.btnGhost}`} to={`/don-hang/${o.id}`}>
                       Xem chi tiết
                     </Link>
                     <Link class={`${styles.btn} ${styles.btnPri}`} to="/menu">

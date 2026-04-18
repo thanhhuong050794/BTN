@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useOrderHistory } from '../context/OrderHistoryContext'
 import styles from './ThanhToanPage.module.css'
 
 function formatPrice(vnd) {
@@ -8,8 +9,12 @@ function formatPrice(vnd) {
 }
 
 export default function ThanhToanPage() {
-  const { lines, totalCount, subtotal } = useCart()
+  const navigate = useNavigate()
+  const { addOrder } = useOrderHistory()
+  const { lines, totalCount, subtotal, clear } = useCart()
   const [payment, setPayment] = useState('transfer')
+  const [submitting, setSubmitting] = useState(false)
+  const [confirmError, setConfirmError] = useState('')
   const [selectedBuilding, setSelectedBuilding] = useState('')
   const [isLocationOpen, setIsLocationOpen] = useState(false)
   const [room, setRoom] = useState('')
@@ -42,6 +47,34 @@ export default function ThanhToanPage() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  async function handleConfirmOrder() {
+    if (totalCount === 0 || submitting) return
+    setConfirmError('')
+    if (!selectedBuilding) {
+      setConfirmError('Vui lòng chọn địa điểm giao hàng trước khi xác nhận.')
+      return
+    }
+    setSubmitting(true)
+    try {
+      addOrder({
+        lines,
+        total,
+        subtotal,
+        shipping,
+        discount,
+        payment,
+        selectedBuilding,
+        room,
+        note,
+        deliveryLocations,
+      })
+      clear()
+      navigate('/lich-su-don', { state: { orderPlaced: true } })
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <>
@@ -242,9 +275,19 @@ export default function ThanhToanPage() {
                     </div>
                     <span class={styles.billSumN}>{formatPrice(total)}</span>
                   </div>
-                  <button type="button" class={styles.billGo} disabled={totalCount === 0}>
+                  {confirmError ? (
+                    <p class={styles.billErr} role="alert">
+                      {confirmError}
+                    </p>
+                  ) : null}
+                  <button
+                    type="button"
+                    class={styles.billGo}
+                    disabled={totalCount === 0 || submitting}
+                    onClick={handleConfirmOrder}
+                  >
                     <span class="material-symbols-outlined material-symbols-fill">shopping_bag</span>
-                    Xác nhận đặt hàng
+                    {submitting ? 'Đang xử lý…' : 'Xác nhận đặt hàng'}
                   </button>
                   <p class={styles.billLegal}>
                     Bằng việc nhấn đặt hàng, bạn đã đồng ý với các{' '}

@@ -1,16 +1,100 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getDishById, suggestedDishes } from '../data/dishes'
+import { computeListedReviewStats, getReviewsForDish, starStepsFromAvg, subscribeDishReviews } from '../lib/dishReviews'
 import styles from './ChiTietMonPage.module.css'
 
 function formatPrice(vnd) {
   return `${vnd.toLocaleString('vi-VN')}đ`
 }
 
+const PLACEHOLDER_REVIEWS = [
+  {
+    id: 'p1',
+    name: 'Hoàng Nam',
+    role: 'Sinh viên Kinh tế',
+    stars: 5,
+    text: 'Gà giòn đúng điệu, da gà xối mỡ mặn mặn ngọt ngọt rất bắt miệng. Cơm không bị khô quá. Suất ăn khá nhiều, đủ no cho cả buổi chiều lên giảng đường.',
+    avatar:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDdypycJ5HgXj16puxulWG91hlXv4PHnZWg7sU8qH9hBRDBSPBGOXLW8nQhz0GJqr1DgfB71Mt1rDnPLrkxyZvV1WIUmUTsuiTZOmRaeRJQDBerkeHAVM5ZTSHzn1HcfVWFgPE4CIJ_cl2gYM1sh25AcRTPppaJbqwQfDqYVu_hpXl2jvbXo6nBEiEWGbWy2hGRG_wsrXDh8N35GGI_iWe71-QMR_TMKA8QylLXZ12EW375S2_LGFopPNwm5j2yjLIrrQ02Z33qNc4',
+  },
+  {
+    id: 'p2',
+    name: 'Minh Anh',
+    role: 'Giảng viên',
+    stars: 4,
+    text: 'Dịch vụ giao hàng nhanh, cơm vẫn còn nóng hổi khi nhận. Nước mắm tỏi ớt là linh hồn của món này, rất đậm đà. Sẽ tiếp tục ủng hộ NEUFood.',
+    avatar:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDizAUQJ2UpXGFZeK5MQUUay1UJLfmRD7SKcdyxy5JcH0mOPFSu2BrVx9_mslWsWWg52bgXe7h7PKP_oUxus0GWi4gQYq_1wQjSfgsARBgAn4yAtllXGWlebFG3jIZmtldmPqd53j_EFF1t2mIy7jTn4S3kfvlE2xwMA0UhWbD5G6g0h2MnUQiMCQgZX1AOSoW4AHo0hD61pn-E3oscqcjYoK-FTJU5Vz2aLy0y1A5TWNIu8M_2gyce98SJCVJmY1LhnnsjEB1tuAw',
+  },
+]
+
+const REVIEWS_INITIAL = 4
+
+function AvgStarRow({ avg }) {
+  return (
+    <div className={styles.reviewsStars}>
+      {starStepsFromAvg(avg).map((kind, i) => (
+        <span
+          key={i}
+          className={`material-symbols-outlined ${kind === 'empty' ? styles.avgStarEmpty : styles.avgStarFill}`}
+        >
+          {kind === 'half' ? 'star_half' : 'star'}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+function CardStars({ value }) {
+  return (
+    <div className={styles.reviewStars}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span
+          key={n}
+          className={`material-symbols-outlined ${styles.starSm} ${n <= value ? styles.cardStarFill : styles.cardStarEmpty}`}
+        >
+          star
+        </span>
+      ))}
+    </div>
+  )
+}
+
 export default function ChiTietMonPage() {
   const { id } = useParams()
   const dish = getDishById(id)
   const [qty, setQty] = useState(1)
+  const [reviewsTick, setReviewsTick] = useState(0)
+
+  useEffect(() => {
+    return subscribeDishReviews(() => setReviewsTick((t) => t + 1))
+  }, [])
+
+  const userReviews = useMemo(() => getReviewsForDish(dish.id), [dish.id, reviewsTick])
+  const listedStats = useMemo(
+    () => computeListedReviewStats(PLACEHOLDER_REVIEWS, userReviews),
+    [userReviews],
+  )
+  const [reviewsExpanded, setReviewsExpanded] = useState(false)
+
+  const allDisplayReviews = useMemo(() => {
+    const samples = PLACEHOLDER_REVIEWS.map((r) => ({ kind: 'sample', key: r.id, data: r }))
+    const yours = userReviews.map((r, idx) => ({
+      kind: 'yours',
+      key: `u-${r.orderId}-${r.savedAt}-${idx}`,
+      data: r,
+    }))
+    return [...samples, ...yours]
+  }, [userReviews])
+
+  const visibleReviews = reviewsExpanded ? allDisplayReviews : allDisplayReviews.slice(0, REVIEWS_INITIAL)
+  const hiddenCount = Math.max(0, allDisplayReviews.length - REVIEWS_INITIAL)
+  const showMoreToggle = allDisplayReviews.length > REVIEWS_INITIAL
+
+  useEffect(() => {
+    setReviewsExpanded(false)
+  }, [dish.id])
 
   const detailImg = dish.detailImage ?? dish.image
   const ingredients = dish.ingredients ?? []
@@ -39,7 +123,9 @@ export default function ChiTietMonPage() {
               </div>
               <div class={styles.detailRate}>
                 <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                {dish.rating}/5 ({dish.reviewCount ?? 120}+ Đánh giá)
+                {listedStats.count > 0 ? `${listedStats.avg.toFixed(1)}/5` : `${Number(dish.rating).toFixed(1)}/5`}
+                {' '}
+                ({listedStats.count.toLocaleString('vi-VN')} đánh giá)
               </div>
             </div>
 
@@ -91,71 +177,73 @@ export default function ChiTietMonPage() {
               <div>
                 <h2 class={styles.reviewsTitle}>Đánh giá khách hàng</h2>
                 <div class={styles.reviewsMeta}>
-                  <div class={styles.reviewsStars}>
-                    <span class="material-symbols-outlined material-symbols-fill">star</span>
-                    <span class="material-symbols-outlined material-symbols-fill">star</span>
-                    <span class="material-symbols-outlined material-symbols-fill">star</span>
-                    <span class="material-symbols-outlined material-symbols-fill">star</span>
-                    <span class="material-symbols-outlined material-symbols-fill">star_half</span>
-                  </div>
-                  <span class={styles.metaBold}>4.8</span>
-                  <span class={styles.metaMuted}>(124 đánh giá)</span>
+                  <AvgStarRow avg={listedStats.count > 0 ? listedStats.avg : Number(dish.rating) || 0} />
+                  <span class={styles.metaBold}>
+                    {(listedStats.count > 0 ? listedStats.avg : Number(dish.rating) || 0).toFixed(1)}
+                  </span>
+                  <span class={styles.metaMuted}>({listedStats.count.toLocaleString('vi-VN')} đánh giá)</span>
                 </div>
               </div>
-              <button type="button" class="link-muted">
-                Xem tất cả
-              </button>
             </div>
             <div class={styles.reviewsGrid}>
-              <div class={styles.review}>
-                <div class={styles.reviewTop}>
-                  <div class={styles.reviewUser}>
-                    <div class={styles.reviewAvatar}>
-                      <img alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdypycJ5HgXj16puxulWG91hlXv4PHnZWg7sU8qH9hBRDBSPBGOXLW8nQhz0GJqr1DgfB71Mt1rDnPLrkxyZvV1WIUmUTsuiTZOmRaeRJQDBerkeHAVM5ZTSHzn1HcfVWFgPE4CIJ_cl2gYM1sh25AcRTPppaJbqwQfDqYVu_hpXl2jvbXo6nBEiEWGbWy2hGRG_wsrXDh8N35GGI_iWe71-QMR_TMKA8QylLXZ12EW375S2_LGFopPNwm5j2yjLIrrQ02Z33qNc4" />
+              {visibleReviews.map((entry) =>
+                entry.kind === 'sample' ? (
+                  <div key={entry.key} class={styles.review}>
+                    <div class={styles.reviewTop}>
+                      <div class={styles.reviewUser}>
+                        <div class={styles.reviewAvatar}>
+                          <img alt="" src={entry.data.avatar} />
+                        </div>
+                        <div>
+                          <h4 class={styles.metaBold}>{entry.data.name}</h4>
+                          <p class={styles.reviewRole}>{entry.data.role}</p>
+                        </div>
+                      </div>
+                      <CardStars value={entry.data.stars} />
                     </div>
-                    <div>
-                      <h4 class={styles.metaBold}>Hoàng Nam</h4>
-                      <p class={styles.reviewRole}>Sinh viên Kinh tế</p>
+                    <p class={styles.reviewText}>{entry.data.text}</p>
+                  </div>
+                ) : (
+                  <div key={entry.key} class={`${styles.review} ${styles.reviewYours}`}>
+                    <div class={styles.reviewTop}>
+                      <div class={styles.reviewUser}>
+                        <div class={`${styles.reviewAvatar} ${styles.reviewAvatarYou}`} aria-hidden>
+                          <span class={styles.avatarLetter}>{(entry.data.authorLabel || 'B').charAt(0)}</span>
+                        </div>
+                        <div>
+                          <h4 class={styles.metaBold}>{entry.data.authorLabel || 'Bạn'}</h4>
+                          <p class={styles.reviewRole}>Đã mua qua NEUFood</p>
+                        </div>
+                      </div>
+                      <CardStars value={entry.data.stars} />
                     </div>
+                    {entry.data.comment ? <p class={styles.reviewText}>{entry.data.comment}</p> : null}
                   </div>
-                  <div class={styles.reviewStars}>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                  </div>
-                </div>
-                <p class={styles.reviewText}>
-                  Gà giòn đúng điệu, da gà xối mỡ mặn mặn ngọt ngọt rất bắt miệng. Cơm không bị khô quá. Suất ăn khá
-                  nhiều, đủ no cho cả buổi chiều lên giảng đường.
-                </p>
-              </div>
-              <div class={styles.review}>
-                <div class={styles.reviewTop}>
-                  <div class={styles.reviewUser}>
-                    <div class={styles.reviewAvatar}>
-                      <img alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDizAUQJ2UpXGFZeK5MQUUay1UJLfmRD7SKcdyxy5JcH0mOPFSu2BrVx9_mslWsWWg52bgXe7h7PKP_oUxus0GWi4gQYq_1wQjSfgsARBgAn4yAtllXGWlebFG3jIZmtldmPqd53j_EFF1t2mIy7jTn4S3kfvlE2xwMA0UhWbD5G6g0h2MnUQiMCQgZX1AOSoW4AHo0hD61pn-E3oscqcjYoK-FTJU5Vz2aLy0y1A5TWNIu8M_2gyce98SJCVJmY1LhnnsjEB1tuAw" />
-                    </div>
-                    <div>
-                      <h4 class={styles.metaBold}>Minh Anh</h4>
-                      <p class={styles.reviewRole}>Giảng viên</p>
-                    </div>
-                  </div>
-                  <div class={styles.reviewStars}>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined material-symbols-fill ${styles.starSm}`}>star</span>
-                    <span class={`material-symbols-outlined ${styles.starSm}`}>star</span>
-                  </div>
-                </div>
-                <p class={styles.reviewText}>
-                  Dịch vụ giao hàng nhanh, cơm vẫn còn nóng hổi khi nhận. Nước mắm tỏi ớt là linh hồn của món này, rất
-                  đậm đà. Sẽ tiếp tục ủng hộ NEUFood.
-                </p>
-              </div>
+                ),
+              )}
             </div>
+            {showMoreToggle ? (
+              <div class={styles.reviewsMore}>
+                <button
+                  type="button"
+                  class={styles.reviewsMoreBtn}
+                  onClick={() => setReviewsExpanded((v) => !v)}
+                  aria-expanded={reviewsExpanded}
+                >
+                  {reviewsExpanded ? (
+                    <>
+                      Thu gọn
+                      <span class={`material-symbols-outlined ${styles.reviewsMoreIco}`}>expand_less</span>
+                    </>
+                  ) : (
+                    <>
+                      Xem thêm đánh giá ({hiddenCount.toLocaleString('vi-VN')})
+                      <span class={`material-symbols-outlined ${styles.reviewsMoreIco}`}>expand_more</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : null}
           </section>
 
           <section>

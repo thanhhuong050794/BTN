@@ -596,6 +596,16 @@
     color: var(--color-brand);
 }
 
+.billErr {
+    margin: 0 0 0.75rem;
+    border-radius: 0.5rem;
+    background-color: rgb(254 242 242);
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-danger, #b91c1c);
+}
+
 .billGo {
     display: flex;
     width: 100%;
@@ -612,16 +622,22 @@
     color: #fff;
     cursor: pointer;
     box-shadow: 0 12px 24px -8px rgb(0 63 135 / 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.2s ease;
 }
 
-.billGo:hover {
+.billGo:hover:not(:disabled) {
     transform: translateY(-0.25rem);
     box-shadow: 0 16px 32px -8px rgb(0 63 135 / 0.5);
 }
 
-.billGo:active {
+.billGo:active:not(:disabled) {
     transform: scale(0.95);
+}
+
+.billGo:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    box-shadow: none;
 }
 
 .billLegal {
