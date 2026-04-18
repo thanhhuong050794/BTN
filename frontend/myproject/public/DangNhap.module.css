@@ -52,6 +52,7 @@
     align-items: center;
     position: fixed;
     top: 0;
+    left: 0;
     z-index: 50;
     background: rgba(249, 249, 255, 0.8);
     backdrop-filter: blur(16px);
@@ -62,6 +63,9 @@
     font-weight: 800;
     letter-spacing: -0.025em;
     color: #003266;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .navLinks {
