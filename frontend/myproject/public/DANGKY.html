@@ -26,12 +26,12 @@
         function handleGoogleSignIn(response) {
             console.log('Google Sign-In successful:', response);
             // Redirect to backend for authentication
-            window.location.href = '/auth/google/callback?credential=' + response.credential;
+            window.location.href = 'http://localhost:3000/auth/google/callback?credential=' + response.credential;
         }
 
         function signInWithGitHub() {
             // Redirect to backend GitHub auth
-            window.location.href = '/auth/github';
+            window.location.href = 'http://localhost:3000/auth/github';
         }
 
         window.onload = function() {

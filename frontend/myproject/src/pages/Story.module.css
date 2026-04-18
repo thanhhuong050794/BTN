@@ -1,10 +1,14 @@
 .container {
-    background: linear-gradient(135deg, #ffffff, #eaf1ff);
+    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(234, 241, 255, 0.8)), url('/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   max-width: 900px;
   margin: 40px auto;
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
 }
 
 .title {
@@ -34,4 +38,12 @@
 }
 body {
   background: linear-gradient(135deg, #5f8eeb, #ffffff);
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: auto;
 }

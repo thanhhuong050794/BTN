@@ -21,6 +21,7 @@ import MenuPage from './pages/MenuPage'
 import LichSuDonHangPage from './pages/LichSuDonHangPage'
 import TaiKhoanPage from './pages/TaiKhoanPage'
 import ThanhToanPage from './pages/ThanhToanPage'
+import GanNeuPage from './pages/GanNeuPage'
 import Recruit from "./pages/Recruit"
 import Story from "./pages/Story"
 function AdminSuite() {
@@ -54,6 +55,7 @@ export default function App() {
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="menu" element={<MenuPage />} />
+            <Route path="gan-neu" element={<GanNeuPage />} />
             <Route path="mon/:id" element={<ChiTietMonPage />} />
             <Route path="gio-hang" element={<GioHangPage />} />
             <Route path="thanh-toan" element={<ThanhToanPage />} />
