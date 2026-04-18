@@ -10,11 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
     <script>
         function signInWithGoogle() {
-            window.location.href = 'http://localhost:3000/auth/google';
+            const next = `${window.location.pathname}${window.location.search}${window.location.hash}` || '/';
+            const returnTo = `${window.location.origin}/oauth/callback?next=${encodeURIComponent(next)}&provider=google`;
+            window.location.href = `http://localhost:3000/auth/google?returnTo=${encodeURIComponent(returnTo)}`;
         }
 
         function signInWithGitHub() {
-            window.location.href = 'http://localhost:3000/auth/github';
+            const next = `${window.location.pathname}${window.location.search}${window.location.hash}` || '/';
+            const returnTo = `${window.location.origin}/oauth/callback?next=${encodeURIComponent(next)}&provider=github`;
+            window.location.href = `http://localhost:3000/auth/github?returnTo=${encodeURIComponent(returnTo)}`;
         }
     </script>
     <style>

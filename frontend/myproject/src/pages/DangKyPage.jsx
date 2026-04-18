@@ -30,7 +30,9 @@ const buttonStyles = {
 
 export default function DangKyPage() {
   const openAuth = (provider) => {
-    window.location.href = `http://localhost:3000/auth/${provider}`
+    const next = `${window.location.pathname}${window.location.search}${window.location.hash}` || '/'
+    const returnTo = `${window.location.origin}/oauth/callback?next=${encodeURIComponent(next)}&provider=${encodeURIComponent(provider)}`
+    window.location.href = `http://localhost:3000/auth/${provider}?returnTo=${encodeURIComponent(returnTo)}`
   }
 
   return (

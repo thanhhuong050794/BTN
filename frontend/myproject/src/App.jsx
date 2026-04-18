@@ -22,6 +22,7 @@ import LichSuDonHangPage from './pages/LichSuDonHangPage'
 import TaiKhoanPage from './pages/TaiKhoanPage'
 import DangNhapPage from './pages/DangNhapPage'
 import DangKyPage from './pages/DangKyPage'
+import OAuthCallbackPage from './pages/OAuthCallbackPage'
 import ThanhToanPage from './pages/ThanhToanPage'
 import GanNeuPage from './pages/GanNeuPage'
 import Recruit from "./pages/Recruit"
@@ -67,6 +68,7 @@ export default function App() {
             <Route path="tai-khoan" element={<TaiKhoanPage />} />
             <Route path="dang-nhap" element={<DangNhapPage />} />
             <Route path="dang-ky" element={<DangKyPage />} />
+            <Route path="oauth/callback" element={<OAuthCallbackPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

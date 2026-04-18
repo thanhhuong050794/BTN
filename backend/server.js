@@ -27,6 +27,104 @@ function parseNum(v, fallback) {
     return Number.isFinite(n) ? n : fallback;
 }
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+function isSafeReturnTo(value) {
+    if (!value) return false;
+    const s = String(value);
+    // Only allow same-tab navigations back into the web app (avoid open redirects)
+    if (s.startsWith('/')) return true;
+    try {
+        const u = new URL(s);
+        const allowed = new Set(['localhost', '127.0.0.1']);
+        if (!allowed.has(u.hostname)) return false;
+        // dev convenience: allow common local ports only
+        const p = u.port ? Number(u.port) : (u.protocol === 'https:' ? 443 : 80);
+        if (!Number.isFinite(p)) return false;
+        if (p < 3000 || p > 59999) return false;
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function rememberOAuthOrigin(req) {
+    try {
+        const proto = (req.get('x-forwarded-proto') || req.protocol || 'http').split(',')[0].trim();
+        const forwardedHost = req.get('x-forwarded-host');
+        const host = (forwardedHost || req.get('host') || '').split(',')[0].trim();
+        if (!host) return;
+        const origin = `${proto}://${host}`;
+        if (!isSafeReturnTo(origin)) return;
+        req.session.oauthReturnOrigin = origin;
+    } catch {
+        /* ignore */
+    }
+}
+
+function resolveReturnToTarget(req, returnTo) {
+    if (!returnTo) return null;
+    const s = String(returnTo);
+    if (s.startsWith('http://') || s.startsWith('https://')) return s;
+    if (!s.startsWith('/')) return null;
+
+    const origin = req.session && req.session.oauthReturnOrigin ? String(req.session.oauthReturnOrigin) : '';
+    if (origin && isSafeReturnTo(origin)) return `${origin}${s}`;
+    return s;
+}
+
+function rememberOAuthReturnTo(req) {
+    const q = req && req.query ? req.query.returnTo : null;
+    if (isSafeReturnTo(q)) {
+        const val = String(q);
+        req.session.oauthReturnTo = val;
+        // If returnTo is absolute, it is the most reliable source
+        // for the dev server origin (Vite port can vary).
+        if (val.startsWith('http://') || val.startsWith('https://')) {
+            try {
+                const u = new URL(val);
+                const origin = u.origin;
+                if (isSafeReturnTo(origin)) req.session.oauthReturnOrigin = origin;
+            } catch {
+                /* ignore */
+            }
+        } else {
+            // Otherwise, fall back to inferring origin from proxy headers.
+            rememberOAuthOrigin(req);
+        }
+        return;
+    }
+    const ref = req && req.get ? req.get('referer') : null;
+    if (isSafeReturnTo(ref)) {
+        const val = String(ref);
+        req.session.oauthReturnTo = val;
+        if (val.startsWith('http://') || val.startsWith('https://')) {
+            try {
+                const u = new URL(val);
+                const origin = u.origin;
+                if (isSafeReturnTo(origin)) req.session.oauthReturnOrigin = origin;
+            } catch {
+                /* ignore */
+            }
+        } else {
+            rememberOAuthOrigin(req);
+        }
+    }
+}
+
+function oauthConfigErrorRedirect(req, res) {
+    const fallback = isSafeReturnTo(req.query && req.query.returnTo) ?
+        String(req.query.returnTo) :
+        FRONTEND_URL;
+    if (fallback.startsWith('http://') || fallback.startsWith('https://')) {
+        const u = new URL(fallback);
+        u.searchParams.set('oauth', 'missing_config');
+        return res.redirect(u.toString());
+    }
+    const join = fallback.includes('?') ? '&' : '?';
+    return res.redirect(`${fallback}${join}oauth=missing_config`);
+}
+
 // User management
 let users = [];
 if (fs.existsSync(USERS_FILE_PATH)) {
@@ -104,7 +202,13 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true in production with HTTPS
+    name: 'neufood.sid',
+    cookie: {
+        httpOnly: true,
+        secure: false, // true in production with HTTPS
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
 }));
 
 // Passport middleware
@@ -149,9 +253,23 @@ app.post('/api/reset', (req, res) => {
 });
 
 // Auth routes
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google', (req, res, next) => {
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        console.warn('Thiếu GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET — OAuth Google không chạy được.');
+        return oauthConfigErrorRedirect(req, res);
+    }
+    rememberOAuthReturnTo(req);
+    return next();
+}, passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
+app.get('/auth/github', (req, res, next) => {
+    if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+        console.warn('Thiếu GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET — OAuth GitHub không chạy được.');
+        return oauthConfigErrorRedirect(req, res);
+    }
+    rememberOAuthReturnTo(req);
+    return next();
+}, passport.authenticate('github', { scope: ['read:user', 'user:email'] }));
 
 
 // Get current user
@@ -171,6 +289,28 @@ app.post('/api/logout', (req, res) => {
         }
         res.json({ message: 'Logged out successfully' });
     });
+});
+
+// Avoid "Cannot GET /" on backend in dev
+app.get('/', (req, res) => {
+    res.redirect(FRONTEND_URL);
+});
+
+function oauthFailureRedirect(req, res, provider) {
+    const origin = (req.session && req.session.oauthReturnOrigin && isSafeReturnTo(req.session.oauthReturnOrigin)) ?
+        String(req.session.oauthReturnOrigin) :
+        FRONTEND_URL;
+    const url = new URL(origin);
+    url.searchParams.set('oauth', 'failed');
+    url.searchParams.set('provider', provider);
+    if (req.session) delete req.session.oauthReturnTo;
+    if (req.session) delete req.session.oauthReturnOrigin;
+    return res.redirect(url.toString());
+}
+
+app.get('/auth/failure/:provider', (req, res) => {
+    const provider = String((req.params && req.params.provider) || 'unknown');
+    return oauthFailureRedirect(req, res, provider);
 });
 
 // chat API
@@ -245,22 +385,58 @@ app.post('/api/chat', async(req, res) => {
     }
 });
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5175';
-
 // chạy server
 const PORT = process.env.PORT || 3000;
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-        res.redirect(FRONTEND_URL);
+    (req, res, next) => {
+        passport.authenticate('google', (err, user, info) => {
+            if (err || !user) {
+                console.error('Google OAuth callback failed:', err || info);
+                return oauthFailureRedirect(req, res, 'google');
+            }
+            req.logIn(user, (loginErr) => {
+                if (loginErr) {
+                    console.error('Google OAuth login failed:', loginErr);
+                    return oauthFailureRedirect(req, res, 'google');
+                }
+                const raw = req.session && req.session.oauthReturnTo ? String(req.session.oauthReturnTo) : '';
+                let target = FRONTEND_URL;
+                if (raw && isSafeReturnTo(raw)) {
+                    const resolved = resolveReturnToTarget(req, raw);
+                    target = resolved && resolved.startsWith('http') ? resolved : `${FRONTEND_URL}${resolved || ''}`;
+                }
+                if (req.session) delete req.session.oauthReturnTo;
+                if (req.session) delete req.session.oauthReturnOrigin;
+                res.redirect(target);
+            });
+        })(req, res, next);
     }
 );
 
 app.get('/auth/github/callback',
-    passport.authenticate('github', { failureRedirect: '/' }),
-    (req, res) => {
-        res.redirect(FRONTEND_URL);
+    (req, res, next) => {
+        passport.authenticate('github', (err, user, info) => {
+            if (err || !user) {
+                console.error('GitHub OAuth callback failed:', err || info);
+                return oauthFailureRedirect(req, res, 'github');
+            }
+            req.logIn(user, (loginErr) => {
+                if (loginErr) {
+                    console.error('GitHub OAuth login failed:', loginErr);
+                    return oauthFailureRedirect(req, res, 'github');
+                }
+                const raw = req.session && req.session.oauthReturnTo ? String(req.session.oauthReturnTo) : '';
+                let target = FRONTEND_URL;
+                if (raw && isSafeReturnTo(raw)) {
+                    const resolved = resolveReturnToTarget(req, raw);
+                    target = resolved && resolved.startsWith('http') ? resolved : `${FRONTEND_URL}${resolved || ''}`;
+                }
+                if (req.session) delete req.session.oauthReturnTo;
+                if (req.session) delete req.session.oauthReturnOrigin;
+                res.redirect(target);
+            });
+        })(req, res, next);
     }
 );
 
