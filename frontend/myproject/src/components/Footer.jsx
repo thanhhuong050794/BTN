@@ -63,9 +63,9 @@ export default function Footer() {
 
   <div className={styles.footerLinks}>
 
-    <a href="/about" className={styles.footerLink}>
-      Câu chuyện của chúng tôi
-    </a>
+   <Link to="/story" className={styles.footerLink}>
+  Câu chuyện của chúng tôi
+</Link>
     <Link to="/recruit" className={styles.footerLink}>
   NEUFood đang tuyển nhân sự
 </Link>
