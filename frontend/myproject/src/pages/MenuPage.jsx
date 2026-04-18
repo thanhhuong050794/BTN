@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Star, Minus, Plus, ShoppingBag, Search, SlidersHorizontal } from 'lucide-react'
+import { Star, Minus, Plus, ShoppingBag, SlidersHorizontal } from 'lucide-react'
 import { dishes, MENU_CATEGORIES } from '../data/dishes'
 import { useCart } from '../context/CartContext'
+import { useMenuSearch } from '../context/MenuSearchContext'
 import { formatVnd } from '../utils/money'
 import styles from './MenuPage.module.css'
 
@@ -136,10 +137,10 @@ function DishCard({ dish }) {
 
 export default function MenuPage() {
   const { add, lines, totalCount } = useCart()
+  const { menuSearch: search } = useMenuSearch()
   const PAGE_SIZE = 9
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([])
-  const [search, setSearch] = useState('')
   const [sort, setSort] = useState('popular')
   const [priceFilter, setPriceFilter] = useState('all')
   const [ratingFilter, setRatingFilter] = useState('all')
@@ -212,20 +213,6 @@ export default function MenuPage() {
                 <p className={styles.pageSub}>Chọn món, thêm vào giỏ — giao tận phòng học.</p>
               </div>
             </header>
-
-            <div className={styles.stickyRow1}>
-              <div className={styles.searchWrap}>
-                <Search className={styles.searchIcon} size={18} strokeWidth={2} aria-hidden />
-                <input
-                  className={styles.searchInput}
-                  type="search"
-                  placeholder="Tìm món theo tên hoặc mô tả..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  aria-label="Tìm món"
-                />
-              </div>
-            </div>
 
             <div className={styles.stickyRow2}>
               <select
