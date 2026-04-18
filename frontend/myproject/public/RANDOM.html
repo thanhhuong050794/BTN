@@ -529,6 +529,15 @@
         document.getElementById('food-name').innerText = item.name;
         document.getElementById('food-img').src = item.img;
         document.getElementById('result-overlay').style.display = 'flex';
+        // Store last picked item for potential highlighting.
+        try {
+            const dishId = findDishIdByName(item.name);
+            sessionStorage.setItem('neufood_random_last_pick_v1', JSON.stringify({
+                name: item.name,
+                dishId: dishId || null,
+                at: new Date().toISOString(),
+            }));
+        } catch {}
     }
 
     function closeResult() {
@@ -556,8 +565,8 @@
             addPending(dishId, 1);
         }
 
-        // Go to React cart page
-        window.location.href = '/gio-hang';
+        // Go to Menu page (cart already updated)
+        window.location.href = '/menu';
     }
 
     drawWheel();
