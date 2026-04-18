@@ -82,7 +82,7 @@ export default function DonHangPage() {
 
   function handleReviewSaved(data) {
     saveReviewForOrder(orderId, data)
-    appendReviewsFromOrder(orderId, view.items, data.starsByLine, data.comment)
+    appendReviewsFromOrder(orderId, view.items, data.starsByLine, data.comment, data.photosByLine)
     setReviewRecord(getReviewForOrder(orderId))
     setReviewOpen(false)
     setReviewToast(true)

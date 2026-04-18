@@ -20,6 +20,8 @@ import HomePage from './pages/HomePage'
 import MenuPage from './pages/MenuPage'
 import LichSuDonHangPage from './pages/LichSuDonHangPage'
 import TaiKhoanPage from './pages/TaiKhoanPage'
+import DangNhapPage from './pages/DangNhapPage'
+import DangKyPage from './pages/DangKyPage'
 import ThanhToanPage from './pages/ThanhToanPage'
 import GanNeuPage from './pages/GanNeuPage'
 import Recruit from "./pages/Recruit"
@@ -63,6 +65,8 @@ export default function App() {
             <Route path="don-hang/:orderId" element={<DonHangPage />} />
             <Route path="don-hang" element={<Navigate to="/lich-su-don" replace />} />
             <Route path="tai-khoan" element={<TaiKhoanPage />} />
+            <Route path="dang-nhap" element={<DangNhapPage />} />
+            <Route path="dang-ky" element={<DangKyPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

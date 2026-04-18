@@ -11,7 +11,7 @@ function readAll() {
   }
 }
 
-/** @returns {{ starsByLine: number[], comment: string, savedAt: string } | null} */
+/** @returns {{ starsByLine: number[], photosByLine?: string[], comment: string, savedAt: string } | null} */
 export function getReviewForOrder(orderId) {
   if (!orderId) return null
   const v = readAll()[orderId]
@@ -19,10 +19,11 @@ export function getReviewForOrder(orderId) {
   return v
 }
 
-export function saveReviewForOrder(orderId, { starsByLine, comment }) {
+export function saveReviewForOrder(orderId, { starsByLine, photosByLine, comment }) {
   const all = readAll()
   all[orderId] = {
     starsByLine,
+    photosByLine: Array.isArray(photosByLine) ? photosByLine : [],
     comment: (comment || '').trim(),
     savedAt: new Date().toISOString(),
   }

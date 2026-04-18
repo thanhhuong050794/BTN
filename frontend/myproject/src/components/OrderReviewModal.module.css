@@ -133,6 +133,47 @@
   color: rgb(203 213 225);
 }
 
+.photoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.photoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0.5rem;
+  border: 1px dashed rgb(148 163 184);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted, #475569);
+  cursor: pointer;
+}
+
+.photoInp {
+  display: none;
+}
+
+.photoRemove {
+  border: none;
+  background: transparent;
+  color: var(--color-danger, #b91c1c);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.photoPreview {
+  width: 100%;
+  max-height: 9rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  border: 1px solid rgb(226 232 240);
+}
+
 .lbl {
   display: flex;
   flex-direction: column;

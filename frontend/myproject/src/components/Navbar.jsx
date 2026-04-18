@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield } from 'lucide-react'
+import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield, MapPin, LogIn, UserPlus, Gamepad2 } from 'lucide-react'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { useCart } from '../context/CartContext'
 import { useMenuSearch } from '../context/MenuSearchContext'
@@ -114,22 +114,22 @@ export default function Navbar() {
                     <User className={styles.accountMenuIcon} strokeWidth={2} />
                     Tài khoản
                   </Link>
-                  <a 
-                    href="/DANGNHAP.html" 
+                  <Link 
+                    to="/dang-nhap" 
                     class={styles.accountMenuItem}
                     onClick={() => setShowAccountMenu(false)}
                   >
                     <LogIn className={styles.accountMenuIcon} strokeWidth={2} />
                     Đăng nhập
-                  </a>
-                  <a 
-                    href="/DANGKY.html" 
+                  </Link>
+                  <Link 
+                    to="/dang-ky" 
                     class={styles.accountMenuItem}
                     onClick={() => setShowAccountMenu(false)}
                   >
                     <UserPlus className={styles.accountMenuIcon} strokeWidth={2} />
                     Đăng ký
-                  </a>
+                  </Link>
                   <a 
                     href="/RANDOM.html" 
                     class={styles.accountMenuItem}

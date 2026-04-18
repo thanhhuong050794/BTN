@@ -3,6 +3,7 @@ import styles from './OrderReviewModal.module.css'
 
 export default function OrderReviewModal({ orderId, items, onClose, onSubmitReview }) {
   const [starsByLine, setStarsByLine] = useState(() => items.map(() => 0))
+  const [photosByLine, setPhotosByLine] = useState(() => items.map(() => ''))
   const [comment, setComment] = useState('')
   const [err, setErr] = useState('')
 
@@ -15,6 +16,39 @@ export default function OrderReviewModal({ orderId, items, onClose, onSubmitRevi
     setErr('')
   }, [])
 
+  const handlePickPhoto = useCallback((lineIdx, e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setErr('Vui lòng chọn file ảnh hợp lệ.')
+      return
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setErr('Ảnh tối đa 2MB để đảm bảo tải nhanh.')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const dataUrl = typeof reader.result === 'string' ? reader.result : ''
+      setPhotosByLine((prev) => {
+        const next = [...prev]
+        next[lineIdx] = dataUrl
+        return next
+      })
+      setErr('')
+    }
+    reader.readAsDataURL(file)
+  }, [])
+
+  const removePhoto = useCallback((lineIdx) => {
+    setPhotosByLine((prev) => {
+      const next = [...prev]
+      next[lineIdx] = ''
+      return next
+    })
+  }, [])
+
   function handleSubmit(e) {
     e.preventDefault()
     const missing = starsByLine.findIndex((s) => s < 1)
@@ -22,7 +56,7 @@ export default function OrderReviewModal({ orderId, items, onClose, onSubmitRevi
       setErr('Vui lòng chọn số sao cho từng món.')
       return
     }
-    onSubmitReview({ starsByLine, comment })
+    onSubmitReview({ starsByLine, photosByLine, comment })
     onClose()
   }
 
@@ -60,6 +94,27 @@ export default function OrderReviewModal({ orderId, items, onClose, onSubmitRevi
                     </button>
                   ))}
                 </div>
+                <div className={styles.photoRow}>
+                  <label className={styles.photoBtn} htmlFor={`photo-${idx}`}>
+                    <span className="material-symbols-outlined">add_a_photo</span>
+                    Thêm ảnh món ăn
+                  </label>
+                  <input
+                    id={`photo-${idx}`}
+                    className={styles.photoInp}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handlePickPhoto(idx, e)}
+                  />
+                  {photosByLine[idx] ? (
+                    <button type="button" className={styles.photoRemove} onClick={() => removePhoto(idx)}>
+                      Bỏ ảnh
+                    </button>
+                  ) : null}
+                </div>
+                {photosByLine[idx] ? (
+                  <img className={styles.photoPreview} src={photosByLine[idx]} alt={`Ảnh đánh giá ${item.name}`} />
+                ) : null}
               </li>
             ))}
           </ul>
