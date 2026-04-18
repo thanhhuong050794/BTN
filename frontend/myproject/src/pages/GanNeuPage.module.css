@@ -1,0 +1,62 @@
+.page {
+  max-width: 960px;
+  margin: 6rem auto 3rem;
+  padding: 0 1.5rem;
+}
+
+.hero {
+  padding: 2.5rem 2rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  margin-bottom: 2rem;
+}
+
+.kicker {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 2.5vw, 3rem);
+  line-height: 1.05;
+  color: #0f172a;
+}
+
+.description {
+  margin-top: 1rem;
+  max-width: 52rem;
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #475569;
+}
+
+.cards {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.card {
+  padding: 1.75rem;
+  border-radius: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.8;
+}

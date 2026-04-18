@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield } from 'lucide-react'
+import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield, MapPin } from 'lucide-react'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { useCart } from '../context/CartContext'
 import { useMenuSearch } from '../context/MenuSearchContext'
@@ -34,6 +34,10 @@ export default function Navbar() {
             <NavLink className={linkClass} to="/menu">
               <UtensilsCrossed className={styles.topnavIcon} strokeWidth={2} aria-hidden />
               Menu
+            </NavLink>
+            <NavLink className={linkClass} to="/gan-neu">
+              <MapPin className={styles.topnavIcon} strokeWidth={2} aria-hidden />
+              Các quán ăn gần NEU
             </NavLink>
             <NavLink className={linkClass} to="/gio-hang">
               <ShoppingCart className={styles.topnavIcon} strokeWidth={2} aria-hidden />
