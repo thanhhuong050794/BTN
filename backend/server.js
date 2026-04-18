@@ -43,6 +43,7 @@ function saveUsers() {
 
 function findOrCreateUser(profile, provider) {
     let user = users.find(u => u.provider === provider && u.providerId === profile.id);
+    const now = new Date().toISOString();
     if (!user) {
         user = {
             id: Date.now().toString(),
@@ -51,11 +52,16 @@ function findOrCreateUser(profile, provider) {
             name: profile.displayName,
             email: profile.emails ? profile.emails[0].value : null,
             avatar: profile.photos ? profile.photos[0].value : null,
-            createdAt: new Date().toISOString()
+            createdAt: now,
+            lastLogin: now,
+            loginCount: 1
         };
         users.push(user);
-        saveUsers();
+    } else {
+        user.lastLogin = now;
+        user.loginCount = (user.loginCount || 0) + 1;
     }
+    saveUsers();
     return user;
 }
 
@@ -145,21 +151,8 @@ app.post('/api/reset', (req, res) => {
 // Auth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-        res.redirect('/'); // Redirect to frontend
-    }
-);
-
 app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
 
-app.get('/auth/github/callback',
-    passport.authenticate('github', { failureRedirect: '/' }),
-    (req, res) => {
-        res.redirect('/'); // Redirect to frontend
-    }
-);
 
 // Get current user
 app.get('/api/user', (req, res) => {
@@ -252,8 +245,24 @@ app.post('/api/chat', async(req, res) => {
     }
 });
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5175';
+
 // chạy server
 const PORT = process.env.PORT || 3000;
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+        res.redirect(FRONTEND_URL);
+    }
+);
+
+app.get('/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/' }),
+    (req, res) => {
+        res.redirect(FRONTEND_URL);
+    }
+);
 
 app.listen(PORT, () => {
     console.log(`Server chạy tại http://localhost:${PORT}`);
