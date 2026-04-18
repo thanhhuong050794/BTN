@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Home, UtensilsCrossed, ShoppingCart, User, Search, Package, Shield } from 'lucide-react'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import { useCart } from '../context/CartContext'
+import { useMenuSearch } from '../context/MenuSearchContext'
 import styles from './Navbar.module.css'
 
 const linkClass = ({ isActive }) =>
@@ -10,6 +11,7 @@ const linkClass = ({ isActive }) =>
 export default function Navbar() {
   const { isAdmin } = useAdminAuth()
   const { totalCount } = useCart()
+  const { menuSearch, setMenuSearch } = useMenuSearch()
   const cartCount = totalCount
 
   return (
@@ -56,7 +58,14 @@ export default function Navbar() {
         <div class={styles.topnavRight}>
           <div class={styles.topnavSearch}>
             <Search className={styles.topnavSearchIcon} strokeWidth={2} aria-hidden />
-            <input class={styles.topnavInput} type="search" placeholder="Thèm món gì hôm nay?" aria-label="Tìm món" />
+            <input
+              className={styles.topnavInput}
+              type="search"
+              placeholder="Tìm món theo tên hoặc mô tả..."
+              value={menuSearch}
+              onChange={(e) => setMenuSearch(e.target.value)}
+              aria-label="Tìm món"
+            />
           </div>
           <div class={styles.topnavActions}>
             <Link class={styles.topnavRound} to="/gio-hang" aria-label={`Giỏ hàng, ${cartCount} món`}>

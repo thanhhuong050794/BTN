@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import { AdminAuthProvider } from './context/AdminAuthContext'
 import { AdminDishesProvider } from './context/AdminDishesContext'
 import { CartProvider } from './context/CartContext'
+import { MenuSearchProvider } from './context/MenuSearchContext'
 import AdminBaoCaoPage from './pages/admin/AdminBaoCaoPage'
 import AdminDonPage from './pages/admin/AdminDonPage'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <AdminAuthProvider>
       <CartProvider>
+      <MenuSearchProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/recruit" element={<Recruit />} />
@@ -58,7 +60,8 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      </CartProvider>
+      </MenuSearchProvider>
+    </CartProvider>
     </AdminAuthProvider>
   )
 }
