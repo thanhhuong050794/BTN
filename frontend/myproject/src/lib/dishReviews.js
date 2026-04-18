@@ -33,7 +33,7 @@ export function getReviewsForDish(dishId) {
  * Ghi đánh giá từng dòng đơn lên từng món (cần item.dishId).
  * Nhận xét chung đơn chỉ gắn vào dòng đầu tiên có dishId.
  */
-export function appendReviewsFromOrder(orderId, items, starsByLine, orderComment) {
+export function appendReviewsFromOrder(orderId, items, starsByLine, orderComment, photosByLine) {
   if (!orderId || !Array.isArray(items) || !Array.isArray(starsByLine)) return
   const all = readAll()
   const general = (orderComment || '').trim()
@@ -55,6 +55,7 @@ export function appendReviewsFromOrder(orderId, items, starsByLine, orderComment
     all[dishId].push({
       stars,
       comment,
+      photo: photosByLine?.[idx] || '',
       savedAt: new Date().toISOString(),
       orderId,
       authorLabel: 'Bạn',

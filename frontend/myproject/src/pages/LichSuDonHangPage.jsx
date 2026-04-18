@@ -14,12 +14,18 @@ const statusUi = {
   cancelled: { label: 'Đã huỷ', cls: styles.badgeBad },
 }
 
+const INITIAL_VISIBLE = 3
+const PAGE_SIZE = 10
+
 export default function LichSuDonHangPage() {
   const { orders } = useOrderHistory()
   const location = useLocation()
   const navigate = useNavigate()
   const [q, setQ] = useState('')
   const [orderFlash, setOrderFlash] = useState(false)
+  const [timeFilter, setTimeFilter] = useState('30')
+  const [showAll, setShowAll] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     if (!location.state?.orderPlaced) return
@@ -35,11 +41,58 @@ export default function LichSuDonHangPage() {
 
   const merged = useMemo(() => [...orders, ...demoHistory], [orders])
 
+  function parseOrderTime(order) {
+    const [d, m, y] = String(order?.date || '').split('/').map((v) => Number(v))
+    const [hh, mm] = String(order?.time || '').split(':').map((v) => Number(v))
+    if (!d || !m || !y) return null
+    const dt = new Date(y, m - 1, d, Number.isFinite(hh) ? hh : 0, Number.isFinite(mm) ? mm : 0)
+    const t = dt.getTime()
+    return Number.isFinite(t) ? t : null
+  }
+
+  const sortedMerged = useMemo(() => {
+    return [...merged].sort((a, b) => (parseOrderTime(b) ?? 0) - (parseOrderTime(a) ?? 0))
+  }, [merged])
+
   const rows = useMemo(() => {
     const s = q.trim().toLowerCase().replace(/^#/, '')
-    if (!s) return merged
-    return merged.filter((o) => o.id.toLowerCase().includes(s))
-  }, [q, merged])
+    const now = Date.now()
+    const dayMs = 24 * 60 * 60 * 1000
+
+    return sortedMerged.filter((o) => {
+      const idMatch = !s || o.id.toLowerCase().includes(s)
+      if (!idMatch) return false
+
+      const t = parseOrderTime(o)
+      if (t == null) return timeFilter === 'all'
+
+      const dt = new Date(t)
+      if (timeFilter === '30') return t >= now - 30 * dayMs
+      if (timeFilter === '90') return t >= now - 90 * dayMs
+      if (timeFilter === '180') return t >= now - 180 * dayMs
+      if (timeFilter === '365') return t >= now - 365 * dayMs
+      if (timeFilter === '2025') return dt.getFullYear() === 2025
+      if (timeFilter === '2024') return dt.getFullYear() === 2024
+      if (timeFilter === 'old') return dt.getFullYear() < 2024
+      if (timeFilter === 'all') return true
+      return true
+    })
+  }, [q, sortedMerged, timeFilter])
+
+  useEffect(() => {
+    setShowAll(false)
+    setCurrentPage(1)
+  }, [q, timeFilter])
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+  const hasMore = rows.length > INITIAL_VISIBLE
+
+  const rowsToRender = useMemo(() => {
+    if (!showAll) return rows.slice(0, INITIAL_VISIBLE)
+    const start = (currentPage - 1) * PAGE_SIZE
+    return rows.slice(start, start + PAGE_SIZE)
+  }, [rows, showAll, currentPage])
 
   return (
     <main class={styles.page}>
@@ -70,11 +123,15 @@ export default function LichSuDonHangPage() {
           </div>
           <div class={styles.filt}>
             <div class={styles.selWrap}>
-              <select class={styles.sel} defaultValue="30" aria-label="Khoảng thời gian">
+              <select class={styles.sel} value={timeFilter} onChange={(e) => setTimeFilter(e.target.value)} aria-label="Khoảng thời gian">
                 <option value="30">30 ngày gần đây</option>
                 <option value="90">3 tháng</option>
+                <option value="180">6 tháng</option>
+                <option value="365">12 tháng</option>
+                <option value="2025">2025</option>
                 <option value="2024">2024</option>
                 <option value="old">Cũ hơn</option>
+                <option value="all">Tất cả</option>
               </select>
               <span class={`material-symbols-outlined ${styles.selChev}`}>expand_more</span>
             </div>
@@ -85,10 +142,10 @@ export default function LichSuDonHangPage() {
         </section>
 
         <div class={styles.list}>
-          {rows.length === 0 ? (
+          {rowsToRender.length === 0 ? (
             <p class={styles.empty}>Không có đơn nào khớp “{q}”.</p>
           ) : (
-            rows.map((o) => {
+            rowsToRender.map((o) => {
               const st = statusUi[o.status] ?? statusUi.preparing
               return (
                 <article key={o.id} class={styles.card}>
@@ -129,12 +186,52 @@ export default function LichSuDonHangPage() {
           )}
         </div>
 
-        <div class={styles.more}>
-          <button type="button" class={styles.moreBtn}>
-            <span>Xem thêm đơn</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
-          </button>
-        </div>
+        {hasMore ? (
+          <div class={styles.more}>
+            <button
+              type="button"
+              class={styles.moreBtn}
+              onClick={() => {
+                setShowAll((prev) => !prev)
+                setCurrentPage(1)
+              }}
+            >
+              <span>{showAll ? 'Thu gọn đơn' : `Xem thêm đơn (${rows.length - INITIAL_VISIBLE})`}</span>
+              <span class="material-symbols-outlined">{showAll ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</span>
+            </button>
+          </div>
+        ) : null}
+
+        {showAll && rows.length > PAGE_SIZE ? (
+          <div class={styles.pagination} aria-label="Chuyển trang lịch sử đơn">
+            <button
+              type="button"
+              class={styles.pageBtn}
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            >
+              {'‹'}
+            </button>
+            {pageNumbers.map((p) => (
+              <button
+                key={p}
+                type="button"
+                class={p === currentPage ? styles.pageBtnOn : styles.pageBtn}
+                onClick={() => setCurrentPage(p)}
+              >
+                {p}
+              </button>
+            ))}
+            <button
+              type="button"
+              class={styles.pageBtn}
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            >
+              {'›'}
+            </button>
+          </div>
+        ) : null}
       </div>
     </main>
   )

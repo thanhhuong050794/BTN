@@ -520,7 +520,7 @@ export default function MenuPage() {
                               onClick={() => add(dish.id, -1)}
                               aria-label="Giảm"
                             >
-                              <Minus size={16} strokeWidth={2} />
+                              <span className={`material-symbols-outlined ${styles.qtyBtnSmMs}`}>remove</span>
                             </button>
                             <span className={styles.qtyValSm}>{qty}</span>
                             <button
@@ -529,7 +529,7 @@ export default function MenuPage() {
                               onClick={() => add(dish.id, 1)}
                               aria-label="Tăng"
                             >
-                              <Plus size={16} strokeWidth={2} />
+                              <span className={`material-symbols-outlined ${styles.qtyBtnSmMs}`}>add</span>
                             </button>
                           </div>
                         </div>
