@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Star, Minus, Plus, ShoppingBag, SlidersHorizontal } from 'lucide-react'
+import { Star, Minus, Plus, ShoppingBag, SlidersHorizontal, ChevronDown } from 'lucide-react'
 import { dishes, MENU_CATEGORIES } from '../data/dishes'
 import { useCart } from '../context/CartContext'
 import { useMenuSearch } from '../context/MenuSearchContext'
@@ -45,6 +45,14 @@ function matchesRating(dish, ratingFilter) {
   if (ratingFilter === 'r45') return dish.rating >= 4.5
   if (ratingFilter === 'r47') return dish.rating >= 4.7
   return true
+}
+
+function categoryChipClass(c, selectedCategoryIds) {
+  const on =
+    c.id === 'all'
+      ? selectedCategoryIds.length === 0
+      : selectedCategoryIds.includes(c.id)
+  return on ? styles.catChipOn : styles.catChip
 }
 
 function StarRow({ value }) {
@@ -135,17 +143,88 @@ function DishCard({ dish }) {
   )
 }
 
+function MenuFilteredResults({ filtered, selectedCategoryLabels }) {
+  const PAGE_SIZE = 9
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const pageStart = (currentPage - 1) * PAGE_SIZE
+  const pagedDishes = filtered.slice(pageStart, pageStart + PAGE_SIZE)
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+
+  return (
+    <>
+      <p className={styles.resultCount}>
+        {filtered.length} món
+        {selectedCategoryLabels.length > 0 ? ` · ${selectedCategoryLabels.join(', ')}` : ''}
+      </p>
+
+      <div className={styles.grid}>
+        {pagedDishes.map((dish) => (
+          <DishCard key={dish.id} dish={dish} />
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className={styles.empty}>Không có món phù hợp. Thử đổi bộ lọc hoặc từ khóa.</p>
+      ) : null}
+
+      {filtered.length > 0 ? (
+        <div className={styles.pagination} aria-label="Chuyển trang món ăn">
+          <button
+            type="button"
+            className={styles.pageBtn}
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          >
+            {'‹'}
+          </button>
+          {pageNumbers.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className={p === currentPage ? styles.pageBtnOn : styles.pageBtn}
+              onClick={() => setCurrentPage(p)}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            type="button"
+            className={styles.pageBtn}
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          >
+            {'›'}
+          </button>
+        </div>
+      ) : null}
+    </>
+  )
+}
+
+const DOCK_FULL_TOP_PX = 72
+const SCROLL_DELTA_PX = 8
+
 export default function MenuPage() {
   const { add, lines, totalCount } = useCart()
   const { menuSearch: search } = useMenuSearch()
-  const PAGE_SIZE = 9
+
+  const lastScrollY = useRef(
+    typeof window !== 'undefined' ? window.scrollY : 0,
+  )
+
+  const [dockMode, setDockMode] = useState(() => {
+    if (typeof window === 'undefined') return 'full'
+    return window.scrollY >= DOCK_FULL_TOP_PX ? 'hidden' : 'full'
+  })
+  const [compactMobilePanelOpen, setCompactMobilePanelOpen] = useState(false)
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([])
   const [sort, setSort] = useState('popular')
   const [priceFilter, setPriceFilter] = useState('all')
   const [ratingFilter, setRatingFilter] = useState('all')
   const [showFilters, setShowFilters] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
 
   const filtered = useMemo(() => {
     let list = [...dishes]
@@ -179,14 +258,40 @@ export default function MenuPage() {
     return list
   }, [selectedCategoryIds, search, sort, priceFilter, ratingFilter])
 
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [selectedCategoryIds, search, sort, priceFilter, ratingFilter])
+  const filterKey = useMemo(
+    () =>
+      [
+        [...selectedCategoryIds].sort().join(','),
+        search,
+        sort,
+        priceFilter,
+        ratingFilter,
+      ].join('\u0001'),
+    [selectedCategoryIds, search, sort, priceFilter, ratingFilter],
+  )
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const pageStart = (currentPage - 1) * PAGE_SIZE
-  const pagedDishes = filtered.slice(pageStart, pageStart + PAGE_SIZE)
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+  useEffect(() => {
+    function onScroll() {
+      const y = window.scrollY
+      const dy = y - lastScrollY.current
+      lastScrollY.current = y
+
+      if (y < DOCK_FULL_TOP_PX) {
+        setDockMode('full')
+        setCompactMobilePanelOpen(false)
+        return
+      }
+      if (dy > SCROLL_DELTA_PX) {
+        setDockMode('hidden')
+        setCompactMobilePanelOpen(false)
+      } else if (dy < -SCROLL_DELTA_PX) {
+        setDockMode('compact')
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const selectedCategoryLabels = selectedCategoryIds
     .map((id) => MENU_CATEGORIES.find((c) => c.id === id)?.label)
@@ -202,10 +307,20 @@ export default function MenuPage() {
     )
   }
 
+  const stickyDockClass = [
+    styles.stickyDock,
+    dockMode === 'full' && styles.stickyDockFull,
+    dockMode === 'compact' && styles.stickyDockCompact,
+    dockMode === 'compact' && compactMobilePanelOpen && styles.stickyDockCompactExpanded,
+    dockMode === 'hidden' && styles.stickyDockHidden,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
     <main className={styles.menu}>
       <div className={styles.wrapOuter}>
-        <div className={styles.stickyDock}>
+        <div className={stickyDockClass}>
           <div className={`wrap ${styles.stickyDockInner}`}>
             <header className={styles.pageHead}>
               <div className={styles.pageHeadText}>
@@ -273,72 +388,109 @@ export default function MenuPage() {
                 <button
                   key={c.id}
                   type="button"
-                  className={
-                    c.id === 'all'
-                      ? selectedCategoryIds.length === 0
-                        ? styles.catChipOn
-                        : styles.catChip
-                      : selectedCategoryIds.includes(c.id)
-                        ? styles.catChipOn
-                        : styles.catChip
-                  }
+                  className={categoryChipClass(c, selectedCategoryIds)}
                   onClick={() => toggleCategory(c.id)}
                 >
                   {c.label}
                 </button>
               ))}
             </nav>
+
+            <div className={styles.compactMobileBar}>
+              <button
+                type="button"
+                className={styles.compactMobileBtn}
+                onClick={() => setCompactMobilePanelOpen((v) => !v)}
+                aria-expanded={compactMobilePanelOpen}
+                aria-controls="menu-compact-mobile-panel"
+              >
+                <SlidersHorizontal size={18} strokeWidth={2} aria-hidden />
+                <span>Lọc & danh mục</span>
+                <ChevronDown
+                  className={compactMobilePanelOpen ? styles.compactMobileChevronOpen : styles.compactMobileChevron}
+                  size={18}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              </button>
+            </div>
+
+            <div
+              id="menu-compact-mobile-panel"
+              className={
+                compactMobilePanelOpen
+                  ? `${styles.compactMobilePanel} ${styles.compactMobilePanelOpen}`
+                  : styles.compactMobilePanel
+              }
+              hidden={!compactMobilePanelOpen}
+            >
+              <div className={styles.compactMobilePanelInner}>
+                <div className={styles.compactMobileFilters}>
+                  <select
+                    className={styles.select}
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                    aria-label="Sắp xếp"
+                  >
+                    {SORT_OPTIONS.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    className={styles.select}
+                    value={priceFilter}
+                    onChange={(e) => setPriceFilter(e.target.value)}
+                    aria-label="Lọc theo giá"
+                  >
+                    {PRICE_FILTERS.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    className={styles.select}
+                    value={ratingFilter}
+                    onChange={(e) => setRatingFilter(e.target.value)}
+                    aria-label="Lọc theo đánh giá"
+                  >
+                    {RATING_FILTERS.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className={styles.compactPanelCats} role="group" aria-label="Danh mục món">
+                  {MENU_CATEGORIES.map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={categoryChipClass(c, selectedCategoryIds)}
+                      onClick={() => {
+                        toggleCategory(c.id)
+                        setCompactMobilePanelOpen(false)
+                      }}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className={`wrap ${styles.wrap}`}>
           <div className={styles.shell}>
             <section className={styles.main} aria-label="Danh sách món">
-              <p className={styles.resultCount}>
-                {filtered.length} món
-                {selectedCategoryLabels.length > 0 ? ` · ${selectedCategoryLabels.join(', ')}` : ''}
-              </p>
-
-              <div className={styles.grid}>
-                {pagedDishes.map((dish) => (
-                  <DishCard key={dish.id} dish={dish} />
-                ))}
-              </div>
-
-              {filtered.length === 0 ? (
-                <p className={styles.empty}>Không có món phù hợp. Thử đổi bộ lọc hoặc từ khóa.</p>
-              ) : null}
-
-              {filtered.length > 0 ? (
-                <div className={styles.pagination} aria-label="Chuyển trang món ăn">
-                  <button
-                    type="button"
-                    className={styles.pageBtn}
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  >
-                    {'‹'}
-                  </button>
-                  {pageNumbers.map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      className={p === currentPage ? styles.pageBtnOn : styles.pageBtn}
-                      onClick={() => setCurrentPage(p)}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    className={styles.pageBtn}
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  >
-                    {'›'}
-                  </button>
-                </div>
-              ) : null}
+              <MenuFilteredResults
+                key={filterKey}
+                filtered={filtered}
+                selectedCategoryLabels={selectedCategoryLabels}
+              />
             </section>
 
             <aside className={styles.cartPanel} aria-label="Giỏ hàng">
