@@ -484,11 +484,11 @@
     }
     .leftSection {
         grid-column: span 7;
-        align-items: flex-start;
-        text-align: left;
+        align-items: center;
+        text-align: center;
     }
     .logoContainer {
-        margin-left: -2rem;
+        margin-left: 0;
     }
     .mainTitle {
         font-size: 4rem;
