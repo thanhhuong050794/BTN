@@ -19,11 +19,6 @@ export default function Recruit() {
   <i>Điền thông tin vào biểu mẫu để ứng tuyển:</i>
 </p>
 
-      {submitted && (
-        <p className={styles.success}>
-          🎉 Đăng ký thành công!
-        </p>
-      )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <fieldset>
@@ -90,6 +85,11 @@ export default function Recruit() {
           </p>
         </fieldset>
       </form>
+           {submitted && (
+        <p className={styles.success}>
+          🎉 Đăng ký thành công!
+        </p>
+      )}
     </div>
   );
 }
