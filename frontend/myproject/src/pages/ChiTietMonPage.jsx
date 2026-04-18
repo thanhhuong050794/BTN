@@ -11,12 +11,12 @@ function formatPrice(vnd) {
 const PLACEHOLDER_REVIEWS = [
   {
     id: 'p1',
-    name: 'Hoàng Nam',
+    name: 'Hoàng Anh',
     role: 'Sinh viên Kinh tế',
     stars: 5,
     text: 'Gà giòn đúng điệu, da gà xối mỡ mặn mặn ngọt ngọt rất bắt miệng. Cơm không bị khô quá. Suất ăn khá nhiều, đủ no cho cả buổi chiều lên giảng đường.',
     avatar:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDdypycJ5HgXj16puxulWG91hlXv4PHnZWg7sU8qH9hBRDBSPBGOXLW8nQhz0GJqr1DgfB71Mt1rDnPLrkxyZvV1WIUmUTsuiTZOmRaeRJQDBerkeHAVM5ZTSHzn1HcfVWFgPE4CIJ_cl2gYM1sh25AcRTPppaJbqwQfDqYVu_hpXl2jvbXo6nBEiEWGbWy2hGRG_wsrXDh8N35GGI_iWe71-QMR_TMKA8QylLXZ12EW375S2_LGFopPNwm5j2yjLIrrQ02Z33qNc4',
+      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face',
   },
   {
     id: 'p2',
@@ -25,7 +25,7 @@ const PLACEHOLDER_REVIEWS = [
     stars: 4,
     text: 'Dịch vụ giao hàng nhanh, cơm vẫn còn nóng hổi khi nhận. Nước mắm tỏi ớt là linh hồn của món này, rất đậm đà. Sẽ tiếp tục ủng hộ NEUFood.',
     avatar:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDizAUQJ2UpXGFZeK5MQUUay1UJLfmRD7SKcdyxy5JcH0mOPFSu2BrVx9_mslWsWWg52bgXe7h7PKP_oUxus0GWi4gQYq_1wQjSfgsARBgAn4yAtllXGWlebFG3jIZmtldmPqd53j_EFF1t2mIy7jTn4S3kfvlE2xwMA0UhWbD5G6g0h2MnUQiMCQgZX1AOSoW4AHo0hD61pn-E3oscqcjYoK-FTJU5Vz2aLy0y1A5TWNIu8M_2gyce98SJCVJmY1LhnnsjEB1tuAw',
+      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face',
   },
 ]
 
