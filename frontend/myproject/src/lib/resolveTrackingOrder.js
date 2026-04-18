@@ -81,7 +81,6 @@ function normalizeStored(record) {
     address,
     eta,
     orderNote: record.orderNote || '',
-    mapSrc: demoTracking.mapSrc,
     driver: demoTracking.driver,
   }
 }
@@ -99,7 +98,6 @@ function fromDemoTracking(status) {
     address: demoTracking.address,
     eta: demoTracking.eta,
     orderNote: '',
-    mapSrc: demoTracking.mapSrc,
     driver: demoTracking.driver,
   }
 }
@@ -134,7 +132,6 @@ export function resolveTrackingOrder(orderId, storedOrders) {
       address: extra.address,
       eta: extra.eta,
       orderNote: '',
-      mapSrc: demoTracking.mapSrc,
       driver: demoTracking.driver,
     }
   }

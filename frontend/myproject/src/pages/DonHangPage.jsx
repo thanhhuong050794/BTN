@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import OrderReviewModal from '../components/OrderReviewModal'
 import { useOrderHistory } from '../context/OrderHistoryContext'
+import { NEU_CAMPUS_MAP_EMBED_URL } from '../data/campusMap'
 import { resolveTrackingOrder } from '../lib/resolveTrackingOrder'
+import { getReviewForOrder, saveReviewForOrder } from '../lib/orderReviews'
 import styles from './DonHangPage.module.css'
 
 function formatPrice(n) {
@@ -14,13 +18,30 @@ export default function DonHangPage() {
   const view = useMemo(() => resolveTrackingOrder(orderId, orders), [orderId, orders])
 
   const [simPhase, setSimPhase] = useState('preparing')
+  const [reviewOpen, setReviewOpen] = useState(false)
+  const [reviewRecord, setReviewRecord] = useState(null)
+  const [reviewToast, setReviewToast] = useState(false)
+
+  useEffect(() => {
+    setReviewRecord(getReviewForOrder(orderId))
+  }, [orderId])
 
   useEffect(() => {
     if (!view || view.status !== 'preparing') return
     setSimPhase('preparing')
-    const t = setTimeout(() => setSimPhase('delivering'), 5000)
-    return () => clearTimeout(t)
+    const t1 = setTimeout(() => setSimPhase('delivering'), 5000)
+    const t2 = setTimeout(() => setSimPhase('delivered'), 10000)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
   }, [view?.id, view?.status])
+
+  useEffect(() => {
+    if (!reviewToast) return
+    const t = setTimeout(() => setReviewToast(false), 4500)
+    return () => clearTimeout(t)
+  }, [reviewToast])
 
   if (!orderId) {
     return <Navigate to="/lich-su-don" replace />
@@ -56,8 +77,36 @@ export default function DonHangPage() {
 
   const showLive = displayPhase !== 'cancelled' && displayPhase !== 'delivered'
 
+  const canOpenReview = displayPhase === 'delivered' && !reviewRecord
+
+  function handleReviewSaved(data) {
+    saveReviewForOrder(orderId, data)
+    setReviewRecord(getReviewForOrder(orderId))
+    setReviewOpen(false)
+    setReviewToast(true)
+  }
+
   return (
     <main class={styles.page}>
+      {reviewToast && typeof document !== 'undefined'
+        ? createPortal(
+            <div className={styles.reviewToast} role="status">
+              <span class={`material-symbols-outlined ${styles.reviewToastIco}`}>check_circle</span>
+              Cảm ơn bạn đã đánh giá!
+            </div>,
+            document.body,
+          )
+        : null}
+
+      {reviewOpen && canOpenReview ? (
+        <OrderReviewModal
+          orderId={orderId}
+          items={view.items}
+          onClose={() => setReviewOpen(false)}
+          onSubmitReview={handleReviewSaved}
+        />
+      ) : null}
+
       <div class={`wrap ${styles.layout}`}>
         <div class={styles.main}>
           <Link class={styles.back} to="/lich-su-don">
@@ -145,34 +194,38 @@ export default function DonHangPage() {
             </section>
           )}
 
-          {showLive ? (
-            <section class={styles.map} aria-label="Bản đồ giao hàng">
-              <img class={styles.mapPic} src={view.mapSrc} alt="Bản đồ khuôn viên NEU" />
+          {displayPhase !== 'cancelled' ? (
+            <section class={styles.map} aria-label="Bản đồ khuôn viên NEU">
+              <iframe
+                title="Bản đồ Đại học Kinh tế Quốc dân (NEU)"
+                src={NEU_CAMPUS_MAP_EMBED_URL}
+                class={styles.mapIframe}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
               <div class={styles.mapGrad} aria-hidden />
-              <div class={styles.mapFoot}>
-                <div class={styles.glass}>
-                  <div class={styles.drvPic}>
-                    <img src={view.driver.photo} alt="" />
+              {showLive ? (
+                <div class={styles.mapFoot}>
+                  <div class={styles.glass}>
+                    <div class={styles.drvPic}>
+                      <img src={view.driver.photo} alt="" />
+                    </div>
+                    <div>
+                      <p class={styles.drvLbl}>Shipper của bạn</p>
+                      <p class={styles.drvName}>{view.driver.name}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p class={styles.drvLbl}>Shipper của bạn</p>
-                    <p class={styles.drvName}>{view.driver.name}</p>
+                  <div class={styles.shipBtns}>
+                    <button type="button" class={`${styles.round} ${styles.roundPri}`} aria-label="Gọi shipper">
+                      <span class="material-symbols-outlined">call</span>
+                    </button>
+                    <button type="button" class={`${styles.round} ${styles.roundSec}`} aria-label="Nhắn tin">
+                      <span class="material-symbols-outlined">chat_bubble</span>
+                    </button>
                   </div>
                 </div>
-                <div class={styles.shipBtns}>
-                  <button type="button" class={`${styles.round} ${styles.roundPri}`} aria-label="Gọi shipper">
-                    <span class="material-symbols-outlined">call</span>
-                  </button>
-                  <button type="button" class={`${styles.round} ${styles.roundSec}`} aria-label="Nhắn tin">
-                    <span class="material-symbols-outlined">chat_bubble</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-          ) : displayPhase === 'delivered' ? (
-            <section class={styles.map} aria-label="Bản đồ giao hàng">
-              <img class={styles.mapPic} src={view.mapSrc} alt="Bản đồ khuôn viên NEU" />
-              <div class={styles.mapGrad} aria-hidden />
+              ) : null}
             </section>
           ) : null}
         </div>
@@ -252,11 +305,31 @@ export default function DonHangPage() {
               </span>
               Đặt lại
             </Link>
-            <button type="button" class={`${styles.actBtn} ${styles.actPri}`} disabled={displayPhase === 'cancelled'}>
+            <button
+              type="button"
+              class={
+                reviewRecord
+                  ? `${styles.actBtn} ${styles.actDone}`
+                  : `${styles.actBtn} ${styles.actPri}`
+              }
+              disabled={displayPhase === 'cancelled' || displayPhase !== 'delivered' || !!reviewRecord}
+              title={
+                displayPhase === 'cancelled'
+                  ? 'Đơn đã huỷ'
+                  : displayPhase !== 'delivered'
+                    ? 'Chỉ đánh giá sau khi đơn ở trạng thái đã giao'
+                    : reviewRecord
+                      ? 'Bạn đã gửi đánh giá cho đơn này'
+                      : undefined
+              }
+              onClick={() => {
+                if (canOpenReview) setReviewOpen(true)
+              }}
+            >
               <span class={`material-symbols-outlined ${styles.icoFill}`} style={{ fontSize: '1.125rem' }}>
-                star
+                {reviewRecord ? 'check_circle' : 'star'}
               </span>
-              Đánh giá
+              {reviewRecord ? 'Đã đánh giá' : 'Đánh giá'}
             </button>
           </div>
         </aside>
