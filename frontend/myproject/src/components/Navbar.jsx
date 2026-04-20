@@ -34,7 +34,7 @@ export default function Navbar() {
     try {
       localStorage.removeItem(SESSION_KEY)
       sessionStorage.removeItem(SESSION_KEY)
-    } catch {}
+    } catch { }
   }
 
   const toggleAccountMenu = () => {
@@ -77,14 +77,14 @@ export default function Navbar() {
     <header class={styles.topnav}>
       <div class={styles.topnavInner}>
         <div class={styles.topnavLeft}>
-        <Link to="/" className={styles.topnavLogo}>
-          <img 
-            src="/neu-food.png" 
-            alt="NEUFood" 
-            className={styles.logoImg}
-          />
-          <span>NEUFood</span>
-        </Link> 
+          <Link to="/" className={styles.topnavLogo}>
+            <img
+              src="/neu-food.png"
+              alt="NEUFood"
+              className={styles.logoImg}
+            />
+            <span>NEUFood</span>
+          </Link>
           <nav class={styles.topnavMenu}>
             <NavLink className={linkClass} end to="/">
               <Home className={styles.topnavIcon} strokeWidth={2} aria-hidden />
@@ -128,8 +128,8 @@ export default function Navbar() {
               <span class={styles.topnavBadge}>{cartCount}</span>
             </Link>
             <div class={styles.accountMenu} ref={accountMenuRef}>
-              <button 
-                class={`${styles.topnavRound} ${styles.accountTrigger}`} 
+              <button
+                class={`${styles.topnavRound} ${styles.accountTrigger}`}
                 onClick={toggleAccountMenu}
                 aria-label={displayName ? `Tài khoản: ${displayName}` : 'Tài khoản'}
               >
@@ -159,16 +159,16 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Link 
-                        to="/dang-nhap" 
+                      <Link
+                        to="/dang-nhap"
                         class={styles.accountMenuItem}
                         onClick={() => setShowAccountMenu(false)}
                       >
                         <LogIn className={styles.accountMenuIcon} strokeWidth={2} />
                         Đăng nhập
                       </Link>
-                      <Link 
-                        to="/dang-ky" 
+                      <Link
+                        to="/dang-ky"
                         class={styles.accountMenuItem}
                         onClick={() => setShowAccountMenu(false)}
                       >
@@ -177,8 +177,8 @@ export default function Navbar() {
                       </Link>
                     </>
                   )}
-                  <a 
-                    href="/RANDOM.html" 
+                  <a
+                    href="/RANDOM.html"
                     class={styles.accountMenuItem}
                     onClick={() => setShowAccountMenu(false)}
                   >
