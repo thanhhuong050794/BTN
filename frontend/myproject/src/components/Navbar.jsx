@@ -98,10 +98,6 @@ export default function Navbar() {
               <MapPin className={styles.topnavIcon} strokeWidth={2} aria-hidden />
               Các quán ăn gần NEU
             </NavLink>
-            <NavLink className={linkClass} to="/gio-hang">
-              <ShoppingCart className={styles.topnavIcon} strokeWidth={2} aria-hidden />
-              Giỏ hàng
-            </NavLink>
             <NavLink className={linkClass} to="/lich-su-don">
               <Package className={styles.topnavIcon} strokeWidth={2} aria-hidden />
               Đơn hàng
