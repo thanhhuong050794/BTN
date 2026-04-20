@@ -3,10 +3,10 @@ console.log(" SERVER ĐANG CHẠY");
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
+const cors = require('cors'); // cho phép CORS để frontend có thể gọi API
 const OpenAI = require('openai');
-const session = require('express-session');
-const passport = require('passport');
+const session = require('express-session'); // cho phép lưu trữ session
+const passport = require('passport'); // cho phép xác thực OAuth
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
 
@@ -20,25 +20,25 @@ function getSystemPrompt() {
     const custom = process.env.OPENROUTER_SYSTEM_PROMPT;
     if (custom && String(custom).trim()) return String(custom).trim();
     return DEFAULT_SYSTEM_PROMPT;
-}
+} //string(custom).trim() dùng để đảm bảo biến môi trường được xử lý chính xác, tránh lỗi khi nó là undefined hoặc chứa khoảng trắng thừa.
 
 function parseNum(v, fallback) {
     const n = Number(v);
     return Number.isFinite(n) ? n : fallback;
-}
+} // Hàm parseNum giúp chuyển đổi chuỗi thành số, nếu không hợp lệ sẽ trả về giá trị mặc định (fallback)
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://dat-va-giao-do-an-tai-neu.onrender.com'; 
 
 function isSafeReturnTo(value) {
     if (!value) return false;
     const s = String(value);
-    // Only allow same-tab navigations back into the web app (avoid open redirects)
+    // cho phep đường dẫn tương đối để tiện dev, nhưng vẫn kiểm tra nếu là URL tuyệt đối thì phải thuộc về localhost
     if (s.startsWith('/')) return true;
     try {
         const u = new URL(s);
         const allowed = new Set(['localhost', '127.0.0.1']);
         if (!allowed.has(u.hostname)) return false;
-        // dev convenience: allow common local ports only
+        // kiểm tra cổng hợp lệ (3000-59999) nếu có, hoặc mặc định là 80/443
         const p = u.port ? Number(u.port) : (u.protocol === 'https:' ? 443 : 80);
         if (!Number.isFinite(p)) return false;
         if (p < 3000 || p > 59999) return false;
@@ -47,7 +47,9 @@ function isSafeReturnTo(value) {
         return false;
     }
 }
-
+// ghi nhớ origin để redirect sau khi OAuth, ưu tiên từ returnTo nếu có
+// sử dụng x-forwarded-proto, x-forwarded-host, sau đó mới đến referer, và cuối cùng là proxy headers.
+//  Luôn kiểm tra tính an toàn của URL trước khi lưu hoặc redirect.
 function rememberOAuthOrigin(req) {
     try {
         const proto = (req.get('x-forwarded-proto') || req.protocol || 'http').split(',')[0].trim();
@@ -61,7 +63,7 @@ function rememberOAuthOrigin(req) {
         /* ignore */
     }
 }
-
+// tạo ra 1 địa chỉ url hoàn chỉnh và an toàn 
 function resolveReturnToTarget(req, returnTo) {
     if (!returnTo) return null;
     const s = String(returnTo);
@@ -72,14 +74,13 @@ function resolveReturnToTarget(req, returnTo) {
     if (origin && isSafeReturnTo(origin)) return `${origin}${s}`;
     return s;
 }
-
+// xác định chính xác trang web cụ thể để redirect sau khi OAuth
+//  ưu tiên returnTo nếu có và an toàn, sau đó mới đến origin đã lưu.
 function rememberOAuthReturnTo(req) {
     const q = req && req.query ? req.query.returnTo : null;
     if (isSafeReturnTo(q)) {
         const val = String(q);
         req.session.oauthReturnTo = val;
-        // If returnTo is absolute, it is the most reliable source
-        // for the dev server origin (Vite port can vary).
         if (val.startsWith('http://') || val.startsWith('https://')) {
             try {
                 const u = new URL(val);
@@ -89,7 +90,6 @@ function rememberOAuthReturnTo(req) {
                 /* ignore */
             }
         } else {
-            // Otherwise, fall back to inferring origin from proxy headers.
             rememberOAuthOrigin(req);
         }
         return;
@@ -111,7 +111,7 @@ function rememberOAuthReturnTo(req) {
         }
     }
 }
-
+// Cơ chế xử lý lỗi tập trung 
 function oauthConfigErrorRedirect(req, res) {
     const fallback = isSafeReturnTo(req.query && req.query.returnTo) ?
         String(req.query.returnTo) :
@@ -138,7 +138,7 @@ if (fs.existsSync(USERS_FILE_PATH)) {
 function saveUsers() {
     fs.writeFileSync(USERS_FILE_PATH, JSON.stringify(users, null, 2));
 }
-
+// Tìm kiếm hoặc tạo mới người dùng dựa trên profile OAuth
 function findOrCreateUser(profile, provider) {
     let user = users.find(u => u.provider === provider && u.providerId === profile.id);
     const now = new Date().toISOString();
@@ -163,7 +163,7 @@ function findOrCreateUser(profile, provider) {
     return user;
 }
 
-// Passport configuration
+// cấu hình Passport với Google và GitHub OAuth
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -191,13 +191,16 @@ passport.deserializeUser((id, done) => {
     done(null, user);
 });
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
 app.use(express.json());
 
-// Serve static files from frontend
+// phục vụ file tĩnh từ thư mục gốc để frontend có thể truy cập
 app.use(express.static(path.join(__dirname, '..')));
 
-// Session middleware
+// cấu hình session
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
@@ -205,13 +208,13 @@ app.use(session({
     name: 'neufood.sid',
     cookie: {
         httpOnly: true,
-        secure: false, // true in production with HTTPS
+        secure: true, // true in production with HTTPS
         sameSite: 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     },
 }));
 
-// Passport middleware
+// khởi tạo Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -272,7 +275,7 @@ app.get('/auth/github', (req, res, next) => {
 }, passport.authenticate('github', { scope: ['read:user', 'user:email'] }));
 
 
-// Get current user
+// API để lấy thông tin người dùng đã đăng nhập
 app.get('/api/user', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user });
@@ -291,7 +294,7 @@ app.post('/api/logout', (req, res) => {
     });
 });
 
-// Avoid "Cannot GET /" on backend in dev
+// tránh việc truy cập trực tiếp vào API gốc, redirect về frontend
 app.get('/', (req, res) => {
     res.redirect(FRONTEND_URL);
 });
@@ -326,9 +329,9 @@ app.post('/api/chat', async(req, res) => {
                 }
 
                 const model = process.env.OPENROUTER_MODEL || 'nvidia/nemotron-3-super-120b-a12b:free';
-                const temperature = parseNum(process.env.OPENROUTER_TEMPERATURE, 0.65);
-                const max_tokens = parseNum(process.env.OPENROUTER_MAX_OUTPUT_TOKENS, 1024);
-                const timeoutMs = parseNum(process.env.OPENROUTER_TIMEOUT_MS, 30000);
+                const temperature = parseNum(process.env.OPENROUTER_TEMPERATURE, 0.65); // độ sáng tạo
+                const max_tokens = parseNum(process.env.OPENROUTER_MAX_OUTPUT_TOKENS, 1024); // độ dài tối đa 
+                const timeoutMs = parseNum(process.env.OPENROUTER_TIMEOUT_MS, 30000); // thời gian chờ tối đa cho 1 yêu cầu 
 
                 // Chuyển lịch sử sang định dạng OpenAI
                 const messages = [
@@ -442,7 +445,3 @@ app.get('/auth/github/callback',
         })(req, res, next);
     }
 );
-
-app.listen(PORT, () => {
-    console.log(`Server chạy tại http://localhost:${PORT}`);
-});

@@ -30,5 +30,21 @@
         "text": "Phở là món ăn khá linh hoạt, vì vậy lượng calo sẽ thay đổi tùy thuộc vào thành phần và khẩu phần bạn chọn:\n\n- **Bún phở**: là nguồn carbohydrate chính; nếu bạn ăn nhiều bún, calo sẽ tăng. Bạn có thể giảm lượng bún hoặc thay bằng bún lọc, bún đậu để giảm calo.\n- **Thịt**: thịt bò nạc (thăn, gân) có ít chất béo hơn thịt bò đỏ hoặc bò viên. Thức ăn từ gà hoặc hải sản thường có calo thấp hơn thịt bò.\n- **Nước dùng**: nước dùng phở thường được ninh từ xương và gia vị, có thể chứa lượng muối piuttosto cao nhưng không quá nhiều chất béo nếu không thêm mucho dầu hoặc mỡ. Bạn có thể yêu cầu nước dùng ít muối hoặc không thêm bột ngọt.\n- **Trái cây và rau**: giá đỗ, húng quế, rau ngọt, lá húng, mù tạt… đều rất ít calo và cung cấp chất xơ, vitamin.\n- **Thêm toppings**: trứng, bột báng, bột chiên, hoặc sốt đậu hũ, sốt Sriracha… có thể tăng calo nếu dùng nhiều.\n\n**Mẹo giảm calo khi ăn phở**:\n1. Chọn phần bún vừa phải (hoặc hỏi “ít bún” nếu có).\n2. Ưu tiên thịt nạc hoặc gà, hạn chế bò viên và các loại thịt chế biến có nhiều chất béo.\n3. Yêu cầu nước dùng ít muối hoặc không thêm bột ngọt.\n4. Thêm nhiều rau sống và giá đỗ.\n5. Giữ lượng sốt và toppings (trứng, bột chiên…) ở mức vừa phải.\n\nNếu bạn đang theo dõi dinh dưỡng cụ thể (ví dụ: để giảm cân, quản lý đường huyết, hoặc có hạn chế về muối/chất béo), tốt nhất là tham khảo thông tin chi tiết trên menu của từng quán hoặc hỏi trực tiếp nhân viên về cách chế biến. Và khi có bất kỳ vấn đề y tế hoặc dị ứng nào, hãy tham khảo ý kiến bác sĩ hoặc chuyên gia dinh dưỡng để được tư vấn phù hợp. \n\nChúc bạn thưởng thức món phở ngon mà vẫn phù hợp với mục tiêu dinh dưỡng của mình! 😊"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "Gợi ý món cho bữa trưa"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "Dưới đây là quelques gợi ý món ăn trưa phổ biến và phù hợp với bối cảnh sinh viên/cán bộ NEU (đặt qua NEUFood), tập trung vào sự cân bằng năng lượng để bạn có đủ sức tập trung vào buổi học chiều sau. Bạn có thể tùy chỉnh theo sở thích riêng trên menu của từng quán:\n\n### 🍱 **Các ấm ăn ấm áp, no nê (tốt nếu bạn cần năng lượng lâu)**\n- **Cơm tấm/sườn nướng + rau sống**: Chọn phần thịt nướng ít mỡ (sườn non, thịt nạc), kèm rau sống giá đỗ, dưa leo. *Gợi ý*: Nhờ \"ít cơm\" hoặc thay bằng cơm lứt nếu có để tăng chất xơ.\n- **Bún chả giò/Thịt nướng**: Đảm bảo có đủ rau sống và nước dùng nhẹ (có thể hỏi ít đường/nước mắm nếu muốn kiểm soát đường/hàm lượng muối).\n- **Phở gà hoặc phở bò nạc**: Như chúng ta đã nói — chọn phần bún vừa phải, thêm nhiều rau, ít bột chiên/trứng nếu muốn nhẹ hơn. *Lưu ý*: Nước dùng thường có muối, nên bạn có thể uống ít nước sau ăn để cân bằng.\n\n### 🥗 **Các bát salad/bowl tươi mát, dễ tiêu hóa (tốt nếu bạn muốn tránh cảm giác buồn ngủ sau ăn)**\n- **Salad gà nướng hoặc tôm**: Đảm bảo có nguồn protein (gà/tôm), nhiều loại rau (xà lách, cà rot, cải bắp), và một chút chất béo tốt từ hạt/đậu. *Mẹo*: Đặt sốt riêng để контроли lượng użyт.\n- **Bowl cơm lứt/quinoa + salmon hoặc đậu hũ**: Phổ biến ở những quán ănfocus vào ăn sạch trên campus. Có thể thêm rau củ nướng và sốt chanh hoặc tương ớt nhẹ.\n- **Gỏi cuốn tôm/thịt + bún**: Nhẹ, giàu chất xơ từ rau và bún lọc. Kèm sốt đậu phộng vừa phải (hoặc chọn sốt nước cốt chanh nếu muốn ít calo hơn).\n\n### 💡 **Lưu ý thực tế khi đặt qua NEUFood:**\n- **Kiểm tra mô tả món**: Nhiều quán ghi rõ \"ít dầu\", \"nhiều rau\", hoặc \"thịt nạc"
+      }
+    ]
   }
 ]
